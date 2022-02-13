@@ -18,4 +18,57 @@ public class ExchangeRatesArchiveTable extends Vector<DailyExchangeRates> {
     public ExchangeRatesArchiveTable(List<DailyExchangeRates> list){
         super(list);
     }
+
+    public Optional<DailyExchangeRates> getLatestEffectiveDate(){
+        return this.stream().max(Comparator.comparing(DailyExchangeRates::getEffectiveDate));
+    }
+
+    public ExchangeRatesArchiveTable filterByTradingDateFrom(LocalDate after){
+        List<DailyExchangeRates> list = this.stream()
+                .filter((dailyTable -> after.compareTo(dailyTable.getTradingDate()) <= 0))
+                .collect(Collectors.toList());
+        return new ExchangeRatesArchiveTable(list);
+    }
+
+    public ExchangeRatesArchiveTable filterByTradingDateTo(LocalDate before){
+        List<DailyExchangeRates> list = this.stream()
+                .filter((dailyTable -> before.compareTo(dailyTable.getTradingDate()) >= 0))
+                .collect(Collectors.toList());
+        return new ExchangeRatesArchiveTable(list);
+    }
+
+    public ExchangeRatesArchiveTable filterByEffectiveDateFrom(LocalDate after){
+        List<DailyExchangeRates> list = this.stream()
+                .filter((dailyTable -> after.compareTo(dailyTable.getEffectiveDate()) <= 0))
+                .collect(Collectors.toList());
+        return new ExchangeRatesArchiveTable(list);
+    }
+
+    public ExchangeRatesArchiveTable filterByEffectiveDateTo(LocalDate before){
+        List<DailyExchangeRates> list = this.stream()
+                .filter((dailyTable -> before.compareTo(dailyTable.getEffectiveDate()) >= 0))
+                .collect(Collectors.toList());
+        return new ExchangeRatesArchiveTable(list);
+    }
+
+    public ExchangeRatesArchiveTable forEachDay(Function<DailyExchangeRates, ExchangeRatesTable> function){
+        ExchangeRatesArchiveTable list = new ExchangeRatesArchiveTable(this);
+        for(int i=0; i<list.size(); i++){
+            DailyExchangeRates dailyExchangeRates = list.get(i).copy();
+            function.apply(dailyExchangeRates);
+            dailyExchangeRates.setRates(function.apply(dailyExchangeRates));
+            list.set(i, dailyExchangeRates);
+        }
+        return list;
+    }
+
+    public static class ExchangeRatesArchiveTableDeserializer implements JsonDeserializer<ExchangeRatesArchiveTable> {
+        public ExchangeRatesArchiveTable deserialize(JsonElement json, Type type, JsonDeserializationContext context) {
+            ExchangeRatesArchiveTable list = new ExchangeRatesArchiveTable();
+            for (JsonElement item : json.getAsJsonArray()) {
+                list.add(context.deserialize(item, DailyExchangeRates.class));
+            }
+            return list;
+        }
+    }
 }
