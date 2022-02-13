@@ -1,15 +1,15 @@
-package com.infoshareacademy.api;
+package com.infoshareacademy.data;
 
-import java.util.List;
+import java.time.LocalDate;
 
-public class ExchangeRatesTable {
+public class DailyExchangeRates {
     private String table;
     private String no;
-    private String tradingDate;
-    private String effectiveDate;
-    private List<Rate> rates;
+    private LocalDate tradingDate;
+    private LocalDate effectiveDate;
+    private ExchangeRatesTable rates;
 
-    public ExchangeRatesTable(String table, String no, String tradingDate, String effectiveDate, List<Rate> rates) {
+    public DailyExchangeRates(String table, String no, LocalDate tradingDate, LocalDate effectiveDate, ExchangeRatesTable rates) {
         this.table = table;
         this.no = no;
         this.tradingDate = tradingDate;
@@ -17,7 +17,7 @@ public class ExchangeRatesTable {
         this.rates = rates;
     }
 
-    public ExchangeRatesTable() {}
+    public DailyExchangeRates() {}
 
     public String getTable() {
         return table;
@@ -35,28 +35,32 @@ public class ExchangeRatesTable {
         this.no = no;
     }
 
-    public String getTradingDate() {
+    public LocalDate getTradingDate() {
         return tradingDate;
     }
 
-    public void setTradingDate(String tradingDate) {
+    public void setTradingDate(LocalDate tradingDate) {
         this.tradingDate = tradingDate;
     }
 
-    public String getEffectiveDate() {
+    public LocalDate getEffectiveDate() {
         return effectiveDate;
     }
 
-    public void setEffectiveDate(String effectiveDate) {
+    public void setEffectiveDate(LocalDate effectiveDate) {
         this.effectiveDate = effectiveDate;
     }
 
-    public List<Rate> getRates() {
+    public ExchangeRatesTable getRates() {
         return rates;
     }
 
-    public void setRates(List<Rate> rates) {
+    public void setRates(ExchangeRatesTable rates) {
         this.rates = rates;
+    }
+
+    public DailyExchangeRates copy(){
+        return new DailyExchangeRates(table, no, tradingDate, effectiveDate, new ExchangeRatesTable(rates));
     }
 
     @Override
@@ -64,7 +68,7 @@ public class ExchangeRatesTable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ExchangeRatesTable that = (ExchangeRatesTable) o;
+        DailyExchangeRates that = (DailyExchangeRates) o;
 
         if (!table.equals(that.table)) return false;
         if (!no.equals(that.no)) return false;

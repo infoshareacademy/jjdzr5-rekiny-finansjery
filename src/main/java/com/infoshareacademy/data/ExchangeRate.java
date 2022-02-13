@@ -1,20 +1,20 @@
-package com.infoshareacademy.api;
+package com.infoshareacademy.data;
 
 
-public class Rate {
+public class ExchangeRate {
     private String currency;
     private String code;
     private double bid;
     private double ask;
 
-    public Rate(String currency, String code, double bid, double ask) {
+    public ExchangeRate(String currency, String code, double bid, double ask) {
         this.currency = currency;
         this.code = code;
         this.bid = bid;
         this.ask = ask;
     }
 
-    public Rate() {}
+    public ExchangeRate() {}
 
     public String getCurrency() {
         return currency;
@@ -53,7 +53,7 @@ public class Rate {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Rate rate = (Rate) o;
+        ExchangeRate rate = (ExchangeRate) o;
 
         if (Double.compare(rate.bid, bid) != 0) return false;
         if (Double.compare(rate.ask, ask) != 0) return false;
@@ -65,6 +65,7 @@ public class Rate {
     public int hashCode() {
         int result;
         long temp;
+        //int hash = Objects.hash(currency, code, bid, ask);
         result = currency.hashCode();
         result = 31 * result + code.hashCode();
         temp = Double.doubleToLongBits(bid);

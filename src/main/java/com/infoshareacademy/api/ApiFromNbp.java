@@ -1,11 +1,10 @@
 package com.infoshareacademy.api;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+import com.infoshareacademy.data.DailyExchangeRates;
+import com.infoshareacademy.data.ExchangeRatesArchiveTable;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -13,19 +12,18 @@ import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ApiFromNbp {
     private static final String LAST_67_DAYS_TABLES = "https://api.nbp.pl/api/exchangerates/tables/C/last/67/";
     private static final String FILE_NAME = "db_table.json";
 
-    public static List<ExchangeRatesTable> loadDb() {
+    public static ExchangeRatesArchiveTable loadDb() {
         return fromJson(loadDbFile());
     }
 
-    public static boolean saveDb(List<ExchangeRatesTable> exchangeRatesTables) {
-        return saveDbFile(toJson(exchangeRatesTables));
+    public static boolean saveDb( ExchangeRatesArchiveTable dailyExchangeRates) {
+        return saveDbFile(toJson(dailyExchangeRates));
     }
 
     private static boolean saveDbFile (String dataBase){
@@ -76,16 +74,13 @@ public class ApiFromNbp {
         return body;
     }
 
-    private static List<ExchangeRatesTable> fromJson(String response) {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        Gson gson = gsonBuilder.create();
-        Type exchangeRatesTableListType = new TypeToken<ArrayList<ExchangeRatesTable>>(){}.getType();
-        return gson.fromJson(response, exchangeRatesTableListType);
+    private static ExchangeRatesArchiveTable fromJson(String response) {
+        Gson gson = ExtendedGson.getExtendedGson();
+        return gson.fromJson(response, ExchangeRatesArchiveTable.class);
     }
 
-    private static String toJson(List<ExchangeRatesTable> dataBase) {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        Gson gson = gsonBuilder.create();
+    private static String toJson(List<DailyExchangeRates> dataBase) {
+        Gson gson = ExtendedGson.getExtendedGson();
         return gson.toJson(dataBase);
     }
 }
