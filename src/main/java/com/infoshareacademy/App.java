@@ -1,5 +1,7 @@
 package com.infoshareacademy;
 
+import com.infoshareacademy.ui.filtration.FiltrationUI;
+
 public class App
 {
     public static void main( String[] args )
@@ -8,6 +10,7 @@ public class App
 
         NBPApiManager nbpApiManager = new NBPApiManager();
 
-        UsageExamplesCode.showExamples(nbpApiManager);
+        FiltrationUI filtrationUI = new FiltrationUI();
+        filtrationUI.filtrationMenu(nbpApiManager);
     }
 }
