@@ -4,8 +4,15 @@ import com.infoshareacademy.data.DailyExchangeRates;
 import com.infoshareacademy.data.ExchangeRate;
 import com.infoshareacademy.data.ExchangeRatesArchiveTable;
 import com.infoshareacademy.data.ExchangeRatesTable;
+import de.vandermeer.asciitable.AsciiTable;
 
 public class CollectionView {
+
+    AsciiTable asciiTable = new AsciiTable();
+    asciiTable.add.Rule();
+    asciiTable.addRow("row 1 col 1", "row 1 col 2");
+
+
 
 
     public static void displayExchangeRatesArchiveTable(ExchangeRatesArchiveTable table){
