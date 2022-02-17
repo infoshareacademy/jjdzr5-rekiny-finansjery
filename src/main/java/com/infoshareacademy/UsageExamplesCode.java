@@ -1,20 +1,16 @@
 package com.infoshareacademy;
 
-import com.infoshareacademy.PresentationLayer.CollectionView;
-import com.infoshareacademy.data.DailyExchangeRates;
-import com.infoshareacademy.data.ExchangeRate;
+import com.infoshareacademy.presentationlayer.CollectionView;
 import com.infoshareacademy.data.ExchangeRatesArchiveTable;
-import com.infoshareacademy.data.ExchangeRatesTable;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 public class UsageExamplesCode {
     public static void showExamples(NBPApiManager nbpApiManager){
 
 
         ExchangeRatesArchiveTable exchangeRatesArchiveTable = nbpApiManager.getCollectionsOfExchangeRates(); // pobiera kolekcję
-        CollectionView.displayExchangeRatesArchiveTable(exchangeRatesArchiveTable.filterByEffectiveDateFrom(LocalDate.of(2022,02,10))); // wyśwetla zawartość kolekcji
+        CollectionView.displayExchangeRatesArchiveTable(exchangeRatesArchiveTable.filterByTradingDateTo(LocalDate.of(2022,01,10))); // wyśwetla zawartość kolekcji
 
 //        System.out.println("============================================================================");
 //        ExchangeRatesArchiveTable fromToExchangeRatesArchiveTable = nbpApiManager
