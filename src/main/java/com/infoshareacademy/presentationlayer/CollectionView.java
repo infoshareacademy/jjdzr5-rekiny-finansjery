@@ -11,7 +11,7 @@ public class CollectionView {
 
     public static void displayExchangeRatesArchiveTable(ExchangeRatesArchiveTable tables) {
 
-        AsciiTable asciiTable = new de.vandermeer.asciitable.AsciiTable();
+        AsciiTable asciiTable = new AsciiTable();
 
         for (DailyExchangeRates table : tables) {
             asciiTable.addRule();
