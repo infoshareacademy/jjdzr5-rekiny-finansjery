@@ -12,7 +12,7 @@ public class CollectionView {
     public static void displayExchangeRatesArchiveTable(ExchangeRatesArchiveTable tables) {
 
         AsciiTable asciiTable = new AsciiTable();
-        asciiTable.addRule();
+
         for (DailyExchangeRates table : tables) {
             asciiTable.addRule();
             asciiTable.addRow(table.getNo(), table.getTradingDate(), table.getEffectiveDate(), "");
@@ -24,6 +24,8 @@ public class CollectionView {
                 asciiTable.addRow(rate.getCode(), rate.getCurrency(), rate.getBid(), rate.getAsk());
             }
         }
+        asciiTable.addRule();
+
         String rend = asciiTable.render();
         System.out.println(rend);
     }

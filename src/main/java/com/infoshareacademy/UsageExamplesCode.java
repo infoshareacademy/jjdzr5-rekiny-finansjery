@@ -16,6 +16,13 @@ public class UsageExamplesCode {
 
     public static void showExamples(NBPApiManager nbpApiManager){
 
+         Runnable runnable = new Runnable() {
+             @Override
+             public void run() {
+
+             }
+         };
+
          /*
         ExchangeRatesArchiveTable exchangeRatesArchiveTable = nbpApiManager.getCollectionsOfExchangeRates();
         displayExchangeRatesArchiveTable(exchangeRatesArchiveTable);
