@@ -2,6 +2,7 @@ package com.infoshareacademy.presentationlayer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SimplyCustomTable {
     private final Character horizontal = 0x2500;
@@ -16,26 +17,30 @@ public class SimplyCustomTable {
     private final Character horizontalTop = 0x2534;
     private final Character horizontalBottom = 0x252C;
 
+    private int columns;
     private String[] topics;
-    private List<String>[] columns;
+    private List<String[]> rows;
     public SimplyCustomTable(int columns){
+        this.columns = columns;
         topics = new String[columns];
-        this.columns = new ArrayList[columns];
-        for(int i=0; i<this.columns.length; i++){
-            this.columns[i] = new ArrayList<String>();
+        for(int i=0; i<columns; i++){
+            topics[i] = "";
         }
+        this.rows = new ArrayList<>();
     }
 
     public SimplyCustomTable setTopics(String... row){
-        for(int i=0; i<topics.length; i++){
-            topics[i]=row[i];
+        if(columns == row.length) {
+            for (int i = 0; i < topics.length; i++) {
+                topics[i] = row[i];
+            }
         }
         return this;
     }
 
     public SimplyCustomTable addRow(String... row){
-        for(int i=0; i<columns.length; i++){
-            columns[i].add(row[i]);
+        if(columns == row.length){
+            rows.add(row);
         }
         return this;
     }
@@ -47,19 +52,15 @@ public class SimplyCustomTable {
         System.out.format(getSeparationLine(cornerTopLeft, horizontalBottom, cornerTopRight, horizontal, columnsSizes));
         System.out.format(tableFormat, topics);
         System.out.format(getSeparationLine(verticalRight, horizontalVertical, verticalLeft, horizontal, columnsSizes));
-        for(int i=0; i<columns[0].size(); i++){
-            String[] row = new String[columns.length];
-            for(int j=0; j<columns.length; j++){
-                row[j] = columns[j].get(i);
-            }
+        for(String[] row : rows){
             System.out.format(tableFormat, row);
         }
         System.out.format(getSeparationLine(cornerBottomLeft, horizontalTop, cornerBottomRight, horizontal, columnsSizes));
     }
 
     private int[] getColumsSizes(){
-        int[] columnsSizes = new int[columns.length];
-        for(int i=0; i<columns.length; i++){
+        int[] columnsSizes = new int[columns];
+        for(int i=0; i<columns; i++){
             columnsSizes[i] = getColumnLength(i);
         }
         return columnsSizes;
@@ -84,10 +85,14 @@ public class SimplyCustomTable {
     }
 
     private int getColumnLength(int i){
-        return columns[i].
+        Optional<String[]> row =  rows.
                 stream().
-                max((s1, s2)->((Integer)s1.length()).compareTo(s2.length())).
-                get().
-                length();
+                max((a1, a2)->((Integer)a1[i].length()).compareTo(a2[i].length()));
+
+        if(row.isPresent()){
+            return Math.max(row.get()[i].length(), topics[i].length());
+        }else{
+            return topics[i].length();
+        }
     }
 }
