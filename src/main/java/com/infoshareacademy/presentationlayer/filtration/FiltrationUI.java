@@ -1,9 +1,10 @@
-package com.infoshareacademy.ui.filtration;
+package com.infoshareacademy.presentationlayer.filtration;
 
 import com.infoshareacademy.NBPApiManager;
-import com.infoshareacademy.ui.ValuesScanner;
 import com.infoshareacademy.UsageExamplesCode;
 import com.infoshareacademy.data.ExchangeRatesArchiveTable;
+import com.infoshareacademy.presentationlayer.CollectionView;
+import com.infoshareacademy.presentationlayer.ValuesScanner;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -49,8 +50,7 @@ public class FiltrationUI {
         list.add(new FiltrationOption().
                 setDescription("display result of filtration").
                 setFilter((table) -> {
-                    UsageExamplesCode.
-                            displayExchangeRatesArchiveTable(table);
+                    CollectionView.displayExchangeRatesArchiveTable(table);
                     return table;
                 }));
         list.add(new FiltrationOption().

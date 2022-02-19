@@ -1,4 +1,4 @@
-package com.infoshareacademy.ui.filtration;
+package com.infoshareacademy.presentationlayer.filtration;
 
 import com.infoshareacademy.data.ExchangeRatesArchiveTable;
 

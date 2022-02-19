@@ -1,6 +1,6 @@
 package com.infoshareacademy;
 
-import com.infoshareacademy.ui.filtration.FiltrationUI;
+import com.infoshareacademy.presentationlayer.filtration.FiltrationUI;
 
 public class App
 {
