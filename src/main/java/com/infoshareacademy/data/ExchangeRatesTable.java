@@ -8,44 +8,63 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class ExchangeRatesTable extends Vector<ExchangeRate> {
-    public ExchangeRatesTable(){}
-    public ExchangeRatesTable(List<ExchangeRate> list){
+
+    public ExchangeRatesTable() {
+    }
+
+    public ExchangeRatesTable(List<ExchangeRate> list) {
         super(list);
     }
 
-    public ExchangeRatesTable filterBySellPriceFrom(double min){
+    public ExchangeRatesTable search(String condition) {
+
+        Predicate<ExchangeRate> searchCurrency = exchangeRate -> exchangeRate.getCurrency().contains(condition.toLowerCase());
+        Predicate<ExchangeRate> searchCode = exchangeRate -> exchangeRate.getCode().contains(condition.toUpperCase());
+
         List<ExchangeRate> list = this.stream()
-                .filter((currency -> min <= currency.getAsk()))
+                .filter(searchCurrency.or(searchCode))
                 .collect(Collectors.toList());
+
         return new ExchangeRatesTable(list);
     }
-    public ExchangeRatesTable filterBySellPriceTo(double max){
+
+    public ExchangeRatesTable filterBySellPriceFrom(double min) {
         List<ExchangeRate> list = this.stream()
-                .filter((currency -> max >= currency.getAsk()))
-                .collect(Collectors.toList());
-        return new ExchangeRatesTable(list);
-    }
-    public ExchangeRatesTable filterByBuyPriceFrom(double min){
-        List<ExchangeRate> list = this.stream()
-                .filter((currency -> min <= currency.getBid()))
-                .collect(Collectors.toList());
-        return new ExchangeRatesTable(list);
-    }
-    public ExchangeRatesTable filterByBuyPriceTo(double max){
-        List<ExchangeRate> list = this.stream()
-                .filter((currency -> max >= currency.getBid()))
+                .filter((exchangeRate -> min <= exchangeRate.getAsk()))
                 .collect(Collectors.toList());
         return new ExchangeRatesTable(list);
     }
 
-    public ExchangeRatesTable filterByShortName(String... selectedCurrencies){
+    public ExchangeRatesTable filterBySellPriceTo(double max) {
+        List<ExchangeRate> list = this.stream()
+                .filter((exchangeRate -> max >= exchangeRate.getAsk()))
+                .collect(Collectors.toList());
+        return new ExchangeRatesTable(list);
+    }
+
+    public ExchangeRatesTable filterByBuyPriceFrom(double min) {
+        List<ExchangeRate> list = this.stream()
+                .filter((exchangeRate -> min <= exchangeRate.getBid()))
+                .collect(Collectors.toList());
+        return new ExchangeRatesTable(list);
+    }
+
+    public ExchangeRatesTable filterByBuyPriceTo(double max) {
+        List<ExchangeRate> list = this.stream()
+                .filter((exchangeRate -> max >= exchangeRate.getBid()))
+                .collect(Collectors.toList());
+        return new ExchangeRatesTable(list);
+    }
+
+    public ExchangeRatesTable filterByShortName(String... selectedCurrencies) {
         List<String> selectedCurrenciesList = Arrays.asList(selectedCurrencies);
         List<ExchangeRate> list = this.stream()
-                .filter((currency ->
-                        selectedCurrenciesList.contains(currency.getCode())
+                .filter((exchangeRate ->
+                        selectedCurrenciesList.contains(exchangeRate.getCode())
                 ))
                 .collect(Collectors.toList());
         return new ExchangeRatesTable(list);
