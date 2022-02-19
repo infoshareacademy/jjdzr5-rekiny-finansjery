@@ -45,7 +45,7 @@ public class SimplyCustomTable {
         String tableFormat = getFormat(vertical, columnsSizes);
 
         System.out.format(getSeparationLine(cornerTopLeft, horizontalBottom, cornerTopRight, horizontal, columnsSizes));
-        System.out.format(tableFormat, "id", "menu options");
+        System.out.format(tableFormat, topics);
         System.out.format(getSeparationLine(verticalRight, horizontalVertical, verticalLeft, horizontal, columnsSizes));
         for(int i=0; i<columns[0].size(); i++){
             String[] row = new String[columns.length];
