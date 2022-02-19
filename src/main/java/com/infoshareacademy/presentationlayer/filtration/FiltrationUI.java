@@ -1,9 +1,9 @@
 package com.infoshareacademy.presentationlayer.filtration;
 
 import com.infoshareacademy.NBPApiManager;
-import com.infoshareacademy.UsageExamplesCode;
 import com.infoshareacademy.data.ExchangeRatesArchiveTable;
 import com.infoshareacademy.presentationlayer.CollectionView;
+import com.infoshareacademy.presentationlayer.SimplyCustomTable;
 import com.infoshareacademy.presentationlayer.ValuesScanner;
 
 import java.time.LocalDate;
@@ -24,25 +24,22 @@ public class FiltrationUI {
     }
 
     private int selectOptions(List<FiltrationOption> list){
-        int longestLine = list.
-                stream().
-                max((o1, o2)->((Integer)o1.getDescription().length()).compareTo(o2.getDescription().length())).
-                get().
-                getDescription().
-                length();
-        String tableFormat = "| %-3s | %-" + longestLine + "s |%n";
-        System.out.format("+-----+-" + "-".repeat(longestLine) + "-+%n");
-        System.out.format(tableFormat, "id", "menu options");
-        System.out.format("+-----+-" + "-".repeat(longestLine) + "-+%n");
-        for(int i = 0; i < list.size(); i++){
-            System.out.format(tableFormat, i, list.get(i).getDescription());
-        }
-        System.out.format("+-----+-" + "-".repeat(longestLine) + "-+%n");
+        displayOptionsTable(list);
+
         int selectedOption = -1;
         while(selectedOption < 0 || selectedOption >= list.size()){
             selectedOption = ValuesScanner.scanInteger("Enter options id");
         }
         return selectedOption;
+    }
+
+    private void displayOptionsTable(List<FiltrationOption> list){
+        SimplyCustomTable menuTable = new SimplyCustomTable(2);
+        menuTable.setTopics("id", "menu options");
+        for(int i = 0; i < list.size(); i++){
+            menuTable.addRow(((Integer)i).toString(), list.get(i).getDescription());
+        }
+        menuTable.displayMenu();
     }
 
     private List<FiltrationOption> getListOfOptions(NBPApiManager nbpApiManager){
