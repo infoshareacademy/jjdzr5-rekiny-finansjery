@@ -4,7 +4,7 @@ import com.infoshareacademy.data.ExchangeRatesArchiveTable;
 
 import java.util.function.Function;
 
-class FiltrationDisplayOption{
+class FiltrationOption {
     private String description;
     private Function<ExchangeRatesArchiveTable, ExchangeRatesArchiveTable> filter;
 
@@ -16,11 +16,11 @@ class FiltrationDisplayOption{
         return filter;
     }
 
-    public FiltrationDisplayOption setDescription(String description) {
+    public FiltrationOption setDescription(String description) {
         this.description = description;
         return this;
     }
-    public FiltrationDisplayOption setFilter(Function<ExchangeRatesArchiveTable, ExchangeRatesArchiveTable> filter) {
+    public FiltrationOption setFilter(Function<ExchangeRatesArchiveTable, ExchangeRatesArchiveTable> filter) {
         this.filter = filter;
         return this;
     }

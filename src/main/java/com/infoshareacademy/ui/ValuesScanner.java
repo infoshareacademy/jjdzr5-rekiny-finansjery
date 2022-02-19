@@ -60,7 +60,7 @@ public class ValuesScanner {
             try {
                 str = scanner.nextLine().replaceAll(" ", "").split(",");
                 break;
-            } catch (DateTimeException e) {
+            } catch (Exception e) {
                 System.out.println("Incorrect date value.");
                 System.out.print(text + ": ");
             }
@@ -74,7 +74,7 @@ public class ValuesScanner {
             try {
                 str = scanner.nextLine();
                 break;
-            } catch (DateTimeException e) {
+            } catch (Exception e) {
                 System.out.println("Incorrect date value.");
                 System.out.print(text + ": ");
             }

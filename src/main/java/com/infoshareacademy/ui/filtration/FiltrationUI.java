@@ -13,7 +13,7 @@ public class FiltrationUI {
 
     public void filtrationMenu(NBPApiManager nbpApiManager){
         boolean selectingFiltration = true;
-        List<FiltrationDisplayOption> options = getListOfOptions(nbpApiManager);
+        List<FiltrationOption> options = getListOfOptions(nbpApiManager);
         ExchangeRatesArchiveTable collection = nbpApiManager.getCollectionsOfExchangeRates();
         while(collection != null) {
             int selectedOption = selectOptions(options);
@@ -22,7 +22,7 @@ public class FiltrationUI {
         }
     }
 
-    private int selectOptions(List<FiltrationDisplayOption> list){
+    private int selectOptions(List<FiltrationOption> list){
         int longestLine = list.
                 stream().
                 max((o1, o2)->((Integer)o1.getDescription().length()).compareTo(o2.getDescription().length())).
@@ -44,23 +44,23 @@ public class FiltrationUI {
         return selectedOption;
     }
 
-    private List<FiltrationDisplayOption> getListOfOptions(NBPApiManager nbpApiManager){
-        List<FiltrationDisplayOption> list = new ArrayList<>();
-        list.add(new FiltrationDisplayOption().
+    private List<FiltrationOption> getListOfOptions(NBPApiManager nbpApiManager){
+        List<FiltrationOption> list = new ArrayList<>();
+        list.add(new FiltrationOption().
                 setDescription("display result of filtration").
                 setFilter((table) -> {
                     UsageExamplesCode.
                             displayExchangeRatesArchiveTable(table);
                     return table;
                 }));
-        list.add(new FiltrationDisplayOption().
+        list.add(new FiltrationOption().
                 setDescription("reset collection").
                 setFilter((table) -> {
                     table = nbpApiManager.
                             getCollectionsOfExchangeRates();
                     return table;
                 }));
-        list.add(new FiltrationDisplayOption().
+        list.add(new FiltrationOption().
                 setDescription("filter daily tables with trading date since selected date").
                 setFilter((table) -> {
                     LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \"2022-02-08\")");
@@ -68,7 +68,7 @@ public class FiltrationUI {
                             filterByTradingDateFrom(date);
                     return table;
                 }));
-        list.add(new FiltrationDisplayOption().
+        list.add(new FiltrationOption().
                 setDescription("filter daily tables with trading date until selected date").
                 setFilter((table) -> {
                     LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \"2022-02-08\")");
@@ -76,7 +76,7 @@ public class FiltrationUI {
                             filterByTradingDateTo(date);
                     return table;
                 }));
-        list.add(new FiltrationDisplayOption().
+        list.add(new FiltrationOption().
                 setDescription("filter daily tables with effective date since selected date").
                 setFilter((table) -> {
                     LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \"2022-02-08\")");
@@ -84,7 +84,7 @@ public class FiltrationUI {
                             filterByEffectiveDateFrom(date);
                     return table;
                 }));
-        list.add(new FiltrationDisplayOption().
+        list.add(new FiltrationOption().
                 setDescription("filter daily tables with effective date until selected date").
                 setFilter((table) -> {
                     LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \"2022-02-08\")");
@@ -92,7 +92,7 @@ public class FiltrationUI {
                             filterByEffectiveDateTo(date);
                     return table;
                 }));
-        list.add(new FiltrationDisplayOption().
+        list.add(new FiltrationOption().
                 setDescription("filter currencies with selected short names").
                 setFilter((table) -> {
                     String[] currencies = ValuesScanner.scanMultipleStrings("Enter selected currencies (example \"USD,SEK\")");
@@ -101,7 +101,7 @@ public class FiltrationUI {
                             filterByShortName(currencies));
                     return table;
                 }));
-        list.add(new FiltrationDisplayOption().
+        list.add(new FiltrationOption().
                 setDescription("filter currencies with ask prices above selected value").
                 setFilter((table) -> {
                     double value = ValuesScanner.scanDouble("Enter the threshold value");
@@ -110,7 +110,7 @@ public class FiltrationUI {
                             filterBySellPriceFrom(value));
                     return table;
                 }));
-        list.add(new FiltrationDisplayOption().
+        list.add(new FiltrationOption().
                 setDescription("filter currencies with ask prices below selected value").
                 setFilter((table) -> {
                     double value = ValuesScanner.scanDouble("Enter the threshold value");
@@ -119,7 +119,7 @@ public class FiltrationUI {
                             filterBySellPriceTo(value));
                     return table;
                 }));
-        list.add(new FiltrationDisplayOption().
+        list.add(new FiltrationOption().
                 setDescription("filter currencies with bid prices above selected value").
                 setFilter((table) -> {
                     double value = ValuesScanner.scanDouble("Enter the threshold value");
@@ -128,7 +128,7 @@ public class FiltrationUI {
                             filterByBuyPriceFrom(value));
                     return table;
                 }));
-        list.add(new FiltrationDisplayOption().
+        list.add(new FiltrationOption().
                 setDescription("filter currencies with bid prices belowe selected value").
                 setFilter((table) -> {
                     double value = ValuesScanner.scanDouble("Enter the threshold value");
@@ -137,7 +137,7 @@ public class FiltrationUI {
                             filterByBuyPriceTo(value));
                     return table;
                 }));
-        list.add(new FiltrationDisplayOption().
+        list.add(new FiltrationOption().
                 setDescription("back to main menu").
                 setFilter((table) -> {
                     ExchangeRatesArchiveTable o = null;

@@ -9,11 +9,38 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 public class UsageExamplesCode {
+     interface Test{
+         void method();
+     }
+
+     public void showTest(Test test){
+         test.method();
+     }
+
     public static void showExamples(NBPApiManager nbpApiManager){
 
 
         ExchangeRatesArchiveTable exchangeRatesArchiveTable = nbpApiManager.getCollectionsOfExchangeRates();
         displayExchangeRatesArchiveTable(exchangeRatesArchiveTable);
+
+        DailyExchangeRates daily =  exchangeRatesArchiveTable.get(0);
+        daily.setNo("dsdasdsadsadsa");
+        nbpApiManager.saveCollection();
+
+        exchangeRatesArchiveTable.remove(exchangeRatesArchiveTable.get(0));
+        nbpApiManager.saveCollection();
+
+        Test test = new Test() {
+            @Override
+            public void method() {
+
+            }
+        };
+
+
+
+
+
 
         System.out.println("============================================================================");
         ExchangeRatesArchiveTable fromToExchangeRatesArchiveTable = nbpApiManager
