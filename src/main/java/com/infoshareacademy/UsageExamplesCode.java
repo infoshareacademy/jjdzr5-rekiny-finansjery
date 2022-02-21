@@ -1,180 +1,76 @@
 package com.infoshareacademy;
 
-import com.infoshareacademy.data.DailyExchangeRates;
-import com.infoshareacademy.data.ExchangeRate;
+import com.infoshareacademy.presentationlayer.CollectionView;
 import com.infoshareacademy.data.ExchangeRatesArchiveTable;
-import com.infoshareacademy.data.ExchangeRatesTable;
 
 import java.time.LocalDate;
-import java.time.Month;
-import java.util.Optional;
-import java.util.Scanner;
 
 public class UsageExamplesCode {
     public static void showExamples(NBPApiManager nbpApiManager) {
 
 
-        ExchangeRatesArchiveTable exchangeRatesArchiveTable = nbpApiManager.getCollectionsOfExchangeRates();
-        displayExchangeRatesArchiveTable(exchangeRatesArchiveTable);
+        ExchangeRatesArchiveTable exchangeRatesArchiveTable = nbpApiManager.getCollectionsOfExchangeRates(); // pobiera kolekcję
+        CollectionView.displayExchangeRatesArchiveTable(exchangeRatesArchiveTable.filterByTradingDateTo(LocalDate.of(2022,01,10))); // wyśwetla zawartość kolekcji
 
-        System.out.println("============================================================================");
-        ExchangeRatesArchiveTable fromToExchangeRatesArchiveTable = nbpApiManager
-                .getCollectionsOfExchangeRates()
-                .filterByEffectiveDateTo(LocalDate.of(2022, 1, 25))
-                .filterByEffectiveDateFrom(LocalDate.of(2022, 1, 21));
-
-        for (DailyExchangeRates dailyExchangeRates : fromToExchangeRatesArchiveTable) {
-            System.out.println(dailyExchangeRates);
-        }
-
-        System.out.println("============================================================================");
-        fromToExchangeRatesArchiveTable = nbpApiManager
-                .getCollectionsOfExchangeRates()
-                .filterByEffectiveDateTo(LocalDate.of(2022, 1, 24))
-                .filterByEffectiveDateFrom(LocalDate.of(2022, 1, 21))
-                .forEachDay(dailyExchangeRates -> dailyExchangeRates.getRates().filterByShortName("USD"));
-
-
-        for (DailyExchangeRates dailyExchangeRates : fromToExchangeRatesArchiveTable) {
-            System.out.println(dailyExchangeRates);
-        }
-
-        System.out.println("============================================================================");
-        fromToExchangeRatesArchiveTable = nbpApiManager
-                .getCollectionsOfExchangeRates()
-                .filterByEffectiveDateTo(LocalDate.of(2022, 1, 24))
-                .filterByEffectiveDateFrom(LocalDate.of(2022, 1, 21))
-                .forEachDay(dailyExchangeRates -> dailyExchangeRates.getRates().filterByBuyPriceFrom(1).filterByBuyPriceTo(3));
-
-        for (DailyExchangeRates dailyExchangeRates : fromToExchangeRatesArchiveTable) {
-            System.out.println(dailyExchangeRates);
-        }
-
-        System.out.println("============================================================================");
-        fromToExchangeRatesArchiveTable = nbpApiManager
-                .getCollectionsOfExchangeRates()
-                .filterByEffectiveDateTo(LocalDate.of(2022, 1, 24))
-                .filterByEffectiveDateFrom(LocalDate.of(2022, 1, 21));
-
-
-        for (DailyExchangeRates dailyExchangeRates : fromToExchangeRatesArchiveTable) {
-            System.out.println(dailyExchangeRates);
-        }
-
-        System.out.println("============================================================================");
-        Optional<DailyExchangeRates> lastDay = nbpApiManager
-                .getCollectionsOfExchangeRates()
-                .getLatestEffectiveDate();
-
-        if (lastDay.isPresent()) {
-            ExchangeRatesTable lastDayRates = lastDay
-                    .get()
-                    .getRates()
-                    .filterByShortName("CZK", "USD");
-            displayExchangeRatesTable(lastDayRates);
-        }
-
-        System.out.println("============================================================================");
-
-        Scanner scanner = new Scanner(System.in);
-        String searchedPhrase;
-        Month month;
-
-//        String[] date;
-//        System.out.println("Search for effective date (year month day):");
-//        while (true) {
+//        System.out.println("============================================================================");
+//        ExchangeRatesArchiveTable fromToExchangeRatesArchiveTable = nbpApiManager
+//                .getCollectionsOfExchangeRates()
+//                .filterByEffectiveDateTo(LocalDate.of(2022,1,25))
+//                .filterByEffectiveDateFrom(LocalDate.of(2022, 1, 21));
 //
-//            searchedPhrase = scanner.nextLine();
+//        for(DailyExchangeRates dailyExchangeRates : fromToExchangeRatesArchiveTable){
+//            System.out.println(dailyExchangeRates);
+//        }
 //
-//            if (searchedPhrase.equals("q")) {
-//                break;
-//            }
+//        System.out.println("============================================================================");
+//        fromToExchangeRatesArchiveTable = nbpApiManager
+//                .getCollectionsOfExchangeRates()
+//                .filterByEffectiveDateTo(LocalDate.of(2022,1,24))
+//                .filterByEffectiveDateFrom(LocalDate.of(2022, 1, 21))
+//                .forEachDay(dailyExchangeRates -> dailyExchangeRates.getRates().filterByShortName("USD"));
 //
-//            date = searchedPhrase.split(" ");
 //
-//            try {
-//                month = Month.of(Integer.parseInt(date[1]));
-//            } catch (NumberFormatException formatException) {
+//        for(DailyExchangeRates dailyExchangeRates : fromToExchangeRatesArchiveTable){
+//            System.out.println(dailyExchangeRates);
+//        }
 //
-//                try {
-//                    month = Month.valueOf(date[1].toUpperCase());
-//                } catch (IllegalArgumentException argumentException) {
-//                    System.out.println("Incorrect month.");
-//                    continue;
-//                }
+//        System.out.println("============================================================================");
+//        fromToExchangeRatesArchiveTable = nbpApiManager
+//                .getCollectionsOfExchangeRates()
+//                .filterByEffectiveDateTo(LocalDate.of(2022,1,24))
+//                .filterByEffectiveDateFrom(LocalDate.of(2022, 1, 21))
+//                .forEachDay(dailyExchangeRates -> dailyExchangeRates.getRates().filterByBuyPriceFrom(1).filterByBuyPriceTo(3));
 //
-//            }
+//        for(DailyExchangeRates dailyExchangeRates : fromToExchangeRatesArchiveTable){
+//            System.out.println(dailyExchangeRates);
+//        }
 //
-//            LocalDate effectiveDate = LocalDate.of(Integer.parseInt(date[0]), month, Integer.parseInt(date[2]));
-//            Optional<DailyExchangeRates> dailyExchangeRates = nbpApiManager
-//                    .getCollectionsOfExchangeRates()
-//                    .searchEffectiveDate(effectiveDate);
+//        System.out.println("============================================================================");
+//        fromToExchangeRatesArchiveTable = nbpApiManager
+//                .getCollectionsOfExchangeRates()
+//                .filterByEffectiveDateTo(LocalDate.of(2022,1,24))
+//                .filterByEffectiveDateFrom(LocalDate.of(2022, 1, 21));
 //
-//            if (dailyExchangeRates.isPresent()) {
-//                displayDailyExchangeRate(dailyExchangeRates.get());
-//            } else {
-//                System.out.println("No results.");
-//            }
 //
+//        for(DailyExchangeRates dailyExchangeRates : fromToExchangeRatesArchiveTable){
+//            System.out.println(dailyExchangeRates);
+//        }
+//
+//        System.out.println("============================================================================");
+//        Optional<DailyExchangeRates> lastDay = nbpApiManager
+//                .getCollectionsOfExchangeRates()
+//                .getLatestEffectiveDate();
+//
+//        if(lastDay.isPresent()){
+//            ExchangeRatesTable lastDayRates = lastDay
+//                    .get()
+//                    .getRates()
+//                    .filterByShortName("CZK", "USD");
+//            displayExchangeRatesTable(lastDayRates);
 //        }
 
-        System.out.println("Search for effective date by giving month: ");
-        while (true) {
-
-            searchedPhrase = scanner.nextLine();
-
-            if (searchedPhrase.equals("q")) {
-                break;
-            }
-
-            try {
-                month = Month.of(Integer.parseInt(searchedPhrase));
-            } catch (NumberFormatException formatException) {
-
-                try {
-                    month = Month.valueOf(searchedPhrase.toUpperCase());
-                } catch (IllegalArgumentException argumentException) {
-                    System.out.println("Incorrect month.");
-                    continue;
-                }
-
-            }
-
-            fromToExchangeRatesArchiveTable = nbpApiManager
-                    .getCollectionsOfExchangeRates()
-                    .searchEffectiveDateByMonth(2022, month);
-
-            if (fromToExchangeRatesArchiveTable.isEmpty()) {
-                System.out.println("No results.");
-            } else {
-                displayExchangeRatesArchiveTable(fromToExchangeRatesArchiveTable);
-            }
-
-        }
 
     }
 
-    public static void displayExchangeRatesArchiveTable(ExchangeRatesArchiveTable table) {
-        for (int i = 0; i < table.size(); i++) {
-            displayDailyExchangeRate(table.get(i));
-        }
-    }
-
-    public static void displayDailyExchangeRate(DailyExchangeRates rate) {
-        System.out.println(rate.getNo() + "\nEffective Date: " + rate.getEffectiveDate() + "\nTrading date: " + rate.getTradingDate());
-        displayExchangeRatesTable(rate.getRates());
-    }
-
-    public static void displayExchangeRatesTable(ExchangeRatesTable table) {
-        for (int j = 0; j < table.size(); j++) {
-            displayExchangeRate(table.get(j));
-        }
-    }
-
-    public static void displayExchangeRate(ExchangeRate rate) {
-        System.out.println(rate.getCurrency() + " " + rate.getCode() + " " +
-                rate.getBid() + " " +
-                rate.getAsk());
-    }
 
 }
