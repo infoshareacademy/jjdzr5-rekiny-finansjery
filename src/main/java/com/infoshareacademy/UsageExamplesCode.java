@@ -76,34 +76,30 @@ public class UsageExamplesCode {
         System.out.println("============================================================================");
 
         Scanner scanner = new Scanner(System.in);
-        String searchCondition;
+        String searchedPhrase;
 
+        System.out.println("Szukanie po numerze tabeli:");
         while (true) {
 
-            searchCondition = scanner.nextLine();
+            searchedPhrase = scanner.nextLine();
 
-            if (searchCondition.equals("q")) {
+            if (searchedPhrase.equals("q")) {
                 break;
             }
 
-            if (searchCondition.length() < 3) {
+            if (searchedPhrase.length() < 3) {
                 System.out.println("Searched phrase is too short.");
                 continue;
             }
 
-            if (lastDay.isPresent()) {
+            Optional<DailyExchangeRates> dailyExchangeRates = nbpApiManager
+                    .getCollectionsOfExchangeRates()
+                    .searchTableNo(2022, searchedPhrase);
 
-                ExchangeRatesTable exchangeRatesTable = lastDay
-                        .get()
-                        .getRates()
-                        .search(searchCondition);
-
-                if (exchangeRatesTable.isEmpty()) {
-                    System.out.println("No results.");
-                } else {
-                    displayExchangeRatesTable(exchangeRatesTable);
-                }
-
+            if (dailyExchangeRates.isPresent()) {
+                displayDailyExchangeRate(dailyExchangeRates.get());
+            } else {
+                System.out.println("No results.");
             }
 
         }
@@ -117,7 +113,7 @@ public class UsageExamplesCode {
     }
 
     public static void displayDailyExchangeRate(DailyExchangeRates rate) {
-        System.out.println(rate.getNo() + " " + rate.getTradingDate());
+        System.out.println(rate.getNo() + "\nEffective Date: " + rate.getEffectiveDate() + "\nTrading date: " + rate.getTradingDate());
         displayExchangeRatesTable(rate.getRates());
     }
 
