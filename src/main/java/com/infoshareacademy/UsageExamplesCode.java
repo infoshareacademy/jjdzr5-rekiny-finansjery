@@ -6,6 +6,7 @@ import com.infoshareacademy.data.ExchangeRatesArchiveTable;
 import com.infoshareacademy.data.ExchangeRatesTable;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -77,8 +78,47 @@ public class UsageExamplesCode {
 
         Scanner scanner = new Scanner(System.in);
         String searchedPhrase;
+        Month month;
 
-        System.out.println("Szukanie po numerze tabeli:");
+//        String[] date;
+//        System.out.println("Search for effective date (year month day):");
+//        while (true) {
+//
+//            searchedPhrase = scanner.nextLine();
+//
+//            if (searchedPhrase.equals("q")) {
+//                break;
+//            }
+//
+//            date = searchedPhrase.split(" ");
+//
+//            try {
+//                month = Month.of(Integer.parseInt(date[1]));
+//            } catch (NumberFormatException formatException) {
+//
+//                try {
+//                    month = Month.valueOf(date[1].toUpperCase());
+//                } catch (IllegalArgumentException argumentException) {
+//                    System.out.println("Incorrect month.");
+//                    continue;
+//                }
+//
+//            }
+//
+//            LocalDate effectiveDate = LocalDate.of(Integer.parseInt(date[0]), month, Integer.parseInt(date[2]));
+//            Optional<DailyExchangeRates> dailyExchangeRates = nbpApiManager
+//                    .getCollectionsOfExchangeRates()
+//                    .searchEffectiveDate(effectiveDate);
+//
+//            if (dailyExchangeRates.isPresent()) {
+//                displayDailyExchangeRate(dailyExchangeRates.get());
+//            } else {
+//                System.out.println("No results.");
+//            }
+//
+//        }
+
+        System.out.println("Search for effective date by giving month: ");
         while (true) {
 
             searchedPhrase = scanner.nextLine();
@@ -87,19 +127,27 @@ public class UsageExamplesCode {
                 break;
             }
 
-            if (searchedPhrase.length() < 3) {
-                System.out.println("Searched phrase is too short.");
-                continue;
+            try {
+                month = Month.of(Integer.parseInt(searchedPhrase));
+            } catch (NumberFormatException formatException) {
+
+                try {
+                    month = Month.valueOf(searchedPhrase.toUpperCase());
+                } catch (IllegalArgumentException argumentException) {
+                    System.out.println("Incorrect month.");
+                    continue;
+                }
+
             }
 
-            Optional<DailyExchangeRates> dailyExchangeRates = nbpApiManager
+            fromToExchangeRatesArchiveTable = nbpApiManager
                     .getCollectionsOfExchangeRates()
-                    .searchTableNo(2022, searchedPhrase);
+                    .searchEffectiveDateByMonth(2022, month);
 
-            if (dailyExchangeRates.isPresent()) {
-                displayDailyExchangeRate(dailyExchangeRates.get());
-            } else {
+            if (fromToExchangeRatesArchiveTable.isEmpty()) {
                 System.out.println("No results.");
+            } else {
+                displayExchangeRatesArchiveTable(fromToExchangeRatesArchiveTable);
             }
 
         }

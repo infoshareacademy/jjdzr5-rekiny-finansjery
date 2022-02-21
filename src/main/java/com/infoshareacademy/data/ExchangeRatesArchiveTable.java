@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +35,40 @@ public class ExchangeRatesArchiveTable extends Vector<DailyExchangeRates> {
         return this.stream()
                 .filter(searchTableNo.and(searchTableYear))
                 .findAny();
+    }
+
+    public Optional<DailyExchangeRates> searchEffectiveDate(LocalDate effectiveDate) {
+
+        Predicate<DailyExchangeRates> searchEffectiveDate = dailyExchangeRates -> dailyExchangeRates.getEffectiveDate().equals(effectiveDate);
+
+        return this.stream()
+                .filter(searchEffectiveDate)
+                .findAny();
+    }
+
+    public ExchangeRatesArchiveTable searchEffectiveDateByMonth(int year, Month month) {
+
+        boolean leapYear = LocalDate.of(year, 1, 1).isLeapYear();
+
+        return filterByEffectiveDateFrom(LocalDate.of(year, month, 1))
+                .filterByEffectiveDateTo(LocalDate.of(year, month, month.length(leapYear)));
+    }
+
+    public Optional<DailyExchangeRates> searchTradingDate(LocalDate tradingDate) {
+
+        Predicate<DailyExchangeRates> searchTradingDate = dailyExchangeRates -> dailyExchangeRates.getTradingDate().equals(tradingDate);
+
+        return this.stream()
+                .filter(searchTradingDate)
+                .findAny();
+    }
+
+    public ExchangeRatesArchiveTable searchTradingDateByMonth(int year, Month month) {
+
+        boolean leapYear = LocalDate.of(year, 1, 1).isLeapYear();
+
+        return filterByTradingDateFrom(LocalDate.of(year, month, 1))
+                .filterByTradingDateTo(LocalDate.of(year, month, month.length(leapYear)));
     }
 
     public ExchangeRatesArchiveTable filterByTradingDateFrom(LocalDate after) {
