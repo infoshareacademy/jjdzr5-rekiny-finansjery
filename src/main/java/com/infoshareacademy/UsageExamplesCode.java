@@ -2,15 +2,19 @@ package com.infoshareacademy;
 
 import com.infoshareacademy.presentationlayer.CollectionView;
 import com.infoshareacademy.data.ExchangeRatesArchiveTable;
+import com.infoshareacademy.presentationlayer.Menu;
 
 import java.time.LocalDate;
 
 public class UsageExamplesCode {
     public static void showExamples(NBPApiManager nbpApiManager){
 
+        Menu menu = new Menu();
+        menu.showMenu();
 
-        ExchangeRatesArchiveTable exchangeRatesArchiveTable = nbpApiManager.getCollectionsOfExchangeRates(); // pobiera kolekcję
-        CollectionView.displayExchangeRatesArchiveTable(exchangeRatesArchiveTable.filterByTradingDateTo(LocalDate.of(2022,01,10))); // wyśwetla zawartość kolekcji
+
+//        ExchangeRatesArchiveTable exchangeRatesArchiveTable = nbpApiManager.getCollectionsOfExchangeRates(); // pobiera kolekcję
+//        CollectionView.displayExchangeRatesArchiveTable(exchangeRatesArchiveTable.filterByTradingDateTo(LocalDate.of(2022,01,10))); // wyśwetla zawartość kolekcji
 
 //        System.out.println("============================================================================");
 //        ExchangeRatesArchiveTable fromToExchangeRatesArchiveTable = nbpApiManager
