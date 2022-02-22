@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Vector;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -20,16 +21,24 @@ public class ExchangeRatesTable extends Vector<ExchangeRate> {
         super(list);
     }
 
-    public ExchangeRatesTable search(String condition) {
+    public ExchangeRatesTable searchCurrency(String currency) {
 
-        Predicate<ExchangeRate> searchCurrency = exchangeRate -> exchangeRate.getCurrency().contains(condition.toLowerCase());
-        Predicate<ExchangeRate> searchCode = exchangeRate -> exchangeRate.getCode().contains(condition.toUpperCase());
+        Predicate<ExchangeRate> searchCurrency = exchangeRate -> exchangeRate.getCurrency().contains(currency.toLowerCase());
 
         List<ExchangeRate> list = this.stream()
-                .filter(searchCurrency.or(searchCode))
+                .filter(searchCurrency)
                 .collect(Collectors.toList());
 
         return new ExchangeRatesTable(list);
+    }
+
+    public Optional<ExchangeRate> searchCode(String code) {
+
+        Predicate<ExchangeRate> searchCode = exchangeRate -> exchangeRate.getCode().contains(code.toUpperCase());
+
+        return this.stream()
+                .filter(searchCode)
+                .findAny();
     }
 
     public ExchangeRatesTable filterBySellPriceFrom(double min) {
