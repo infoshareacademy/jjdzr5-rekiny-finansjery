@@ -7,14 +7,18 @@ public class Menu {
     public void showMenu(){
         Scanner scanner = new Scanner(System.in);
 
+        String[] menuOptions = {"Search for historical information",
+                "Show latest exchange rates",
+                "Exit"};
 
-        String[] menuOptions = {"Option 1", "Option 2", "Option 3"};
-        String[] option1SubOptions = {"Sub-option 1", "Sub-option 2", "Sub-option 3"};
-
+        String[] option1SubOptions = {"Search by date",
+                "Search by currency",
+                "Search by code"};
 
         for (int i = 0; i < menuOptions.length; i++) {
-            System.out.println(menuOptions[i]);
+            System.out.println(i + " - " + menuOptions[i]);
         }
+
         System.out.println("\n");
         boolean isInt = false;
         do {
@@ -23,11 +27,11 @@ public class Menu {
                 int menuChoice = scanner.nextInt();
                 isInt = true;
                 switch (menuChoice) {
-                    case 1:
+                    case 0:
                         System.out.println("You've chosen " + menuOptions[0]);
                         System.out.println("The available sub-options are: ");
-                        for (int i = 0; i < option1SubOptions.length; i++) {
-                            System.out.println(option1SubOptions[i]);
+                        for (int j = 0; j < option1SubOptions.length; j++) {
+                            System.out.println(j + " - " + option1SubOptions[j]);
                         }
                         System.out.println("\n");
                         System.out.println("Please choose your sub-option:");
@@ -36,13 +40,13 @@ public class Menu {
                             menuChoice = scanner.nextInt();
                             isInt = true;
                             switch (menuChoice) {
-                                case 1:
+                                case 0:
                                     System.out.println("You've chosen " + option1SubOptions[0]);
                                     break;
-                                case 2:
+                                case 1:
                                     System.out.println("You've chosen " + option1SubOptions[1]);
                                     break;
-                                case 3:
+                                case 2:
                                     System.out.println("You've chosen " + option1SubOptions[2]);
                                     break;
                                 default:
@@ -54,10 +58,10 @@ public class Menu {
                             scanner.next();
                         }
                         break;
-                    case 2:
+                    case 1:
                         System.out.println("You've chosen " + menuOptions[1]);
                         break;
-                    case 3:
+                    case 2:
                         System.out.println("You've chosen " + menuOptions[2]);
                         break;
                     default:
