@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class SimplyCustomTable {
+public class SimpleCustomTable {
     private final Character horizontal = 0x2500;
     private final Character vertical = 0x2502;
     private final Character cornerTopLeft = 0x250C;
@@ -20,7 +20,7 @@ public class SimplyCustomTable {
     private int columns;
     private String[] topics;
     private List<String[]> rows;
-    public SimplyCustomTable(int columns){
+    public SimpleCustomTable(int columns){
         this.columns = columns;
         topics = new String[columns];
         for(int i=0; i<columns; i++){
@@ -29,7 +29,7 @@ public class SimplyCustomTable {
         this.rows = new ArrayList<>();
     }
 
-    public SimplyCustomTable setTopics(String... row){
+    public SimpleCustomTable setTopics(String... row){
         if(columns == row.length) {
             for (int i = 0; i < topics.length; i++) {
                 topics[i] = row[i];
@@ -38,7 +38,7 @@ public class SimplyCustomTable {
         return this;
     }
 
-    public SimplyCustomTable addRow(String... row){
+    public SimpleCustomTable addRow(String... row){
         if(columns == row.length){
             rows.add(row);
         }

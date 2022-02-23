@@ -10,7 +10,7 @@ public class ValuesScanner {
     public static LocalDate scanLocalDate(String text) {
         LocalDate since = null;
         System.out.print(text + ": ");;
-        while (scanner.hasNext()) {
+        while (true) {
             try {
                 since = LocalDate.parse(scanner.nextLine());
                 break;
@@ -24,7 +24,7 @@ public class ValuesScanner {
     public static Double scanDouble(String text) {
         Double value = 0D;
         System.out.print(text + ": ");;
-        while (scanner.hasNext()) {
+        while (true) {
             try {
                 value = scanner.nextDouble();
                 break;
@@ -40,7 +40,7 @@ public class ValuesScanner {
     public static Integer scanInteger(String text) {
         int value = 0;
         System.out.print(text + ": ");;
-        while (scanner.hasNext()) {
+        while (true) {
             try {
                 value = scanner.nextInt();
                 break;
@@ -53,10 +53,33 @@ public class ValuesScanner {
         }
         return value;
     }
+    public static Integer scanIntegerInRange(String text, int min, int max) {
+        int value = 0;
+        System.out.print(text + ": ");;
+        while (true) {
+            try {
+                value = scanner.nextInt();
+                if(value < min || value >= max){
+                    throw new IndexOutOfBoundsException();
+                }
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("Incorrect date value.");
+                System.out.print(text + ": ");
+            } catch (IndexOutOfBoundsException e){
+                System.out.println("No such option.");
+                System.out.print(text + ": ");
+            }
+            finally {
+                scanner.nextLine();
+            }
+        }
+        return value;
+    }
     public static String[] scanMultipleStrings(String text) {
         String[] str = new String[0];
         System.out.print(text + ": ");;
-        while (scanner.hasNext()) {
+        while (true) {
             try {
                 str = scanner.nextLine().replaceAll(" ", "").split(",");
                 break;
@@ -70,7 +93,7 @@ public class ValuesScanner {
     public static String scanString(String text) {
         String str = "";
         System.out.print(text + ": ");;
-        while (scanner.hasNext()) {
+        while (true) {
             try {
                 str = scanner.nextLine();
                 break;

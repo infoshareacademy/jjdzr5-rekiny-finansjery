@@ -3,7 +3,7 @@ package com.infoshareacademy.presentationlayer.filtration;
 import com.infoshareacademy.NBPApiManager;
 import com.infoshareacademy.data.ExchangeRatesArchiveTable;
 import com.infoshareacademy.presentationlayer.CollectionView;
-import com.infoshareacademy.presentationlayer.SimplyCustomTable;
+import com.infoshareacademy.presentationlayer.SimpleCustomTable;
 import com.infoshareacademy.presentationlayer.ValuesScanner;
 
 import java.time.LocalDate;
@@ -27,17 +27,15 @@ public class FiltrationUI {
         displayOptionsTable(list);
 
         int selectedOption = -1;
-        while(selectedOption < 0 || selectedOption >= list.size()){
-            selectedOption = ValuesScanner.scanInteger("Enter options id");
-        }
+        selectedOption = ValuesScanner.scanIntegerInRange("Enter options id", 0, list.size());
         return selectedOption;
     }
 
     private void displayOptionsTable(List<FiltrationOption> list){
-        SimplyCustomTable menuTable = new SimplyCustomTable(2);
+        SimpleCustomTable menuTable = new SimpleCustomTable(2);
         menuTable.setTopics("id", "menu options");
         for(int i = 0; i < list.size(); i++){
-            menuTable.addRow(((Integer)i).toString(), list.get(i).getDescription());
+            menuTable.addRow(String.valueOf(i), list.get(i).getDescription());
         }
         menuTable.displayMenu();
     }

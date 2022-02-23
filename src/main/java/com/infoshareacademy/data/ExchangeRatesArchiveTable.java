@@ -55,7 +55,7 @@ public class ExchangeRatesArchiveTable extends Vector<DailyExchangeRates> {
         ExchangeRatesArchiveTable list = new ExchangeRatesArchiveTable(this);
         for(int i=0; i<list.size(); i++){
             DailyExchangeRates dailyExchangeRates = list.get(i).copy();
-            function.apply(dailyExchangeRates);
+            //function.apply(dailyExchangeRates);
             dailyExchangeRates.setRates(function.apply(dailyExchangeRates));
             list.set(i, dailyExchangeRates);
         }
