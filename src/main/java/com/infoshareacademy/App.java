@@ -3,10 +3,16 @@ package com.infoshareacademy;
 import com.infoshareacademy.presentationlayer.BetterMenu;
 import com.infoshareacademy.presentationlayer.ValuesScanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.concurrent.atomic.AtomicReference;
 
 public class App
 {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
+
     public static void main( String[] args )
     {
         AtomicReference<Boolean> stayInLoop = new AtomicReference<>(true);
