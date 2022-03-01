@@ -1,9 +1,6 @@
 package com.infoshareacademy;
 
-import com.infoshareacademy.presentationlayer.CollectionView;
-import com.infoshareacademy.data.ExchangeRatesArchiveTable;
-
-import java.time.LocalDate;
+import com.infoshareacademy.services.NBPApiManager;
 
 public class UsageExamplesCode {
      interface Test{

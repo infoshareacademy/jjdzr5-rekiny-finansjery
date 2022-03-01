@@ -1,15 +1,20 @@
-package com.infoshareacademy.data;
+package com.infoshareacademy.domain;
+
+import com.infoshareacademy.services.ExchangeRatesService;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DailyExchangeRates {
     private String table;
     private String no;
     private LocalDate tradingDate;
     private LocalDate effectiveDate;
-    private ExchangeRatesTable rates;
+    private CopyOnWriteArrayList<ExchangeRate> rates;
 
-    public DailyExchangeRates(String table, String no, LocalDate tradingDate, LocalDate effectiveDate, ExchangeRatesTable rates) {
+    public DailyExchangeRates(String table, String no, LocalDate tradingDate, LocalDate effectiveDate, CopyOnWriteArrayList<ExchangeRate> rates) {
         this.table = table;
         this.no = no;
         this.tradingDate = tradingDate;
@@ -51,16 +56,16 @@ public class DailyExchangeRates {
         this.effectiveDate = effectiveDate;
     }
 
-    public ExchangeRatesTable getRates() {
+    public CopyOnWriteArrayList<ExchangeRate> getRates() {
         return rates;
     }
 
-    public void setRates(ExchangeRatesTable rates) {
-        this.rates = rates;
+    public void setRates(List<ExchangeRate> rates) {
+        this.rates = new CopyOnWriteArrayList<>(rates);
     }
 
     public DailyExchangeRates copy(){
-        return new DailyExchangeRates(table, no, tradingDate, effectiveDate, new ExchangeRatesTable(rates));
+        return new DailyExchangeRates(table, no, tradingDate, effectiveDate, new CopyOnWriteArrayList<>(rates));
     }
 
     @Override

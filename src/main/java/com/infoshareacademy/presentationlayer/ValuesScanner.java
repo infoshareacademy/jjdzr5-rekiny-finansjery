@@ -1,5 +1,7 @@
 package com.infoshareacademy.presentationlayer;
 
+import org.slf4j.Logger;
+
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.InputMismatchException;
@@ -85,6 +87,7 @@ public class ValuesScanner {
                 break;
             } catch (Exception e) {
                 System.out.println("Incorrect date value.");
+
                 System.out.print(text + ": ");
             }
         }

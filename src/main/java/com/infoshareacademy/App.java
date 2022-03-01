@@ -1,6 +1,7 @@
 package com.infoshareacademy;
 
 import com.infoshareacademy.presentationlayer.filtration.FiltrationUI;
+import com.infoshareacademy.services.NBPApiManager;
 
 public class App
 {
