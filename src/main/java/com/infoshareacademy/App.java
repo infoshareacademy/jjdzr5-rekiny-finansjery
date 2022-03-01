@@ -18,13 +18,15 @@ public class App
     public static void main( String[] args )
     {
         AtomicReference<Boolean> stayInLoop = new AtomicReference<>(true);
+        NBPApiManager nbpApiManager = new NBPApiManager();
 
         BetterMenu menu = new BetterMenu();
 
         menu.addMenuOption(new BetterMenu.MenuOption().
                 setDescription("Filtration").
                 setMethod(()->{
-                    System.out.println("This is a test You've chosen '0'.");
+                    FiltrationUI filtrationUI = new FiltrationUI();
+                    filtrationUI.filtrationMenu(nbpApiManager);
         }));
 
         menu.addMenuOption(new BetterMenu.MenuOption().

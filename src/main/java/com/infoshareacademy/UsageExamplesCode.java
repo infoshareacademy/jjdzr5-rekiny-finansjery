@@ -3,7 +3,6 @@ package com.infoshareacademy;
 
 import com.infoshareacademy.services.NBPApiManager;
 import com.infoshareacademy.presentationlayer.CollectionView;
-import com.infoshareacademy.data.ExchangeRatesArchiveTable;
 import com.infoshareacademy.presentationlayer.Menu;
 
 import java.time.LocalDate;
