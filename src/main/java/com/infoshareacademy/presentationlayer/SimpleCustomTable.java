@@ -45,7 +45,7 @@ public class SimpleCustomTable {
         return this;
     }
 
-    public void displayMenu(){
+    public void displayTable(){
         int[] columnsSizes = getColumsSizes();
         String tableFormat = getFormat(vertical, columnsSizes);
 

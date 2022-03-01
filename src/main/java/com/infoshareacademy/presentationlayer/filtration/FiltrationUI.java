@@ -40,7 +40,7 @@ public class FiltrationUI {
         for(int i = 0; i < list.size(); i++){
             menuTable.addRow(String.valueOf(i), list.get(i).getDescription());
         }
-        menuTable.displayMenu();
+        menuTable.displayTable();
     }
 
     private List<FiltrationOption> getListOfOptions(NBPApiManager nbpApiManager){

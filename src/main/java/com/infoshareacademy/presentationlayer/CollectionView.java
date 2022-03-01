@@ -26,8 +26,6 @@ public class CollectionView {
                 asciiTable.addRow(rate.getCode(), rate.getCurrency(), rate.getBid(), rate.getAsk());
             }
         }
-        asciiTable.addRule();
-
         String rend = asciiTable.render();
         System.out.println(rend);
     }
