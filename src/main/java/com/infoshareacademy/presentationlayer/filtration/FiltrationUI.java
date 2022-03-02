@@ -13,7 +13,6 @@ import java.util.List;
 public class FiltrationUI {
 
     public void filtrationMenu(NBPApiManager nbpApiManager){
-        boolean selectingFiltration = true;
         List<FiltrationOption> options = getListOfOptions(nbpApiManager);
         ExchangeRatesArchiveTable collection = nbpApiManager.getCollectionsOfExchangeRates();
         while(collection != null) {
@@ -134,10 +133,7 @@ public class FiltrationUI {
                 }));
         list.add(new FiltrationOption().
                 setDescription("back to main menu").
-                setFilter((table) -> {
-                    ExchangeRatesArchiveTable o = null;
-                    return o;
-                }));
+                setFilter((table) -> null));
         return list;
     }
 }

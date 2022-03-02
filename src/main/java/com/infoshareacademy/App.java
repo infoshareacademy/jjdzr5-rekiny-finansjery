@@ -2,6 +2,8 @@ package com.infoshareacademy;
 
 import com.infoshareacademy.presentationlayer.BetterMenu;
 import com.infoshareacademy.presentationlayer.ValuesScanner;
+import com.infoshareacademy.presentationlayer.filtration.FiltrationUI;
+import com.infoshareacademy.presentationlayer.search.SearchUI;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -9,20 +11,25 @@ public class App
 {
     public static void main( String[] args )
     {
+        NBPApiManager nbpApiManager = new NBPApiManager();
         AtomicReference<Boolean> stayInLoop = new AtomicReference<>(true);
 
         BetterMenu menu = new BetterMenu();
 
         menu.addMenuOption(new BetterMenu.MenuOption().
-                setDescription("New Menu Option").
+                setDescription("Search Option").
                 setMethod(()->{
                     System.out.println("This is a test You've chosen '0'.");
+                    SearchUI searchUI = new SearchUI(nbpApiManager);
+                    searchUI.runMenu();
         }));
 
         menu.addMenuOption(new BetterMenu.MenuOption().
-                setDescription("New Menu Option").
+                setDescription("Filtration Option").
                 setMethod(()->{
                     System.out.println("This is a test. You've chosen '1'.");
+                    FiltrationUI filtrationUI = new FiltrationUI();
+                    filtrationUI.filtrationMenu(nbpApiManager);
         }));
 
         menu.addMenuOption(new BetterMenu.MenuOption().

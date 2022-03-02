@@ -2,6 +2,7 @@ package com.infoshareacademy.presentationlayer;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -9,28 +10,26 @@ public class ValuesScanner {
     public static final Scanner scanner = new Scanner(System.in);
     public static LocalDate scanLocalDate(String text) {
         LocalDate since = null;
-        System.out.print(text + ": ");;
         while (true) {
+            System.out.print(text + ": ");
             try {
                 since = LocalDate.parse(scanner.nextLine());
                 break;
             } catch (DateTimeException e) {
                 System.out.println("Incorrect date value.");
-                System.out.print(text + ": ");;
             }
         }
         return since;
     }
     public static Double scanDouble(String text) {
         Double value = 0D;
-        System.out.print(text + ": ");;
         while (true) {
+            System.out.print(text + ": ");
             try {
                 value = scanner.nextDouble();
                 break;
             } catch (InputMismatchException e) {
                 System.out.println("Incorrect date value.");
-                System.out.print(text + ": ");;
             } finally {
                 scanner.nextLine();
             }
@@ -39,14 +38,13 @@ public class ValuesScanner {
     }
     public static Integer scanInteger(String text) {
         int value = 0;
-        System.out.print(text + ": ");;
         while (true) {
+            System.out.print(text + ": ");
             try {
                 value = scanner.nextInt();
                 break;
             } catch (InputMismatchException e) {
                 System.out.println("Incorrect date value.");
-                System.out.print(text + ": ");
             } finally {
                 scanner.nextLine();
             }
@@ -55,8 +53,8 @@ public class ValuesScanner {
     }
     public static Integer scanIntegerInRange(String text, int min, int max) {
         int value = 0;
-        System.out.print(text + ": ");;
         while (true) {
+            System.out.print(text + ": ");
             try {
                 value = scanner.nextInt();
                 if(value < min || value >= max){
@@ -65,10 +63,8 @@ public class ValuesScanner {
                 break;
             } catch (InputMismatchException e) {
                 System.out.println("Incorrect date value.");
-                System.out.print(text + ": ");
             } catch (IndexOutOfBoundsException e){
                 System.out.println("No such option.");
-                System.out.print(text + ": ");
             }
             finally {
                 scanner.nextLine();
@@ -78,30 +74,53 @@ public class ValuesScanner {
     }
     public static String[] scanMultipleStrings(String text) {
         String[] str = new String[0];
-        System.out.print(text + ": ");;
         while (true) {
+            System.out.print(text + ": ");
             try {
                 str = scanner.nextLine().replaceAll(" ", "").split(",");
                 break;
             } catch (Exception e) {
                 System.out.println("Incorrect date value.");
-                System.out.print(text + ": ");
             }
         }
         return str;
     }
     public static String scanString(String text) {
         String str = "";
-        System.out.print(text + ": ");;
         while (true) {
+            System.out.print(text + ": ");
             try {
                 str = scanner.nextLine();
+                if (str.length() < 3) {
+                    System.out.println("Searched phrase is too short.");
+                    continue;
+                }
                 break;
             } catch (Exception e) {
-                System.out.println("Incorrect date value.");
-                System.out.print(text + ": ");
+                System.out.println("Incorrect value.");
             }
         }
         return str;
+    }
+
+    public static Month scanMonth(String text) {
+        String str = "";
+        Month month;
+        while (true) {
+            System.out.print(text + ": ");
+            try {
+                str = scanner.nextLine();
+                month = Month.of(Integer.parseInt(str));
+                break;
+            } catch (NumberFormatException formatException) {
+                try {
+                    month = Month.valueOf(str.toUpperCase());
+                    break;
+                } catch (IllegalArgumentException argumentException) {
+                    System.out.println("Incorrect month.");
+                }
+            }
+        }
+        return month;
     }
 }

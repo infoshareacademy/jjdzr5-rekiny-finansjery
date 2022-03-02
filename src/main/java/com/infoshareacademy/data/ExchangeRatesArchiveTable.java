@@ -54,6 +54,12 @@ public class ExchangeRatesArchiveTable extends Vector<DailyExchangeRates> {
                 .filterByEffectiveDateTo(LocalDate.of(year, month, month.length(leapYear)));
     }
 
+    public ExchangeRatesArchiveTable searchEffectiveDateByYear(int year) {
+
+        return filterByEffectiveDateFrom(LocalDate.of(year, Month.JANUARY, 1))
+                .filterByEffectiveDateTo(LocalDate.of(year, Month.DECEMBER, 31));
+    }
+
     public Optional<DailyExchangeRates> searchTradingDate(LocalDate tradingDate) {
 
         Predicate<DailyExchangeRates> searchTradingDate = dailyExchangeRates -> dailyExchangeRates.getTradingDate().equals(tradingDate);
@@ -69,6 +75,12 @@ public class ExchangeRatesArchiveTable extends Vector<DailyExchangeRates> {
 
         return filterByTradingDateFrom(LocalDate.of(year, month, 1))
                 .filterByTradingDateTo(LocalDate.of(year, month, month.length(leapYear)));
+    }
+
+    public ExchangeRatesArchiveTable searchTradingDateByYear(int year) {
+
+        return filterByTradingDateFrom(LocalDate.of(year, Month.JANUARY, 1))
+                .filterByTradingDateTo(LocalDate.of(year, Month.DECEMBER, 31));
     }
 
     public ExchangeRatesArchiveTable filterByTradingDateFrom(LocalDate after) {
@@ -103,7 +115,6 @@ public class ExchangeRatesArchiveTable extends Vector<DailyExchangeRates> {
         ExchangeRatesArchiveTable list = new ExchangeRatesArchiveTable(this);
         for (int i = 0; i < list.size(); i++) {
             DailyExchangeRates dailyExchangeRates = list.get(i).copy();
-            //function.apply(dailyExchangeRates);
             dailyExchangeRates.setRates(function.apply(dailyExchangeRates));
             list.set(i, dailyExchangeRates);
         }

@@ -13,8 +13,8 @@ public class BetterMenu {
     public void displayMenu(){
         SimpleCustomTable menuTable = new SimpleCustomTable(2);
         menuTable.setTopics("ID", "Menu Options");
-        for(Integer i = 0; i < options.size(); i++){
-            menuTable.addRow(i.toString(), options.get(i).getDescription());
+        for(int i = 0; i < options.size(); i++){
+            menuTable.addRow(String.valueOf(i), options.get(i).getDescription());
         }
         menuTable.displayTable();
     }
