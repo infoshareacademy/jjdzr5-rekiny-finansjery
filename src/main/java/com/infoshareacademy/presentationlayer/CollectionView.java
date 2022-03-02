@@ -2,7 +2,7 @@ package com.infoshareacademy.presentationlayer;
 
 import com.infoshareacademy.domain.DailyExchangeRates;
 import com.infoshareacademy.domain.ExchangeRate;
-import com.infoshareacademy.services.DailyExchangeRatesService;
+import com.infoshareacademy.services.DailyExchangeRatesFiltrationService;
 import de.vandermeer.asciitable.AsciiTable;
 
 import java.util.List;
@@ -11,10 +11,10 @@ public class CollectionView {
 
 //todo: display table parameter using foreach
 
-    public static void displayExchangeRatesArchiveTable(DailyExchangeRatesService dailyExchangeRatesService) {
+    public static void displayExchangeRatesArchiveTable(DailyExchangeRatesFiltrationService dailyExchangeRatesFiltrationService) {
 
         AsciiTable asciiTable = new AsciiTable();
-        List<DailyExchangeRates> tables = dailyExchangeRatesService.getDailyExchangeRates();
+        List<DailyExchangeRates> tables = dailyExchangeRatesFiltrationService.getDailyExchangeRates();
         for (DailyExchangeRates table : tables) {
             asciiTable.addRule();
             asciiTable.addRow(table.getNo(), table.getTradingDate(), table.getEffectiveDate(), "");

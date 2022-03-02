@@ -7,6 +7,7 @@ import java.util.List;
 
 public class NBPApiManager {
     private List<DailyExchangeRates> collectionsOfExchangeRates;
+
     public NBPApiManager(){
         collectionsOfExchangeRates = ApiFromNbp.loadDb();
     }
@@ -15,9 +16,11 @@ public class NBPApiManager {
         return collectionsOfExchangeRates;
     }
 
-    public DailyExchangeRatesService getDailyExchangeRatesService() {
-        return new DailyExchangeRatesService(collectionsOfExchangeRates);
+    public DailyExchangeRatesFiltrationService getDailyExchangeRatesService() {
+        return new DailyExchangeRatesFiltrationService(collectionsOfExchangeRates);
     }
+
+    //
 
     public boolean saveCollection(){
         return ApiFromNbp.saveDb(collectionsOfExchangeRates);

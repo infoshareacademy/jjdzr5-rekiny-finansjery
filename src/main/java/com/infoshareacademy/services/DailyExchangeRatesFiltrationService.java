@@ -11,11 +11,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class DailyExchangeRatesService {
+public class DailyExchangeRatesFiltrationService {
 
     private List<DailyExchangeRates> dailyExchangeRates;
 
-    public DailyExchangeRatesService(List<DailyExchangeRates> list){
+    public DailyExchangeRatesFiltrationService(List<DailyExchangeRates> list){
         dailyExchangeRates = new CopyOnWriteArrayList<>(list);
     }
 
@@ -27,40 +27,40 @@ public class DailyExchangeRatesService {
         return dailyExchangeRates.stream().max(Comparator.comparing(DailyExchangeRates::getEffectiveDate));
     }
 
-    public DailyExchangeRatesService filterByTradingDateFrom(LocalDate after){
+    public DailyExchangeRatesFiltrationService filterByTradingDateFrom(LocalDate after){
         dailyExchangeRates = dailyExchangeRates.stream()
                 .filter((dailyTable -> after.compareTo(dailyTable.getTradingDate()) <= 0))
                 .collect(Collectors.toList());
         return this;
     }
 
-    public DailyExchangeRatesService filterByTradingDateTo(LocalDate before){
+    public DailyExchangeRatesFiltrationService filterByTradingDateTo(LocalDate before){
         dailyExchangeRates = dailyExchangeRates.stream()
                 .filter((dailyTable -> before.compareTo(dailyTable.getTradingDate()) >= 0))
                 .collect(Collectors.toList());
         return this;
     }
 
-    public DailyExchangeRatesService filterByEffectiveDateFrom(LocalDate after){
+    public DailyExchangeRatesFiltrationService filterByEffectiveDateFrom(LocalDate after){
         dailyExchangeRates = dailyExchangeRates.stream()
                 .filter((dailyTable -> after.compareTo(dailyTable.getEffectiveDate()) <= 0))
                 .collect(Collectors.toList());
         return this;
     }
 
-    public DailyExchangeRatesService filterByEffectiveDateTo(LocalDate before){
+    public DailyExchangeRatesFiltrationService filterByEffectiveDateTo(LocalDate before){
         dailyExchangeRates = dailyExchangeRates.stream()
                 .filter((dailyTable -> before.compareTo(dailyTable.getEffectiveDate()) >= 0))
                 .collect(Collectors.toList());
         return this;
     }
 
-    public DailyExchangeRatesService forEachDay(Function<DailyExchangeRates, ExchangeRatesService> function){
+    public DailyExchangeRatesFiltrationService forEachDay(Function<DailyExchangeRates, ExchangeRatesFiltrationService> function){
         CopyOnWriteArrayList<DailyExchangeRates> list = new CopyOnWriteArrayList<>(dailyExchangeRates);
         for(int i=0; i<list.size(); i++){
             DailyExchangeRates exchangeRates = list.get(i).copy();
-            ExchangeRatesService exchangeRatesService = function.apply(exchangeRates);
-            exchangeRates.setRates(exchangeRatesService.getExchangeRates());
+            ExchangeRatesFiltrationService exchangeRatesFiltrationService = function.apply(exchangeRates);
+            exchangeRates.setRates(exchangeRatesFiltrationService.getExchangeRates());
             list.set(i, exchangeRates);
         }
         dailyExchangeRates = list;

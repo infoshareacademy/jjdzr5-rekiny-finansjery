@@ -1,9 +1,6 @@
 package com.infoshareacademy.domain;
 
-import com.infoshareacademy.services.ExchangeRatesService;
-
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 

@@ -1,9 +1,8 @@
 package com.infoshareacademy.presentationlayer.filtration;
 
-import com.infoshareacademy.domain.DailyExchangeRates;
-import com.infoshareacademy.services.ExchangeRatesService;
+import com.infoshareacademy.services.ExchangeRatesFiltrationService;
 import com.infoshareacademy.services.NBPApiManager;
-import com.infoshareacademy.services.DailyExchangeRatesService;
+import com.infoshareacademy.services.DailyExchangeRatesFiltrationService;
 import com.infoshareacademy.presentationlayer.CollectionView;
 import com.infoshareacademy.presentationlayer.SimpleCustomTable;
 import com.infoshareacademy.presentationlayer.ValuesScanner;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FiltrationUI {
-    DailyExchangeRatesService exchangeRatesService;
+    DailyExchangeRatesFiltrationService exchangeRatesService;
 
     public void filtrationMenu(NBPApiManager nbpApiManager){
         boolean selectingFiltration = true;
@@ -86,7 +85,7 @@ public class FiltrationUI {
                 setDescription("filter currencies with selected short names").
                 setFilter((table) -> {
                     String[] currencies = ValuesScanner.scanMultipleStrings("Enter selected currencies (example \"USD,SEK\")");
-                    exchangeRatesService = table.forEachDay(dailyExchangeRates -> new ExchangeRatesService(dailyExchangeRates.
+                    exchangeRatesService = table.forEachDay(dailyExchangeRates -> new ExchangeRatesFiltrationService(dailyExchangeRates.
                             getRates()).
                             filterByShortName(currencies));
                 }));
@@ -94,7 +93,7 @@ public class FiltrationUI {
                 setDescription("filter currencies with ask prices above selected value").
                 setFilter((table) -> {
                     double value = ValuesScanner.scanDouble("Enter the threshold value");
-                    exchangeRatesService = table.forEachDay(dailyExchangeRates -> new ExchangeRatesService(dailyExchangeRates.
+                    exchangeRatesService = table.forEachDay(dailyExchangeRates -> new ExchangeRatesFiltrationService(dailyExchangeRates.
                             getRates()).
                             filterBySellPriceFrom(value));
                 }));
@@ -102,7 +101,7 @@ public class FiltrationUI {
                 setDescription("filter currencies with ask prices below selected value").
                 setFilter((table) -> {
                     double value = ValuesScanner.scanDouble("Enter the threshold value");
-                    exchangeRatesService = table.forEachDay(dailyExchangeRates -> new ExchangeRatesService(dailyExchangeRates.
+                    exchangeRatesService = table.forEachDay(dailyExchangeRates -> new ExchangeRatesFiltrationService(dailyExchangeRates.
                             getRates()).
                             filterBySellPriceTo(value));
                 }));
@@ -110,7 +109,7 @@ public class FiltrationUI {
                 setDescription("filter currencies with bid prices above selected value").
                 setFilter((table) -> {
                     double value = ValuesScanner.scanDouble("Enter the threshold value");
-                    exchangeRatesService = table.forEachDay(dailyExchangeRates -> new ExchangeRatesService(dailyExchangeRates.
+                    exchangeRatesService = table.forEachDay(dailyExchangeRates -> new ExchangeRatesFiltrationService(dailyExchangeRates.
                             getRates()).
                             filterByBuyPriceFrom(value));
                 }));
@@ -118,7 +117,7 @@ public class FiltrationUI {
                 setDescription("filter currencies with bid prices belowe selected value").
                 setFilter((table) -> {
                     double value = ValuesScanner.scanDouble("Enter the threshold value");
-                    exchangeRatesService = table.forEachDay(dailyExchangeRates -> new ExchangeRatesService(dailyExchangeRates.
+                    exchangeRatesService = table.forEachDay(dailyExchangeRates -> new ExchangeRatesFiltrationService(dailyExchangeRates.
                             getRates()).
                             filterByBuyPriceTo(value));
                 }));

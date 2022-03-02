@@ -18,7 +18,7 @@ public class UsageExamplesCode {
 
     public static void showExamples(NBPApiManager nbpApiManager){
 
-        Menu menu = new Menu();
+        /*Menu menu = new Menu();
         menu.showMenu();
          Runnable runnable = new Runnable() {
              @Override
