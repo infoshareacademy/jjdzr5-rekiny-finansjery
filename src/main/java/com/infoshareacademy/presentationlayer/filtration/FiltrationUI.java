@@ -47,7 +47,7 @@ public class FiltrationUI {
         list.add(new FiltrationOption().
                 setDescription("display result of filtration").
                 setFilter((table) -> {
-                    CollectionView.displayExchangeRatesArchiveTable(table);
+                    CollectionView.displayExchangeRatesArchiveTable(table.getDailyExchangeRates());
                 }));
         list.add(new FiltrationOption().
                 setDescription("reset collection").
