@@ -1,7 +1,8 @@
 package com.infoshareacademy;
 
+
+import com.infoshareacademy.services.NBPApiManager;
 import com.infoshareacademy.presentationlayer.CollectionView;
-import com.infoshareacademy.data.ExchangeRatesArchiveTable;
 import com.infoshareacademy.presentationlayer.Menu;
 
 import java.time.LocalDate;
@@ -17,7 +18,7 @@ public class UsageExamplesCode {
 
     public static void showExamples(NBPApiManager nbpApiManager) {
 
-        Menu menu = new Menu();
+        /*Menu menu = new Menu();
         menu.showMenu();
          Runnable runnable = new Runnable() {
              @Override

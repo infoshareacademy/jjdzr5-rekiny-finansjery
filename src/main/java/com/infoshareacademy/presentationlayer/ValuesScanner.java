@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class ValuesScanner {
     public static final Scanner scanner = new Scanner(System.in);
     public static LocalDate scanLocalDate(String text) {
-        LocalDate since = null;
+        LocalDate since;
         while (true) {
             System.out.print(text + ": ");
             try {
@@ -22,7 +22,7 @@ public class ValuesScanner {
         return since;
     }
     public static Double scanDouble(String text) {
-        Double value = 0D;
+        Double value;
         while (true) {
             System.out.print(text + ": ");
             try {
@@ -37,7 +37,7 @@ public class ValuesScanner {
         return value;
     }
     public static Integer scanInteger(String text) {
-        int value = 0;
+        int value;
         while (true) {
             System.out.print(text + ": ");
             try {
@@ -52,7 +52,7 @@ public class ValuesScanner {
         return value;
     }
     public static Integer scanIntegerInRange(String text, int min, int max) {
-        int value = 0;
+        int value;
         while (true) {
             System.out.print(text + ": ");
             try {
@@ -73,7 +73,7 @@ public class ValuesScanner {
         return value;
     }
     public static String[] scanMultipleStrings(String text) {
-        String[] str = new String[0];
+        String[] str;
         while (true) {
             System.out.print(text + ": ");
             try {
@@ -86,7 +86,7 @@ public class ValuesScanner {
         return str;
     }
     public static String scanString(String text) {
-        String str = "";
+        String str;
         while (true) {
             System.out.print(text + ": ");
             try {

@@ -1,5 +1,4 @@
-package com.infoshareacademy.data;
-
+package com.infoshareacademy.domain;
 
 public class ExchangeRate {
     private String currency;
