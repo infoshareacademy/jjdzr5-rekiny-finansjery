@@ -6,28 +6,29 @@ import java.util.List;
 public class Menu {
 
     private final List<MenuOption> options;
-    public Menu(){
+
+    public Menu() {
         options = new ArrayList<>();
     }
 
-    public void displayMenu(){
+    public void displayMenu() {
         SimpleCustomTable menuTable = new SimpleCustomTable(2);
         menuTable.setTopics("ID", "Menu Options");
-        for(Integer i = 0; i < options.size(); i++){
-            menuTable.addRow(i.toString(), options.get(i).getDescription());
+        for (int i = 0; i < options.size(); i++) {
+            menuTable.addRow(String.valueOf(i), options.get(i).getDescription());
         }
         menuTable.displayTable();
     }
 
-    public void executeSelectedOption(int index){
+    public void executeSelectedOption(int index) {
         options.get(index).getMethod().run();
     }
 
-    public void addMenuOption(MenuOption option){
+    public void addMenuOption(MenuOption option) {
         options.add(option);
     }
 
-    public int getMenuSize(){
+    public int getMenuSize() {
         return options.size();
     }
 
@@ -55,4 +56,3 @@ public class Menu {
     }
 
 }
-

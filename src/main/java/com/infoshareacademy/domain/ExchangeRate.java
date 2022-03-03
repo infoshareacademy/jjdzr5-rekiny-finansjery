@@ -64,7 +64,6 @@ public class ExchangeRate {
     public int hashCode() {
         int result;
         long temp;
-        //int hash = Objects.hash(currency, code, bid, ask);
         result = currency.hashCode();
         result = 31 * result + code.hashCode();
         temp = Double.doubleToLongBits(bid);

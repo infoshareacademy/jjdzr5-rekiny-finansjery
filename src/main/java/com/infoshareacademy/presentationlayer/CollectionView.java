@@ -2,7 +2,6 @@ package com.infoshareacademy.presentationlayer;
 
 import com.infoshareacademy.domain.DailyExchangeRates;
 import com.infoshareacademy.domain.ExchangeRate;
-import com.infoshareacademy.services.DailyExchangeRatesFiltrationService;
 import de.vandermeer.asciitable.AsciiTable;
 
 import java.util.List;
@@ -33,4 +32,5 @@ public class CollectionView {
         String rend = asciiTable.render();
         System.out.println(rend);
     }
+
 }

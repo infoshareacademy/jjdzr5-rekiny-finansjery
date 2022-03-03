@@ -4,9 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.infoshareacademy.domain.DailyExchangeRates;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -19,9 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ApiFromNbp {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ApiFromNbp.class);
-
     private static final String LAST_67_DAYS_TABLES = "https://api.nbp.pl/api/exchangerates/tables/C/last/67/";
     private static final String FILE_NAME = "db_table.json";
 

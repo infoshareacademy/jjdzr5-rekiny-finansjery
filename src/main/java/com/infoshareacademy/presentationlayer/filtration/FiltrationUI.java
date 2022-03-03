@@ -16,7 +16,7 @@ public class FiltrationUI {
 
     public void filtrationMenu(NBPApiManager nbpApiManager){
         List<FiltrationOption> options = getListOfOptions(nbpApiManager);
-        exchangeRatesService = nbpApiManager.getDailyExchangeRatesService();
+        exchangeRatesService = nbpApiManager.getDailyExchangeRatesFiltrationService();
         while(exchangeRatesService != null) {
             int selectedOption = selectOptions(options);
             System.out.println("Selected option: [" + options.get(selectedOption).getDescription() + "]");
@@ -51,7 +51,7 @@ public class FiltrationUI {
         list.add(new FiltrationOption().
                 setDescription("reset collection").
                 setFilter((table) -> {
-                    exchangeRatesService = nbpApiManager.getDailyExchangeRatesService();
+                    exchangeRatesService = nbpApiManager.getDailyExchangeRatesFiltrationService();
                 }));
         list.add(new FiltrationOption().
                 setDescription("filter daily tables with trading date since selected date").
@@ -122,9 +122,7 @@ public class FiltrationUI {
                 }));
         list.add(new FiltrationOption().
                 setDescription("back to main menu").
-                setFilter((table) -> {
-                    exchangeRatesService = null;
-                }));
+                setFilter((table) -> exchangeRatesService = null));
         return list;
     }
 }

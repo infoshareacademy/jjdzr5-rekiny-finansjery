@@ -42,13 +42,5 @@ public class App
             menu.executeSelectedOption(ValuesScanner.scanIntegerInRange("Select the desired option", 0 , menu.getMenuSize()));
         }
 
-
-
-
-/*        System.out.println( "Rekiny Finansjery" );
-
-        NBPApiManager nbpApiManager = new NBPApiManager();
-
-        UsageExamplesCode.showExamples(nbpApiManager);*/
     }
 }

@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 public class ValuesScanner {
     public static final Scanner scanner = new Scanner(System.in);
+
     public static LocalDate scanLocalDate(String text) {
         LocalDate since;
         while (true) {
@@ -21,6 +22,7 @@ public class ValuesScanner {
         }
         return since;
     }
+
     public static Double scanDouble(String text) {
         Double value;
         while (true) {
@@ -36,6 +38,7 @@ public class ValuesScanner {
         }
         return value;
     }
+
     public static Integer scanInteger(String text) {
         int value;
         while (true) {
@@ -51,27 +54,28 @@ public class ValuesScanner {
         }
         return value;
     }
+
     public static Integer scanIntegerInRange(String text, int min, int max) {
         int value;
         while (true) {
             System.out.print(text + ": ");
             try {
                 value = scanner.nextInt();
-                if(value < min || value >= max){
+                if (value < min || value >= max) {
                     throw new IndexOutOfBoundsException();
                 }
                 break;
             } catch (InputMismatchException e) {
                 System.out.println("Incorrect date value.");
-            } catch (IndexOutOfBoundsException e){
+            } catch (IndexOutOfBoundsException e) {
                 System.out.println("No such option.");
-            }
-            finally {
+            } finally {
                 scanner.nextLine();
             }
         }
         return value;
     }
+
     public static String[] scanMultipleStrings(String text) {
         String[] str;
         while (true) {
@@ -85,6 +89,7 @@ public class ValuesScanner {
         }
         return str;
     }
+
     public static String scanString(String text) {
         String str;
         while (true) {
@@ -123,4 +128,5 @@ public class ValuesScanner {
         }
         return month;
     }
+
 }

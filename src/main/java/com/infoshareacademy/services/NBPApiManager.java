@@ -16,11 +16,13 @@ public class NBPApiManager {
         return collectionsOfExchangeRates;
     }
 
-    public DailyExchangeRatesFiltrationService getDailyExchangeRatesService() {
+    public DailyExchangeRatesFiltrationService getDailyExchangeRatesFiltrationService() {
         return new DailyExchangeRatesFiltrationService(collectionsOfExchangeRates);
     }
 
-    //
+    public DailyExchangeRatesSearchService getDailyExchangeRatesSearchService() {
+        return new DailyExchangeRatesSearchService(collectionsOfExchangeRates);
+    }
 
     public boolean saveCollection(){
         return ApiFromNbp.saveDb(collectionsOfExchangeRates);
