@@ -1,18 +1,18 @@
 package com.infoshareacademy.presentationlayer.filtration;
 
-import com.infoshareacademy.data.ExchangeRatesArchiveTable;
+import com.infoshareacademy.services.DailyExchangeRatesFiltrationService;
 
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 class FiltrationOption {
     private String description;
-    private Function<ExchangeRatesArchiveTable, ExchangeRatesArchiveTable> filter;
+    private Consumer<DailyExchangeRatesFiltrationService> filter;
 
     public String getDescription() {
         return description;
     }
 
-    public Function<ExchangeRatesArchiveTable, ExchangeRatesArchiveTable> getFilter() {
+    public Consumer<DailyExchangeRatesFiltrationService> getFilter() {
         return filter;
     }
 
@@ -20,7 +20,7 @@ class FiltrationOption {
         this.description = description;
         return this;
     }
-    public FiltrationOption setFilter(Function<ExchangeRatesArchiveTable, ExchangeRatesArchiveTable> filter) {
+    public FiltrationOption setFilter(Consumer<DailyExchangeRatesFiltrationService> filter) {
         this.filter = filter;
         return this;
     }
