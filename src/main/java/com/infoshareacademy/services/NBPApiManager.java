@@ -1,6 +1,6 @@
 package com.infoshareacademy.services;
 
-import com.infoshareacademy.api.ApiFromNbp;
+import com.infoshareacademy.api.ApiFromFile;
 import com.infoshareacademy.domain.DailyExchangeRates;
 
 import java.util.List;
@@ -9,7 +9,7 @@ public class NBPApiManager {
     private List<DailyExchangeRates> collectionsOfExchangeRates;
 
     public NBPApiManager(){
-        collectionsOfExchangeRates = ApiFromNbp.loadDb();
+        collectionsOfExchangeRates = new ApiFromFile().loadDb();
     }
 
     public List<DailyExchangeRates> getCollectionsOfExchangeRates() {
@@ -23,6 +23,6 @@ public class NBPApiManager {
     //
 
     public boolean saveCollection(){
-        return ApiFromNbp.saveDb(collectionsOfExchangeRates);
+        return new ApiFromFile().saveDb(collectionsOfExchangeRates);
     }
 }
