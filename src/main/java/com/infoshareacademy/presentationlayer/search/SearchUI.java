@@ -1,15 +1,14 @@
 package com.infoshareacademy.presentationlayer.search;
 
-import com.infoshareacademy.domain.DailyExchangeRates;
 import com.infoshareacademy.presentationlayer.CollectionView;
 import com.infoshareacademy.presentationlayer.Menu;
 import com.infoshareacademy.presentationlayer.ValuesScanner;
 import com.infoshareacademy.services.DailyExchangeRatesSearchService;
+import com.infoshareacademy.services.ExchangeRatesSearchService;
 import com.infoshareacademy.services.NBPApiManager;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Optional;
 
 public class SearchUI {
 
@@ -21,6 +20,8 @@ public class SearchUI {
     private boolean isRunning;
 
     public SearchUI(NBPApiManager nbpApiManager) {
+
+        exchangeRatesSearchService = nbpApiManager.getDailyExchangeRatesSearchService();
         this.menu = new Menu();
         getListOfOptions(nbpApiManager);
 
@@ -28,7 +29,6 @@ public class SearchUI {
     }
 
     public void runMenu() {
-
         while (isRunning) {
             menu.displayMenu();
             int selectedOption = ValuesScanner.scanIntegerInRange("Enter option", 0, menu.getMenuSize());
@@ -40,86 +40,95 @@ public class SearchUI {
     private void getListOfOptions(NBPApiManager nbpApiManager) {
 
         menu.addMenuOption(new Menu.MenuOption()
-                .setDescription("Search for tables by giving table number")
+                .setDescription("Display result")
+                .setMethod(this::displayResult)
+        );
+        menu.addMenuOption(new Menu.MenuOption()
+                .setDescription("Reset collection")
+                .setMethod(() -> this.exchangeRatesSearchService = nbpApiManager.getDailyExchangeRatesSearchService())
+        );
+        menu.addMenuOption(new Menu.MenuOption()
+                .setDescription("Search for tables by giving a table number")
                 .setMethod(() -> {
-                    String tableNo = ValuesScanner.scanString("Enter table number (example \"004/C/NBP/2022\")");
-                    exchangeRatesSearchService = nbpApiManager
-                            .getDailyExchangeRatesSearchService()
-                            .searchTableNo(tableNo);
+                    String tableNo = ValuesScanner.scanString("Enter a table number (example \"004/C/NBP/2022\")");
+                    this.exchangeRatesSearchService.searchTableNo(tableNo);
                     displayResult();
                 })
         );
         menu.addMenuOption(new Menu.MenuOption()
-                .setDescription("Search for table by giving effective date")
+                .setDescription("Search for tables by giving a full effective date")
                 .setMethod(() -> {
-                    LocalDate effectiveDate = ValuesScanner.scanLocalDate("Enter date (example \"2022-02-08\")");
-                    Optional<DailyExchangeRates> dailyExchangeRates = nbpApiManager
-                            .getDailyExchangeRatesSearchService()
-                            .searchEffectiveDate(effectiveDate);
-                    dailyExchangeRates.ifPresent(CollectionView::displayDailyExchangeRates);
-                })
-        );
-        menu.addMenuOption(new Menu.MenuOption()
-                .setDescription("Search for tables by giving year of effective date")
-                .setMethod(() -> {
-                    int year = ValuesScanner.scanIntegerInRange("Enter year (from " + MIN_YEAR + ")", MIN_YEAR, MAX_YEAR);
-                    exchangeRatesSearchService = nbpApiManager
-                            .getDailyExchangeRatesSearchService()
-                            .searchEffectiveDateByTimeRange(LocalDate.of(year, Month.JANUARY, 1), LocalDate.of(year, Month.DECEMBER, 31));
+                    LocalDate effectiveDate = ValuesScanner.scanLocalDate("Enter a date (example \"2022-02-08\")");
+                    this.exchangeRatesSearchService.searchEffectiveDate(effectiveDate);
                     displayResult();
                 })
         );
         menu.addMenuOption(new Menu.MenuOption()
-                .setDescription("Search for tables by giving year and month of effective date")
+                .setDescription("Search for tables by giving a year and a month of effective date")
                 .setMethod(() -> {
-                    int year = ValuesScanner.scanIntegerInRange("Enter year (from " + MIN_YEAR + ")", MIN_YEAR, MAX_YEAR);
-                    Month month = ValuesScanner.scanMonth("Enter month (examples: 2, february, February");
-                    boolean leapYear = LocalDate.of(year, 1, 1).isLeapYear();
+                    int year = ValuesScanner.scanIntegerInRange("Enter a year from " + MIN_YEAR, MIN_YEAR, MAX_YEAR);
+                    Month month = ValuesScanner.scanMonth("Enter a month (examples: 2, february) or '-'");
+                    LocalDate dateFrom;
+                    LocalDate dateTo;
 
-                    exchangeRatesSearchService = nbpApiManager
-                            .getDailyExchangeRatesSearchService()
-                            .searchEffectiveDateByTimeRange(LocalDate.of(year, month, 1), LocalDate.of(year, month, month.length(leapYear)));
+                    if (month == null) {
+                        dateFrom = LocalDate.of(year, Month.JANUARY, 1);
+                        dateTo = LocalDate.of(year, Month.DECEMBER, 31);
+                    } else {
+                        boolean leapYear = LocalDate.of(year, 1, 1).isLeapYear();
+                        dateFrom = LocalDate.of(year, month, 1);
+                        dateTo = LocalDate.of(year, month, month.length(leapYear));
+                    }
+                    this.exchangeRatesSearchService.searchEffectiveDateByTimeRange(dateFrom, dateTo);
                     displayResult();
                 })
         );
         menu.addMenuOption(new Menu.MenuOption()
-                .setDescription("Search for table by giving trading date")
+                .setDescription("Search for tables by giving a full trading date")
                 .setMethod(() -> {
-                    LocalDate effectiveDate = ValuesScanner.scanLocalDate("Enter date (example \"2022-02-08\")");
-                    Optional<DailyExchangeRates> dailyExchangeRates = nbpApiManager
-                            .getDailyExchangeRatesSearchService()
-                            .searchTradingDate(effectiveDate);
-                    dailyExchangeRates.ifPresent(CollectionView::displayDailyExchangeRates);
-                })
-        );
-        menu.addMenuOption(new Menu.MenuOption()
-                .setDescription("Search for tables by giving year of trading date")
-                .setMethod(() -> {
-                    int year = ValuesScanner.scanIntegerInRange("Enter year (from " + MIN_YEAR + ")", MIN_YEAR, MAX_YEAR);
-                    exchangeRatesSearchService = nbpApiManager
-                            .getDailyExchangeRatesSearchService()
-                            .searchTradingDateByTimeRange(LocalDate.of(year, Month.JANUARY, 1), LocalDate.of(year, Month.DECEMBER, 31));
+                    LocalDate effectiveDate = ValuesScanner.scanLocalDate("Enter a date (example \"2022-02-08\")");
+                    this.exchangeRatesSearchService.searchTradingDate(effectiveDate);
                     displayResult();
                 })
         );
         menu.addMenuOption(new Menu.MenuOption()
-                .setDescription("Search for tables by giving year and month of trading date")
+                .setDescription("Search for tables by giving a year and a month of trading date")
                 .setMethod(() -> {
+                    int year = ValuesScanner.scanIntegerInRange("Enter a year from " + MIN_YEAR, MIN_YEAR, MAX_YEAR);
+                    Month month = ValuesScanner.scanMonth("Enter a month (examples: 2, february) or '-'");
+                    LocalDate dateFrom;
+                    LocalDate dateTo;
 
-                    int year = ValuesScanner.scanIntegerInRange("Enter year (from " + MIN_YEAR + ")", MIN_YEAR, MAX_YEAR);
-                    Month month = ValuesScanner.scanMonth("Enter month (examples: 2, february, February");
-                    boolean leapYear = LocalDate.of(year, 1, 1).isLeapYear();
-
-                    exchangeRatesSearchService = nbpApiManager
-                            .getDailyExchangeRatesSearchService()
-                            .searchTradingDateByTimeRange(LocalDate.of(year, month, 1), LocalDate.of(year, month, month.length(leapYear)));
+                    if (month == null) {
+                        dateFrom = LocalDate.of(year, Month.JANUARY, 1);
+                        dateTo = LocalDate.of(year, Month.DECEMBER, 31);
+                    } else {
+                        boolean leapYear = LocalDate.of(year, 1, 1).isLeapYear();
+                        dateFrom = LocalDate.of(year, month, 1);
+                        dateTo = LocalDate.of(year, month, month.length(leapYear));
+                    }
+                    this.exchangeRatesSearchService.searchTradingDateByTimeRange(dateFrom, dateTo);
                     displayResult();
                 })
         );
         menu.addMenuOption(new Menu.MenuOption()
-                .setDescription("Search for rates by giving currency name or code")
+                .setDescription("Search for rates by giving a currency name")
                 .setMethod(() -> {
-
+                    String currency = ValuesScanner.scanString("Enter the currency name");
+                    this.exchangeRatesSearchService.forEachDay(dailyExchangeRates -> new ExchangeRatesSearchService(dailyExchangeRates
+                            .getRates())
+                            .searchCurrency(currency));
+                    displayResult();
+                })
+        );
+        menu.addMenuOption(new Menu.MenuOption()
+                .setDescription("Search for rates by giving a currency code")
+                .setMethod(() -> {
+                    String code = ValuesScanner.scanString("Enter the currency code (example \"USD\")");
+                    this.exchangeRatesSearchService.forEachDay(dailyExchangeRates -> new ExchangeRatesSearchService(dailyExchangeRates
+                            .getRates())
+                            .searchCode(code));
+                    displayResult();
                 })
         );
         menu.addMenuOption(new Menu.MenuOption()
@@ -129,7 +138,7 @@ public class SearchUI {
     }
 
     private void displayResult() {
-        if (exchangeRatesSearchService == null) {
+        if (exchangeRatesSearchService.getDailyExchangeRates().isEmpty()) {
             System.out.println("No results.");
         } else {
             CollectionView.displayExchangeRatesArchiveTable(exchangeRatesSearchService.getDailyExchangeRates());

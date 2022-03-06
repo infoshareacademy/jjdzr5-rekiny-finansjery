@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -32,13 +33,15 @@ public class DailyExchangeRatesSearchService {
         return this;
     }
 
-    public Optional<DailyExchangeRates> searchEffectiveDate(LocalDate effectiveDate) {
+    public DailyExchangeRatesSearchService searchEffectiveDate(LocalDate effectiveDate) {
 
         Predicate<DailyExchangeRates> searchEffectiveDate = dailyExchangeRates -> dailyExchangeRates.getEffectiveDate().equals(effectiveDate);
 
-        return dailyExchangeRates.stream()
+        dailyExchangeRates = dailyExchangeRates.stream()
                 .filter(searchEffectiveDate)
-                .findAny();
+                .collect(Collectors.toList());
+
+        return this;
     }
 
     public DailyExchangeRatesSearchService searchEffectiveDateByTimeRange(LocalDate dateFrom, LocalDate dateTo) {
@@ -53,13 +56,15 @@ public class DailyExchangeRatesSearchService {
         return this;
     }
 
-    public Optional<DailyExchangeRates> searchTradingDate(LocalDate tradingDate) {
+    public DailyExchangeRatesSearchService searchTradingDate(LocalDate tradingDate) {
 
         Predicate<DailyExchangeRates> searchTradingDate = dailyExchangeRates -> dailyExchangeRates.getTradingDate().equals(tradingDate);
 
-        return dailyExchangeRates.stream()
+        dailyExchangeRates = dailyExchangeRates.stream()
                 .filter(searchTradingDate)
-                .findAny();
+                .collect(Collectors.toList());
+
+        return this;
     }
 
     public DailyExchangeRatesSearchService searchTradingDateByTimeRange(LocalDate dateFrom, LocalDate dateTo) {
@@ -71,6 +76,18 @@ public class DailyExchangeRatesSearchService {
                 .filter(searchTradingDateFrom.and(searchTradingDateTo))
                 .collect(Collectors.toList());
 
+        return this;
+    }
+
+    public DailyExchangeRatesSearchService forEachDay(Function<DailyExchangeRates, ExchangeRatesSearchService> function) {
+        CopyOnWriteArrayList<DailyExchangeRates> list = new CopyOnWriteArrayList<>(dailyExchangeRates);
+        for (int i = 0; i < list.size(); i++) {
+            DailyExchangeRates exchangeRates = list.get(i).copy();
+            ExchangeRatesSearchService exchangeRatesSearchService = function.apply(exchangeRates);
+            exchangeRates.setRates(exchangeRatesSearchService.getExchangeRates());
+            list.set(i, exchangeRates);
+        }
+        dailyExchangeRates = list;
         return this;
     }
 

@@ -100,33 +100,30 @@ public class ValuesScanner {
                     System.out.println("Searched phrase is too short.");
                     continue;
                 }
-                break;
+                return str;
             } catch (Exception e) {
                 System.out.println("Incorrect value.");
             }
         }
-        return str;
     }
 
     public static Month scanMonth(String text) {
         String str = "";
-        Month month;
         while (true) {
             System.out.print(text + ": ");
             try {
                 str = scanner.nextLine();
-                month = Month.of(Integer.parseInt(str));
-                break;
+                return Month.of(Integer.parseInt(str));
             } catch (NumberFormatException formatException) {
                 try {
-                    month = Month.valueOf(str.toUpperCase());
-                    break;
+                    return str.equals("-") ? null : Month.valueOf(str.toUpperCase());
                 } catch (IllegalArgumentException argumentException) {
                     System.out.println("Incorrect month.");
                 }
+            } catch (DateTimeException dateTimeException) {
+                System.out.println("Month out of range.");
             }
         }
-        return month;
     }
 
 }

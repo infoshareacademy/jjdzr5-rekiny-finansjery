@@ -31,13 +31,15 @@ public class ExchangeRatesSearchService {
         return this;
     }
 
-    public Optional<ExchangeRate> searchCode(String code) {
+    public ExchangeRatesSearchService searchCode(String code) {
 
         Predicate<ExchangeRate> searchCode = exchangeRate -> exchangeRate.getCode().contains(code.toUpperCase());
 
-        return exchangeRates.stream()
+        exchangeRates = exchangeRates.stream()
                 .filter(searchCode)
-                .findAny();
+                .collect(Collectors.toList());
+
+        return this;
     }
 
 }
