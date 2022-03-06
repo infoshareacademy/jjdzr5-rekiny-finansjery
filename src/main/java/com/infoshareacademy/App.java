@@ -1,23 +1,33 @@
 package com.infoshareacademy;
 
+import com.Configuration.PropertiesLoader;
 import com.infoshareacademy.presentationlayer.BetterMenu;
 import com.infoshareacademy.presentationlayer.ValuesScanner;
 
+import java.io.IOException;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class App
 {
-    public static void main( String[] args )
-    {
-        AtomicReference<Boolean> stayInLoop = new AtomicReference<>(true);
+    public static void main( String[] args ) throws IOException {
+        AtomicReference<Boolean> stayInLoop = new AtomicReference<>(true); // co to?
 
-        BetterMenu menu = new BetterMenu();
+        PropertiesLoader propertiesLoader = new PropertiesLoader();
+        propertiesLoader.loadProperties();
+
+ /*       BetterMenu menu = new BetterMenu();
 
         menu.addMenuOption(new BetterMenu.MenuOption().
-                setDescription("New Menu Option").
+                setDescription("Properties Loader").
                 setMethod(()->{
-                    System.out.println("This is a test You've chosen '0'.");
-        }));
+                    PropertiesLoader p = new PropertiesLoader();
+                    try {
+                        p.propertiesLoader();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }));
 
         menu.addMenuOption(new BetterMenu.MenuOption().
                 setDescription("New Menu Option").
@@ -34,7 +44,7 @@ public class App
         menu.displayMenu();
         while(stayInLoop.get()){
             menu.executeSelectedOption(ValuesScanner.scanIntegerInRange("Select the desired option", 0 , menu.getMenuSize()));
-        }
+        }*/
 
 
 
