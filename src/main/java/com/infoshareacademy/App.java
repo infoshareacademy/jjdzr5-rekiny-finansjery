@@ -1,11 +1,8 @@
 package com.infoshareacademy;
 
-import com.Configuration.PropertiesLoader;
-import com.infoshareacademy.presentationlayer.BetterMenu;
-import com.infoshareacademy.presentationlayer.ValuesScanner;
+import com.infoshareacademy.configuration.PropertiesLoader;
 
 import java.io.IOException;
-import java.util.Properties;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class App
