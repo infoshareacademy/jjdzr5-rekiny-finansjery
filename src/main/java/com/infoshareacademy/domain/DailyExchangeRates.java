@@ -11,6 +11,10 @@ public class DailyExchangeRates {
     private LocalDate effectiveDate;
     private CopyOnWriteArrayList<ExchangeRate> rates;
 
+    public DailyExchangeRates(){
+        this.rates = new CopyOnWriteArrayList<ExchangeRate>();
+    }
+
     public DailyExchangeRates(String table, String no, LocalDate tradingDate, LocalDate effectiveDate, CopyOnWriteArrayList<ExchangeRate> rates) {
         this.table = table;
         this.no = no;
@@ -18,8 +22,6 @@ public class DailyExchangeRates {
         this.effectiveDate = effectiveDate;
         this.rates = rates;
     }
-
-    public DailyExchangeRates() {}
 
     public String getTable() {
         return table;

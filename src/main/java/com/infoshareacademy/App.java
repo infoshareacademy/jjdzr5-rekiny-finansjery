@@ -1,6 +1,8 @@
 package com.infoshareacademy;
 
+import com.infoshareacademy.presentationlayer.CollectionView;
 import com.infoshareacademy.presentationlayer.filtration.FiltrationUI;
+import com.infoshareacademy.presentationlayer.EditorUI;
 import com.infoshareacademy.services.NBPApiManager;
 import com.infoshareacademy.presentationlayer.Menu;
 import com.infoshareacademy.presentationlayer.ValuesScanner;
@@ -30,9 +32,16 @@ public class App
         }));
 
         menu.addMenuOption(new Menu.MenuOption().
-                setDescription("New Menu Option").
+                setDescription("Manage data").
                 setMethod(()->{
-                    System.out.println("This is a test. You've chosen '1'.");
+                    EditorUI editorUI = new EditorUI(nbpApiManager);
+                    editorUI.displayEditorMainMenu();
+                }));
+
+        menu.addMenuOption(new Menu.MenuOption().
+                setDescription("Display all").
+                setMethod(()->{
+                    CollectionView.displayExchangeRatesArchiveTable(nbpApiManager.getCollectionsOfExchangeRates());
         }));
 
         menu.addMenuOption(new Menu.MenuOption().

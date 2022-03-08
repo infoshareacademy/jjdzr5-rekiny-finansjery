@@ -23,14 +23,24 @@ public class CollectionView {
         asciiTable.addRule();
         asciiTable.addRow(table.getNo(), table.getTradingDate(), table.getEffectiveDate(), "");
         asciiTable.addRule();
+        if (table.getRates().size() > 0){
+            asciiTable.addRow("Code", "Currency Name", "Bid Price", "Asking Price");
+            asciiTable.addRule();
+            for (ExchangeRate rate : table.getRates()) {
+                asciiTable.addRow(rate.getCode(), rate.getCurrency(), rate.getBid(), rate.getAsk());
+            }
+            asciiTable.addRule();
+        }
+        System.out.println(asciiTable.render());
+    }
+
+    public static void displayExchangeRate(ExchangeRate rate){
+        AsciiTable asciiTable = new AsciiTable();
+        asciiTable.addRule();
         asciiTable.addRow("Code", "Currency Name", "Bid Price", "Asking Price");
         asciiTable.addRule();
-
-        for (ExchangeRate rate : table.getRates()) {
-            asciiTable.addRow(rate.getCode(), rate.getCurrency(), rate.getBid(), rate.getAsk());
-        }
+        asciiTable.addRow(rate.getCode(), rate.getCurrency(), rate.getBid(), rate.getAsk());
         asciiTable.addRule();
-        String rend = asciiTable.render();
-        System.out.println(rend);
+        System.out.println(asciiTable.render());
     }
 }
