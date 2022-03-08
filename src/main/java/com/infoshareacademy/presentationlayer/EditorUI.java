@@ -2,12 +2,9 @@ package com.infoshareacademy.presentationlayer;
 
 import com.infoshareacademy.domain.DailyExchangeRates;
 import com.infoshareacademy.domain.ExchangeRate;
-import com.infoshareacademy.presentationlayer.Menu;
-import com.infoshareacademy.presentationlayer.ValuesScanner;
 import com.infoshareacademy.services.NBPApiManager;
 
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EditorUI {
     NBPApiManager nbpApiManager;
@@ -19,7 +16,6 @@ public class EditorUI {
 
     public void displayEditorMainMenu(){
         Menu menu = new Menu();
-        AtomicBoolean stayInLoop = new AtomicBoolean(true);
         menu.addMenuOption(new Menu.MenuOption().
                 setDescription("Find daily table").
                 setMethod(()->{
@@ -46,21 +42,11 @@ public class EditorUI {
                         nbpApiManager.saveCollection();
                     }
                 }));
-        menu.addMenuOption(new Menu.MenuOption().
-                setDescription("Back").
-                setMethod(()->{
-                    stayInLoop.set(false);
-                }));
-
-        while(stayInLoop.get()){
-            menu.displayMenu();
-            menu.executeSelectedOption(ValuesScanner.scanIntegerInRange("Enter id of option", 0, menu.getMenuSize()));
-        }
+        menu.displayMenuWithReturnAndExecute("Back", ()->{});
     }
 
     public void displayEditorMenuOfDailyTable(DailyExchangeRates dailyExchangeRates){
         Menu menu = new Menu();
-        AtomicBoolean stayInLoop = new AtomicBoolean(true);
         menu.addMenuOption(new Menu.MenuOption().
                 setDescription("Edit table").
                 setMethod(()->{
@@ -92,22 +78,11 @@ public class EditorUI {
                         nbpApiManager.saveCollection();
                     }
                 }));
-        menu.addMenuOption(new Menu.MenuOption().
-                setDescription("Back").
-                setMethod(()->{
-                    stayInLoop.set(false);
-                }));
-
-        while(stayInLoop.get()){
-            CollectionView.displayDailyExchangeRates(dailyExchangeRates);
-            menu.displayMenu();
-            menu.executeSelectedOption(ValuesScanner.scanIntegerInRange("Enter id of option", 0, menu.getMenuSize()));
-        }
+        menu.displayMenuWithReturnAndExecute("Back", ()->CollectionView.displayDailyExchangeRates(dailyExchangeRates));
     }
 
     public void displayEditorMenuOfExchangeRate(ExchangeRate exchangeRate){
         Menu menu = new Menu();
-        AtomicBoolean stayInLoop = new AtomicBoolean(true);
         menu.addMenuOption(new Menu.MenuOption().
                 setDescription("Set new code").
                 setMethod(()->{
@@ -132,22 +107,11 @@ public class EditorUI {
                     exchangeRate.setBid(ValuesScanner.scanDouble("Enter new bid price"));
                     nbpApiManager.saveCollection();
                 }));
-        menu.addMenuOption(new Menu.MenuOption().
-                setDescription("Finish edition").
-                setMethod(()->{
-                    stayInLoop.set(false);
-                }));
-
-        while(stayInLoop.get()){
-            CollectionView.displayExchangeRate(exchangeRate);
-            menu.displayMenu();
-            menu.executeSelectedOption(ValuesScanner.scanIntegerInRange("Enter id of option", 0, menu.getMenuSize()));
-        }
+        menu.displayMenuWithReturnAndExecute("Back", ()->CollectionView.displayExchangeRate(exchangeRate));
     }
 
     public void displayValuesEditorOfDailyTable(DailyExchangeRates dailyExchangeRates){
         Menu menu = new Menu();
-        AtomicBoolean stayInLoop = new AtomicBoolean(true);
         menu.addMenuOption(new Menu.MenuOption().
                 setDescription("Set new No.").
                 setMethod(()->{
@@ -166,16 +130,6 @@ public class EditorUI {
                     dailyExchangeRates.setEffectiveDate(ValuesScanner.scanLocalDate("Enter new effective date"));
                     nbpApiManager.saveCollection();
                 }));
-        menu.addMenuOption(new Menu.MenuOption().
-                setDescription("Finish edition").
-                setMethod(()->{
-                    stayInLoop.set(false);
-                }));
-
-        while(stayInLoop.get()){
-            CollectionView.displayDailyExchangeRates(dailyExchangeRates);
-            menu.displayMenu();
-            menu.executeSelectedOption(ValuesScanner.scanIntegerInRange("Enter id of option", 0, menu.getMenuSize()));
-        }
+        menu.displayMenuWithReturnAndExecute("Return", ()->CollectionView.displayDailyExchangeRates(dailyExchangeRates));
     }
 }
