@@ -9,21 +9,41 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ApiFromNbp extends Json {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiFromNbp.class);
 
-    private final String LAST_67_DAYS_TABLES = "https://api.nbp.pl/api/exchangerates/tables/C/last/67/";
+    private final String LAST_67_DAYS_TABLES = "https://api.nbp.pl/api/exchangerates/tables/c/last/67/";
+    private final String RANGE_OF_DATE = "http://api.nbp.pl/api/exchangerates/tables/c/%1$s/%2$s/";
+    private final Integer LIMIT_DAYS = 90;
 
     @Override
     public List<DailyExchangeRates> loadDb() {
-        return fromJson(getLAST_67_DAYS_TABLES());
+        return fromJson(getLast67DaysTables());
     }
 
-    protected String getLAST_67_DAYS_TABLES(){
+    protected String getLast67DaysTables(){
         return getJsonFromNbp(LAST_67_DAYS_TABLES);
+    }
+    protected List<DailyExchangeRates> getRangeOfDate(LocalDate startDate, LocalDate endDate){
+        List<DailyExchangeRates> result = new ArrayList<>();
+        LocalDate tempEndDate = (ChronoUnit.DAYS.between(startDate, endDate) > LIMIT_DAYS? startDate.plusDays(LIMIT_DAYS):endDate);
+        do {
+            try {
+                result.addAll(fromJson(getJsonFromNbp(String.format(RANGE_OF_DATE, startDate, tempEndDate))));
+            } catch (NullPointerException e) {
+//                System.out.println("null");
+                LOGGER.error(e.getMessage());
+            }
+            startDate = tempEndDate;
+            tempEndDate = (ChronoUnit.DAYS.between(startDate, endDate) > LIMIT_DAYS? startDate.plusDays(LIMIT_DAYS):endDate);
+        } while (endDate.isAfter(startDate));
+        return result;
     }
 
     private String getJsonFromNbp(String url) {
@@ -42,7 +62,8 @@ public class ApiFromNbp extends Json {
                 body = response.body();
             }
         } catch(Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            LOGGER.error(e.getMessage());
         }
         return body;
     }
