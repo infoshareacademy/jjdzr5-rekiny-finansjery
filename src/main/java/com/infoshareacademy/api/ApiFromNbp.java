@@ -1,8 +1,11 @@
 package com.infoshareacademy.api;
 
 import com.google.gson.Gson;
-import com.infoshareacademy.data.DailyExchangeRates;
-import com.infoshareacademy.data.ExchangeRatesArchiveTable;
+import com.google.gson.reflect.TypeToken;
+import com.infoshareacademy.domain.DailyExchangeRates;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
@@ -12,17 +15,21 @@ import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ApiFromNbp {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApiFromNbp.class);
+
     private static final String LAST_67_DAYS_TABLES = "https://api.nbp.pl/api/exchangerates/tables/C/last/67/";
     private static final String FILE_NAME = "db_table.json";
 
-    public static ExchangeRatesArchiveTable loadDb() {
+    public static List<DailyExchangeRates> loadDb() {
         return fromJson(loadDbFile());
     }
 
-    public static boolean saveDb( ExchangeRatesArchiveTable dailyExchangeRates) {
+    public static boolean saveDb(List<DailyExchangeRates> dailyExchangeRates) {
         return saveDbFile(toJson(dailyExchangeRates));
     }
 
@@ -74,9 +81,9 @@ public class ApiFromNbp {
         return body;
     }
 
-    private static ExchangeRatesArchiveTable fromJson(String response) {
+    private static List<DailyExchangeRates> fromJson(String response) {
         Gson gson = ExtendedGson.getExtendedGson();
-        return gson.fromJson(response, ExchangeRatesArchiveTable.class);
+        return gson.fromJson(response, new TypeToken<ArrayList<DailyExchangeRates>>(){}.getType());
     }
 
     private static String toJson(List<DailyExchangeRates> dataBase) {

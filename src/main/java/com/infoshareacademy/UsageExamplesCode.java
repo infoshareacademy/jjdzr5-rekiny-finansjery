@@ -1,6 +1,11 @@
 package com.infoshareacademy;
 
+
+import com.infoshareacademy.services.NBPApiManager;
+import com.infoshareacademy.presentationlayer.CollectionView;
 import com.infoshareacademy.presentationlayer.Menu;
+
+import java.time.LocalDate;
 
 public class UsageExamplesCode {
      interface Test{
@@ -13,6 +18,14 @@ public class UsageExamplesCode {
 
     public static void showExamples(NBPApiManager nbpApiManager){
 
+        /*Menu menu = new Menu();
+        menu.showMenu();
+         Runnable runnable = new Runnable() {
+             @Override
+             public void run() {
+
+             }
+         };
 
          /*
         ExchangeRatesArchiveTable exchangeRatesArchiveTable = nbpApiManager.getCollectionsOfExchangeRates();
@@ -115,7 +128,6 @@ public class UsageExamplesCode {
 //                    .filterByShortName("CZK", "USD");
 //            displayExchangeRatesTable(lastDayRates);
 //        }
->>>>>>> 49f73f92ee0acd48875a40e63a3ad56171a2bd30
 */
 
     }
