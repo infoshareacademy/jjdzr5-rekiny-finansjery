@@ -1,5 +1,6 @@
 package com.infoshareacademy.presentationlayer.search;
 
+import com.infoshareacademy.domain.DailyExchangeRates;
 import com.infoshareacademy.presentationlayer.CollectionView;
 import com.infoshareacademy.presentationlayer.Menu;
 import com.infoshareacademy.presentationlayer.ValuesScanner;
@@ -9,13 +10,15 @@ import com.infoshareacademy.services.NBPApiManager;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.List;
 
 public class SearchUI {
 
     private static final int MIN_YEAR = 2021;
     private static final int MAX_YEAR = 2023;
 
-    private DailyExchangeRatesSearchService exchangeRatesSearchService;
+    private final DailyExchangeRatesSearchService exchangeRatesSearchService;
+    private List<DailyExchangeRates> dailyExchangeRates;
     private final Menu menu;
     private boolean isRunning;
 
@@ -23,7 +26,7 @@ public class SearchUI {
 
         exchangeRatesSearchService = nbpApiManager.getDailyExchangeRatesSearchService();
         this.menu = new Menu();
-        getListOfOptions(nbpApiManager);
+        getListOfOptions();
 
         this.isRunning = true;
     }
@@ -37,21 +40,13 @@ public class SearchUI {
         }
     }
 
-    private void getListOfOptions(NBPApiManager nbpApiManager) {
+    private void getListOfOptions() {
 
-        menu.addMenuOption(new Menu.MenuOption()
-                .setDescription("Display result")
-                .setMethod(this::displayResult)
-        );
-        menu.addMenuOption(new Menu.MenuOption()
-                .setDescription("Reset collection")
-                .setMethod(() -> this.exchangeRatesSearchService = nbpApiManager.getDailyExchangeRatesSearchService())
-        );
         menu.addMenuOption(new Menu.MenuOption()
                 .setDescription("Search for tables by giving a table number")
                 .setMethod(() -> {
                     String tableNo = ValuesScanner.scanString("Enter a table number (example \"004/C/NBP/2022\")");
-                    this.exchangeRatesSearchService.searchTableNo(tableNo);
+                    dailyExchangeRates = exchangeRatesSearchService.searchTableNo(tableNo);
                     displayResult();
                 })
         );
@@ -59,8 +54,9 @@ public class SearchUI {
                 .setDescription("Search for tables by giving a full effective date")
                 .setMethod(() -> {
                     LocalDate effectiveDate = ValuesScanner.scanLocalDate("Enter a date (example \"2022-02-08\")");
-                    this.exchangeRatesSearchService.searchEffectiveDate(effectiveDate);
-                    displayResult();
+                    exchangeRatesSearchService
+                            .searchEffectiveDate(effectiveDate)
+                            .ifPresent(CollectionView::displayDailyExchangeRates);
                 })
         );
         menu.addMenuOption(new Menu.MenuOption()
@@ -79,7 +75,7 @@ public class SearchUI {
                         dateFrom = LocalDate.of(year, month, 1);
                         dateTo = LocalDate.of(year, month, month.length(leapYear));
                     }
-                    this.exchangeRatesSearchService.searchEffectiveDateByTimeRange(dateFrom, dateTo);
+                    dailyExchangeRates = exchangeRatesSearchService.searchEffectiveDateByTimeRange(dateFrom, dateTo);
                     displayResult();
                 })
         );
@@ -87,8 +83,9 @@ public class SearchUI {
                 .setDescription("Search for tables by giving a full trading date")
                 .setMethod(() -> {
                     LocalDate effectiveDate = ValuesScanner.scanLocalDate("Enter a date (example \"2022-02-08\")");
-                    this.exchangeRatesSearchService.searchTradingDate(effectiveDate);
-                    displayResult();
+                    exchangeRatesSearchService
+                            .searchTradingDate(effectiveDate)
+                            .ifPresent(CollectionView::displayDailyExchangeRates);
                 })
         );
         menu.addMenuOption(new Menu.MenuOption()
@@ -107,7 +104,7 @@ public class SearchUI {
                         dateFrom = LocalDate.of(year, month, 1);
                         dateTo = LocalDate.of(year, month, month.length(leapYear));
                     }
-                    this.exchangeRatesSearchService.searchTradingDateByTimeRange(dateFrom, dateTo);
+                    dailyExchangeRates = exchangeRatesSearchService.searchTradingDateByTimeRange(dateFrom, dateTo);
                     displayResult();
                 })
         );
@@ -115,9 +112,9 @@ public class SearchUI {
                 .setDescription("Search for rates by giving a currency name")
                 .setMethod(() -> {
                     String currency = ValuesScanner.scanString("Enter the currency name");
-                    this.exchangeRatesSearchService.forEachDay(dailyExchangeRates -> new ExchangeRatesSearchService(dailyExchangeRates
+                    dailyExchangeRates = exchangeRatesSearchService.forEachDay(exchangeRates -> exchangeRates.setRates(new ExchangeRatesSearchService(exchangeRates
                             .getRates())
-                            .searchCurrency(currency));
+                            .searchCurrency(currency)));
                     displayResult();
                 })
         );
@@ -125,9 +122,10 @@ public class SearchUI {
                 .setDescription("Search for rates by giving a currency code")
                 .setMethod(() -> {
                     String code = ValuesScanner.scanString("Enter the currency code (example \"USD\")");
-                    this.exchangeRatesSearchService.forEachDay(dailyExchangeRates -> new ExchangeRatesSearchService(dailyExchangeRates
+                    dailyExchangeRates = exchangeRatesSearchService.forEachDay(exchangeRates -> new ExchangeRatesSearchService(exchangeRates
                             .getRates())
-                            .searchCode(code));
+                            .searchCode(code)
+                            .ifPresent(exchangeRate -> exchangeRates.setRates(List.of(exchangeRate))));
                     displayResult();
                 })
         );
@@ -141,7 +139,7 @@ public class SearchUI {
         if (exchangeRatesSearchService.getDailyExchangeRates().isEmpty()) {
             System.out.println("No results.");
         } else {
-            CollectionView.displayExchangeRatesArchiveTable(exchangeRatesSearchService.getDailyExchangeRates());
+            CollectionView.displayExchangeRatesArchiveTable(dailyExchangeRates);
         }
     }
 

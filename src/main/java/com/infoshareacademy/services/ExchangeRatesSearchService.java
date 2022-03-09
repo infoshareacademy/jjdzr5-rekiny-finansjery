@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class ExchangeRatesSearchService {
 
-    private List<ExchangeRate> exchangeRates;
+    private final List<ExchangeRate> exchangeRates;
 
     public ExchangeRatesSearchService(List<ExchangeRate> exchangeRates) {
         this.exchangeRates = new CopyOnWriteArrayList<>(exchangeRates);
@@ -20,26 +20,22 @@ public class ExchangeRatesSearchService {
         return exchangeRates;
     }
 
-    public ExchangeRatesSearchService searchCurrency(String currency) {
+    public List<ExchangeRate> searchCurrency(String currency) {
 
         Predicate<ExchangeRate> searchCurrency = exchangeRate -> exchangeRate.getCurrency().contains(currency.toLowerCase());
 
-        exchangeRates = exchangeRates.stream()
+        return exchangeRates.stream()
                 .filter(searchCurrency)
                 .collect(Collectors.toList());
-
-        return this;
     }
 
-    public ExchangeRatesSearchService searchCode(String code) {
+    public Optional<ExchangeRate> searchCode(String code) {
 
         Predicate<ExchangeRate> searchCode = exchangeRate -> exchangeRate.getCode().contains(code.toUpperCase());
 
-        exchangeRates = exchangeRates.stream()
+        return exchangeRates.stream()
                 .filter(searchCode)
-                .collect(Collectors.toList());
-
-        return this;
+                .findAny();
     }
 
 }
