@@ -13,14 +13,6 @@ public class UsageExamplesCode {
 
     public static void showExamples(NBPApiManager nbpApiManager){
 
-        Menu menu = new Menu();
-        menu.displayMenu();
-         Runnable runnable = new Runnable() {
-             @Override
-             public void run() {
-
-             }
-         };
 
          /*
         ExchangeRatesArchiveTable exchangeRatesArchiveTable = nbpApiManager.getCollectionsOfExchangeRates();

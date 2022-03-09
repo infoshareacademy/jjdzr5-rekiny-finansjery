@@ -13,9 +13,6 @@ public class MenuContents {
 
         AtomicReference<Boolean> stayInLoop = new AtomicReference<>(true);
 
-        PropertiesLoader propertiesLoader = new PropertiesLoader();
-        propertiesLoader.loadProperties(); //todo handle the exception throwing properly (at the moment it's in method signature)
-
         Menu menu = new Menu();
 
         menu.addMenuOption(new Menu.MenuOption().
@@ -23,10 +20,11 @@ public class MenuContents {
                 setMethod(() -> {
                     PropertiesLoader p = new PropertiesLoader();
                     try {
-                        p.loadProperties();
+                        p.loadConfigurationFromFileOrCreateDefaultOne();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    p.createConfigurationMap();
                 }));
 
         menu.addMenuOption(new Menu.MenuOption().
