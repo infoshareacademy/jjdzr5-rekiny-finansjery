@@ -31,7 +31,7 @@ public class PropertiesLoader {
 
         for (String configLine : parameters) {
             String[] keyAndValue = configLine.split("=");
-            configMap.put(keyAndValue[0], keyAndValue[1]);
+            configMap.put(keyAndValue[0].trim(), keyAndValue[1].trim());
 //            System.out.println(keyAndValue[0] + " " + keyAndValue[1]);
         }
 

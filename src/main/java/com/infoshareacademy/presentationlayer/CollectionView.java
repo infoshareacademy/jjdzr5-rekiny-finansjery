@@ -5,6 +5,8 @@ import com.infoshareacademy.data.ExchangeRate;
 import com.infoshareacademy.data.ExchangeRatesArchiveTable;
 import de.vandermeer.asciitable.AsciiTable;
 
+import java.time.LocalDate;
+
 public class CollectionView {
 
 //todo: display table parameter using foreach
@@ -15,7 +17,7 @@ public class CollectionView {
         asciiTable.addRule();
         for (DailyExchangeRates table : tables) {
             asciiTable.addRule();
-            asciiTable.addRow(table.getNo(), table.getTradingDate(), table.getEffectiveDate(), "");
+            asciiTable.addRow(table.getNo(), table.getTradingDate().format(LocalDate), table.getEffectiveDate(), "");
             asciiTable.addRule();
             asciiTable.addRow("Code", "Currency Name", "Bid Price", "Asking Price");
             asciiTable.addRule();

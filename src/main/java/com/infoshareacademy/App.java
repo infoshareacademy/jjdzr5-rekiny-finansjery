@@ -21,7 +21,11 @@ public class App
                 "                         __/ |                              _/ |           __/ |\n" +
                 "                        |___/                              |__/           |___/ ");
 
+        NBPApiManager nbpApiManager = new NBPApiManager();
+        
         MenuContents menuContents = new MenuContents();
-        menuContents.loadMenu();
+        menuContents.loadMenu(nbpApiManager);
+
+
     }
 }

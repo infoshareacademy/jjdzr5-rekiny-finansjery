@@ -1,5 +1,6 @@
 package com.infoshareacademy.presentationlayer;
 
+import com.infoshareacademy.NBPApiManager;
 import com.infoshareacademy.configuration.PropertiesLoader;
 import com.infoshareacademy.presentationlayer.Menu;
 
@@ -9,7 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class MenuContents {
 
-    public void loadMenu() throws IOException {
+    public void loadMenu(NBPApiManager nbpApiManager) throws IOException {
 
         AtomicReference<Boolean> stayInLoop = new AtomicReference<>(true);
 
@@ -25,6 +26,12 @@ public class MenuContents {
                         e.printStackTrace();
                     }
                     p.createConfigurationMap();
+                }));
+
+        menu.addMenuOption(new Menu.MenuOption().
+                setDescription("View All Elements").
+                setMethod(() -> {
+                    CollectionView.displayExchangeRatesArchiveTable(nbpApiManager.getCollectionsOfExchangeRates());
                 }));
 
         menu.addMenuOption(new Menu.MenuOption().
