@@ -1,16 +1,16 @@
 package com.infoshareacademy.presentationlayer;
 
-import com.infoshareacademy.NBPApiManager;
 import com.infoshareacademy.configuration.PropertiesLoader;
-import com.infoshareacademy.presentationlayer.Menu;
+import com.infoshareacademy.services.NBPApiManager;
 
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MenuContents {
 
-    public void loadMenu(NBPApiManager nbpApiManager) throws IOException {
+    public void loadMenu(NBPApiManager nbpApiManager) {
 
         AtomicReference<Boolean> stayInLoop = new AtomicReference<>(true);
 
@@ -21,17 +21,23 @@ public class MenuContents {
                 setMethod(() -> {
                     PropertiesLoader p = new PropertiesLoader();
                     try {
-                        p.loadConfigurationFromFileOrCreateDefaultOne();
+                        p.checkIfConfigFileExistsIfNotCreateDefaultOne();
+                        p.returnDateFormat();
+                        p.returnOrder();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    p.createConfigurationMap();
+
                 }));
 
         menu.addMenuOption(new Menu.MenuOption().
                 setDescription("View All Elements").
                 setMethod(() -> {
-                    CollectionView.displayExchangeRatesArchiveTable(nbpApiManager.getCollectionsOfExchangeRates());
+                    try {
+                        CollectionView.displayExchangeRatesArchiveTable(nbpApiManager.getCollectionsOfExchangeRates());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }));
 
         menu.addMenuOption(new Menu.MenuOption().

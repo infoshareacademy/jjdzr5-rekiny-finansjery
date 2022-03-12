@@ -8,35 +8,28 @@ import java.io.*;
 
 public class PropertiesLoader {
 
-    List<String> parameters = new ArrayList<>();
-
-    public void loadConfigurationFromFileOrCreateDefaultOne() throws IOException {
+    public void checkIfConfigFileExistsIfNotCreateDefaultOne() throws IOException {
 
         Path path = Paths.get("db.properties");
 
-        try {
-            parameters = Files.readAllLines(path);
-        } catch (IOException e) {
+        if(Files.exists(path)){
+        } else {
             Files.createFile(path);
             Files.writeString(path, "order=ascending\n" +
-                    "date-format=dd/mm/yyyy");
-
+                    "date-format=dd.MM.yyyy");
             System.out.println("Problem with loading config file. I've created a default one.");
         }
     }
 
-    public Map<String, String> createConfigurationMap() {
-
-        Map<String, String> configMap = new HashMap<>();
-
-        for (String configLine : parameters) {
-            String[] keyAndValue = configLine.split("=");
-            configMap.put(keyAndValue[0].trim(), keyAndValue[1].trim());
-//            System.out.println(keyAndValue[0] + " " + keyAndValue[1]);
-        }
-
-        System.out.println("Configuration map created.");
-
-        return configMap;
+    public String returnOrder () throws IOException {
+        Properties config = new Properties();
+        config.load(new FileInputStream("db.properties"));
+        return config.getProperty("order");
     }
+    public String returnDateFormat () throws IOException {
+        Properties config = new Properties();
+        config.load(new FileInputStream("db.properties"));
+        return config.getProperty("dateFormat");
+    }
+
 }

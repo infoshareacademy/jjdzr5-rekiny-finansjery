@@ -7,6 +7,7 @@ import com.infoshareacademy.presentationlayer.CollectionView;
 import com.infoshareacademy.presentationlayer.SimpleCustomTable;
 import com.infoshareacademy.presentationlayer.ValuesScanner;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +48,11 @@ public class FiltrationUI {
         list.add(new FiltrationOption().
                 setDescription("display result of filtration").
                 setFilter((table) -> {
-                    CollectionView.displayExchangeRatesArchiveTable(table.getDailyExchangeRates());
+                    try {
+                        CollectionView.displayExchangeRatesArchiveTable(table.getDailyExchangeRates());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }));
         list.add(new FiltrationOption().
                 setDescription("reset collection").
