@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Menu {
+public class Menu { //todo get rid ot table being displayed after the menu is exited
 
     private final List<MenuOption> options;
     public Menu(){

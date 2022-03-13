@@ -1,5 +1,6 @@
 package com.infoshareacademy.presentationlayer.filtration;
 
+import com.infoshareacademy.configuration.PropertiesLoader;
 import com.infoshareacademy.services.ExchangeRatesFiltrationService;
 import com.infoshareacademy.services.NBPApiManager;
 import com.infoshareacademy.services.DailyExchangeRatesFiltrationService;
@@ -7,7 +8,9 @@ import com.infoshareacademy.presentationlayer.CollectionView;
 import com.infoshareacademy.presentationlayer.SimpleCustomTable;
 import com.infoshareacademy.presentationlayer.ValuesScanner;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,21 +67,31 @@ public class FiltrationUI {
         list.add(new FiltrationOption().
                 setDescription("filter daily tables with trading date until selected date").
                 setFilter((table) -> {
-                    LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \"2022-02-08\")");
+                    LocalDate date = ValuesScanner.
+                            scanLocalDate("Enter the threshold date (example \""+
+                                    LocalDate.of(2022, 03, 01).
+                                            format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
+                                    +"\")");
                     exchangeRatesService = table.
                             filterByTradingDateTo(date);
                 }));
         list.add(new FiltrationOption().
                 setDescription("filter daily tables with effective date since selected date").
                 setFilter((table) -> {
-                    LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \"2022-02-08\")");
+                    LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \""+
+                            LocalDate.of(2022, 03, 01).
+                                    format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
+                            +"\")");
                     exchangeRatesService = table.
                             filterByEffectiveDateFrom(date);
                 }));
         list.add(new FiltrationOption().
                 setDescription("filter daily tables with effective date until selected date").
                 setFilter((table) -> {
-                    LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \"2022-02-08\")");
+                    LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \""+
+                            LocalDate.of(2022, 03, 01).
+                                    format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
+                            +"\")");
                     exchangeRatesService = table.
                             filterByEffectiveDateTo(date);
                 }));

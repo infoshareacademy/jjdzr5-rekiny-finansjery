@@ -1,10 +1,12 @@
 package com.infoshareacademy.presentationlayer;
 
+import com.infoshareacademy.configuration.PropertiesLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -18,7 +20,10 @@ public class ValuesScanner {
         System.out.print(text + ": ");
         while (true) {
             try {
-                since = LocalDate.parse(scanner.nextLine());
+                since = LocalDate.parse(scanner.nextLine(),
+                            DateTimeFormatter
+                            .ofPattern(PropertiesLoader.getInstance().returnDateFormat())
+                        );
                 break;
             } catch (DateTimeException e) {
                 System.out.println("Incorrect date value.");

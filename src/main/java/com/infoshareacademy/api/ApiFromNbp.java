@@ -37,7 +37,6 @@ public class ApiFromNbp extends ApiDataSource {
             try {
                 result.addAll(fromJson(getJsonFromNbp(String.format(RANGE_OF_DATE, startDate, tempEndDate))));
             } catch (NullPointerException e) {
-//                System.out.println("null");
                 LOGGER.error(e.getMessage());
             }
             startDate = tempEndDate;
