@@ -7,7 +7,7 @@ import com.infoshareacademy.domain.DailyExchangeRates;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Json {
+public abstract class ApiDataSource {
 
     public abstract List<DailyExchangeRates> loadDb();
 

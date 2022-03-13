@@ -14,7 +14,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApiFromNbp extends Json {
+public class ApiFromNbp extends ApiDataSource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiFromNbp.class);
 
@@ -37,7 +37,6 @@ public class ApiFromNbp extends Json {
             try {
                 result.addAll(fromJson(getJsonFromNbp(String.format(RANGE_OF_DATE, startDate, tempEndDate))));
             } catch (NullPointerException e) {
-//                System.out.println("null");
                 LOGGER.error(e.getMessage());
             }
             startDate = tempEndDate;

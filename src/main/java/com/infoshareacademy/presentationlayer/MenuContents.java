@@ -1,6 +1,7 @@
 package com.infoshareacademy.presentationlayer;
 
 import com.infoshareacademy.configuration.PropertiesLoader;
+import com.infoshareacademy.presentationlayer.filtration.FiltrationUI;
 import com.infoshareacademy.services.NBPApiManager;
 
 
@@ -10,40 +11,30 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class MenuContents {
 
-    public void loadMenu(NBPApiManager nbpApiManager) {
-
+    public void loadMenu() {
+        NBPApiManager nbpApiManager = NBPApiManager.getInstance();
         AtomicReference<Boolean> stayInLoop = new AtomicReference<>(true);
 
         Menu menu = new Menu();
 
         menu.addMenuOption(new Menu.MenuOption().
-                setDescription("Properties Loader").
-                setMethod(() -> {
-                    PropertiesLoader p = new PropertiesLoader();
-                    try {
-                        p.checkIfConfigFileExistsIfNotCreateDefaultOne();
-                        p.returnDateFormat();
-                        p.returnOrder();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                }));
-
-        menu.addMenuOption(new Menu.MenuOption().
                 setDescription("View All Elements").
                 setMethod(() -> {
-                    try {
-                        CollectionView.displayExchangeRatesArchiveTable(nbpApiManager.getCollectionsOfExchangeRates());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    CollectionView.displayExchangeRatesArchiveTable(nbpApiManager.getCollectionsOfExchangeRates());
                 }));
 
         menu.addMenuOption(new Menu.MenuOption().
-                setDescription("New Menu Option").
-                setMethod(() -> {
-                    System.out.println("This is a test. You've chosen '1'.");
+                setDescription("Filtration").
+                setMethod(()->{
+                    FiltrationUI filtrationUI = new FiltrationUI();
+                    filtrationUI.filtrationMenu();
+                }));
+
+        menu.addMenuOption(new Menu.MenuOption().
+                setDescription("Manage data").
+                setMethod(()->{
+                    EditorUI editorUI = new EditorUI();
+                    editorUI.displayEditorMainMenu();
                 }));
 
         menu.addMenuOption(new Menu.MenuOption().

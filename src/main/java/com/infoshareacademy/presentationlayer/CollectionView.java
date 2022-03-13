@@ -16,33 +16,46 @@ public class CollectionView {
 
 //todo: display table parameter using foreach
 
-    public static void displayExchangeRatesArchiveTable(List<DailyExchangeRates> list) throws IOException{
+    public static void displayExchangeRatesArchiveTable(List<DailyExchangeRates> list){
         List<DailyExchangeRates> tables = list;
         for (DailyExchangeRates table : tables) {
             displayDailyExchangeRates(table);
         }
     }
 
-    public static void displayDailyExchangeRates(DailyExchangeRates table) throws IOException {
+    public static void displayDailyExchangeRates(DailyExchangeRates table) {
         AsciiTable asciiTable = new AsciiTable();
         asciiTable.addRule();
-        asciiTable.addRow(table.getNo(), table.getTradingDate().
-                format(DateTimeFormatter.
-                        ofPattern(new PropertiesLoader().
-                                returnDateFormat())),
-                table.getEffectiveDate().
-                        format(DateTimeFormatter.
-                                ofPattern(new PropertiesLoader().
-                                        returnDateFormat())), "");
+        asciiTable.addRow(table.getNo(), table.getTradingDate()
+                        .format(DateTimeFormatter
+                        .ofPattern(PropertiesLoader
+                        .getInstance()
+                        .returnDateFormat())),
+                        table.getEffectiveDate().
+                        format(DateTimeFormatter
+                        .ofPattern(PropertiesLoader
+                        .getInstance()
+                        .returnDateFormat()))
+                        , "");
+        asciiTable.addRule();
+        if (table.getRates().size() > 0){
+            asciiTable.addRow("Code", "Currency Name", "Bid Price", "Asking Price");
+            asciiTable.addRule();
+            for (ExchangeRate rate : table.getRates()) {
+                asciiTable.addRow(rate.getCode(), rate.getCurrency(), rate.getBid(), rate.getAsk());
+            }
+            asciiTable.addRule();
+        }
+        System.out.println(asciiTable.render());
+    }
+
+    public static void displayExchangeRate(ExchangeRate rate){
+        AsciiTable asciiTable = new AsciiTable();
         asciiTable.addRule();
         asciiTable.addRow("Code", "Currency Name", "Bid Price", "Asking Price");
         asciiTable.addRule();
-
-        for (ExchangeRate rate : table.getRates()) {
-            asciiTable.addRow(rate.getCode(), rate.getCurrency(), rate.getBid(), rate.getAsk());
-        }
+        asciiTable.addRow(rate.getCode(), rate.getCurrency(), rate.getBid(), rate.getAsk());
         asciiTable.addRule();
-        String rend = asciiTable.render();
-        System.out.println(rend);
+        System.out.println(asciiTable.render());
     }
 }

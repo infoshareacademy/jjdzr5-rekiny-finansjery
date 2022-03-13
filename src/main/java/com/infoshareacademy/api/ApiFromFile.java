@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class ApiFromFile extends Json {
+public class ApiFromFile extends ApiDataSource {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiFromFile.class);
 
     private final String FILE_NAME = "db_table.json";
