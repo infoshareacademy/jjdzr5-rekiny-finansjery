@@ -9,8 +9,8 @@ import java.util.Optional;
 public class EditorUI {
     NBPApiManager nbpApiManager;
 
-    public EditorUI(NBPApiManager nbpApiManager){
-        this.nbpApiManager = nbpApiManager;
+    public EditorUI(){
+        this.nbpApiManager = NBPApiManager.getInstance();
 
     }
 

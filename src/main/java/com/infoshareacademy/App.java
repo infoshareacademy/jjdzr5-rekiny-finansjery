@@ -20,7 +20,7 @@ public class App
     public static void main( String[] args )
     {
         AtomicReference<Boolean> stayInLoop = new AtomicReference<>(true);
-        NBPApiManager nbpApiManager = new NBPApiManager();
+        NBPApiManager nbpApiManager = NBPApiManager.getInstance();
 
         Menu menu = new Menu();
 
@@ -28,13 +28,13 @@ public class App
                 setDescription("Filtration").
                 setMethod(()->{
                     FiltrationUI filtrationUI = new FiltrationUI();
-                    filtrationUI.filtrationMenu(nbpApiManager);
+                    filtrationUI.filtrationMenu();
         }));
 
         menu.addMenuOption(new Menu.MenuOption().
                 setDescription("Manage data").
                 setMethod(()->{
-                    EditorUI editorUI = new EditorUI(nbpApiManager);
+                    EditorUI editorUI = new EditorUI();
                     editorUI.displayEditorMainMenu();
                 }));
 

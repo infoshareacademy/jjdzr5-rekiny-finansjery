@@ -10,7 +10,16 @@ import java.util.Optional;
 public class NBPApiManager {
     private List<DailyExchangeRates> collectionsOfExchangeRates;
 
-    public NBPApiManager(){
+    private static NBPApiManager INSTANCE;
+
+    public synchronized static NBPApiManager getInstance(){
+        if(INSTANCE != null){
+            return  INSTANCE;
+        }
+        return new NBPApiManager();
+    }
+
+    private NBPApiManager(){
         collectionsOfExchangeRates = ApiFromNbp.loadDb();
     }
 

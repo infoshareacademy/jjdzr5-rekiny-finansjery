@@ -14,8 +14,9 @@ import java.util.List;
 public class FiltrationUI {
     DailyExchangeRatesFiltrationService exchangeRatesService;
 
-    public void filtrationMenu(NBPApiManager nbpApiManager){
+    public void filtrationMenu(){
         boolean selectingFiltration = true;
+        NBPApiManager nbpApiManager = NBPApiManager.getInstance();
         List<FiltrationOption> options = getListOfOptions(nbpApiManager);
         exchangeRatesService = nbpApiManager.getDailyExchangeRatesService();
         while(exchangeRatesService != null) {
