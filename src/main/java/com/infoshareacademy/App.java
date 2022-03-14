@@ -6,6 +6,8 @@ import com.infoshareacademy.presentationlayer.MenuContents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Properties;
+
 public class App {
     final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
@@ -18,9 +20,7 @@ public class App {
                 "\\_| \\_\\___|_|\\_\\_|_| |_|\\__, | \\_|   |_|_| |_|\\__,_|_| |_|___/ |\\___|_|   \\__, |\n" +
                 "                         __/ |                              _/ |           __/ |\n" +
                 "                        |___/                              |__/           |___/ ");
-
         PropertiesLoader propertiesLoader = PropertiesLoader.getInstance();
-
         MenuContents menuContents = new MenuContents();
         menuContents.loadMenu();
     }

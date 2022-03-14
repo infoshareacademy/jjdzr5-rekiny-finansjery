@@ -1,5 +1,9 @@
 package com.infoshareacademy.configuration;
 
+import com.infoshareacademy.App;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -8,6 +12,8 @@ import java.io.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PropertiesLoader {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesLoader.class);
 
     private static PropertiesLoader INSTANCE;
 
@@ -24,9 +30,8 @@ public class PropertiesLoader {
         Path path = Paths.get("db.properties");
         try{
             loadFromFile(path);
-        }
-        catch (IOException e){
-            properties = checkIfConfigFileExistsIfNotCreateDefaultOne();
+        } catch (IOException e) {
+            properties = createDefaultConfiguration();
         }
     }
 
@@ -35,28 +40,20 @@ public class PropertiesLoader {
         properties.load(Files.newBufferedReader(path));
     }
 
-    public Properties checkIfConfigFileExistsIfNotCreateDefaultOne() {
-
-        Path path = Paths.get("db.properties");
-        Map<String,String> defaultProperties = new HashMap<>();
+    public Properties createDefaultConfiguration() {
+        Properties defaultProperties = new Properties();
         defaultProperties.put("order", "ascending");
         defaultProperties.put("date-format", "dd.MM.yyyy");
-        AtomicReference<String> rawProperties = new AtomicReference<>("");
-        defaultProperties.forEach((key, value)-> rawProperties.set(rawProperties.get()+key+"="+value+"\n"));
-        try {
-            if (!Files.exists(path)) {
-                Files.createFile(path);
-                Files.writeString(path, rawProperties.get());
 
-                Properties properties = new Properties();
-                properties.load(new ByteArrayInputStream(rawProperties.get().getBytes()));
-                System.out.println("Problem with loading config file. I've created a default one.");
-                return properties;
-            }
+        Path path = Paths.get("db.properties");
+        try(FileOutputStream outputStream = new FileOutputStream(path.toString())) {
+            defaultProperties.store(outputStream, "default config");
+            LOGGER.info("Problem with loading config file. I've created a default one.");
         }
         catch (IOException e){
+            LOGGER.error("Problem with loading config file. Couldn't create default config file.");
         }
-        return null;
+        return defaultProperties;
     }
 
     public String getProperty(String property) {

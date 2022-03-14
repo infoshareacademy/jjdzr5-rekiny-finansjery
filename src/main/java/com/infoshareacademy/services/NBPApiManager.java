@@ -32,6 +32,10 @@ public class NBPApiManager {
         return new DailyExchangeRatesFiltrationService(collectionsOfExchangeRates);
     }
 
+    public DailyExchangeRatesSearchService getDailyExchangeSearchRatesService() {
+        return new DailyExchangeRatesSearchService(collectionsOfExchangeRates);
+    }
+
     public Optional<DailyExchangeRates> findDailyTable(String no){
         return collectionsOfExchangeRates.stream().filter(table -> table.getNo().equals(no)).findFirst();
     }
