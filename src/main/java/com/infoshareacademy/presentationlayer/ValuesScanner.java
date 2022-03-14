@@ -1,20 +1,30 @@
 package com.infoshareacademy.presentationlayer;
 
+import com.infoshareacademy.configuration.PropertiesLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ValuesScanner {
-    public static final Scanner scanner = new Scanner(System.in);
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ValuesScanner.class);
+
+    public static final Scanner scanner = new Scanner(System.in);
     public static LocalDate scanLocalDate(String text) {
         LocalDate since;
         while (true) {
             System.out.print(text + ": ");
             try {
-                since = LocalDate.parse(scanner.nextLine());
+                since = LocalDate.parse(scanner.nextLine(),
+                            DateTimeFormatter
+                            .ofPattern(PropertiesLoader.getInstance().returnDateFormat())
+                        );
                 break;
             } catch (DateTimeException e) {
                 System.out.println("Incorrect date value.");
@@ -125,5 +135,4 @@ public class ValuesScanner {
             }
         }
     }
-
 }

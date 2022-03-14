@@ -1,5 +1,6 @@
 package com.infoshareacademy.presentationlayer.search;
 
+import com.infoshareacademy.configuration.PropertiesLoader;
 import com.infoshareacademy.domain.DailyExchangeRates;
 import com.infoshareacademy.presentationlayer.CollectionView;
 import com.infoshareacademy.presentationlayer.Menu;
@@ -10,6 +11,7 @@ import com.infoshareacademy.services.NBPApiManager;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class SearchUI {
@@ -22,9 +24,9 @@ public class SearchUI {
     private final Menu menu;
     private boolean isRunning;
 
-    public SearchUI(NBPApiManager nbpApiManager) {
+    public SearchUI() {
 
-        exchangeRatesSearchService = nbpApiManager.getDailyExchangeRatesSearchService();
+        exchangeRatesSearchService = NBPApiManager.getInstance().getDailyExchangeSearchRatesService();
         this.menu = new Menu();
         getListOfOptions();
 
@@ -53,7 +55,10 @@ public class SearchUI {
         menu.addMenuOption(new Menu.MenuOption()
                 .setDescription("Search for tables by giving a full effective date")
                 .setMethod(() -> {
-                    LocalDate effectiveDate = ValuesScanner.scanLocalDate("Enter a date (example \"2022-02-08\")");
+                    LocalDate effectiveDate = ValuesScanner.scanLocalDate("Enter a date (example \""+
+                            LocalDate.of(2022, 03, 01).
+                                    format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
+                            +"\")" );
                     exchangeRatesSearchService
                             .searchEffectiveDate(effectiveDate)
                             .ifPresent(CollectionView::displayDailyExchangeRates);
@@ -82,7 +87,10 @@ public class SearchUI {
         menu.addMenuOption(new Menu.MenuOption()
                 .setDescription("Search for tables by giving a full trading date")
                 .setMethod(() -> {
-                    LocalDate effectiveDate = ValuesScanner.scanLocalDate("Enter a date (example \"2022-02-08\")");
+                    LocalDate effectiveDate = ValuesScanner.scanLocalDate("Enter a date (example \""+
+                            LocalDate.of(2022, 03, 01).
+                                    format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
+                            +"\")" );
                     exchangeRatesSearchService
                             .searchTradingDate(effectiveDate)
                             .ifPresent(CollectionView::displayDailyExchangeRates);

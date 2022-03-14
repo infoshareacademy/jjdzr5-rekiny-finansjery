@@ -1,5 +1,6 @@
 package com.infoshareacademy.presentationlayer.filtration;
 
+import com.infoshareacademy.configuration.PropertiesLoader;
 import com.infoshareacademy.services.ExchangeRatesFiltrationService;
 import com.infoshareacademy.services.NBPApiManager;
 import com.infoshareacademy.services.DailyExchangeRatesFiltrationService;
@@ -7,16 +8,20 @@ import com.infoshareacademy.presentationlayer.CollectionView;
 import com.infoshareacademy.presentationlayer.SimpleCustomTable;
 import com.infoshareacademy.presentationlayer.ValuesScanner;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FiltrationUI {
     DailyExchangeRatesFiltrationService exchangeRatesService;
 
-    public void filtrationMenu(NBPApiManager nbpApiManager){
+    public void filtrationMenu(){
+        boolean selectingFiltration = true;
+        NBPApiManager nbpApiManager = NBPApiManager.getInstance();
         List<FiltrationOption> options = getListOfOptions(nbpApiManager);
-        exchangeRatesService = nbpApiManager.getDailyExchangeRatesFiltrationService();
+        exchangeRatesService = nbpApiManager.getDailyExchangeRatesService();
         while(exchangeRatesService != null) {
             int selectedOption = selectOptions(options);
             System.out.println("Selected option: [" + options.get(selectedOption).getDescription() + "]");
@@ -51,7 +56,7 @@ public class FiltrationUI {
         list.add(new FiltrationOption().
                 setDescription("reset collection").
                 setFilter((table) -> {
-                    exchangeRatesService = nbpApiManager.getDailyExchangeRatesFiltrationService();
+                    exchangeRatesService = nbpApiManager.getDailyExchangeRatesService();
                 }));
         list.add(new FiltrationOption().
                 setDescription("filter daily tables with trading date since selected date").
@@ -62,21 +67,31 @@ public class FiltrationUI {
         list.add(new FiltrationOption().
                 setDescription("filter daily tables with trading date until selected date").
                 setFilter((table) -> {
-                    LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \"2022-02-08\")");
+                    LocalDate date = ValuesScanner.
+                            scanLocalDate("Enter the threshold date (example \""+
+                                    LocalDate.of(2022, 03, 01).
+                                            format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
+                                    +"\")");
                     exchangeRatesService = table.
                             filterByTradingDateTo(date);
                 }));
         list.add(new FiltrationOption().
                 setDescription("filter daily tables with effective date since selected date").
                 setFilter((table) -> {
-                    LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \"2022-02-08\")");
+                    LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \""+
+                            LocalDate.of(2022, 03, 01).
+                                    format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
+                            +"\")");
                     exchangeRatesService = table.
                             filterByEffectiveDateFrom(date);
                 }));
         list.add(new FiltrationOption().
                 setDescription("filter daily tables with effective date until selected date").
                 setFilter((table) -> {
-                    LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \"2022-02-08\")");
+                    LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \""+
+                            LocalDate.of(2022, 03, 01).
+                                    format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
+                            +"\")");
                     exchangeRatesService = table.
                             filterByEffectiveDateTo(date);
                 }));
@@ -122,7 +137,9 @@ public class FiltrationUI {
                 }));
         list.add(new FiltrationOption().
                 setDescription("back to main menu").
-                setFilter((table) -> exchangeRatesService = null));
+                setFilter((table) -> {
+                    exchangeRatesService = null;
+                }));
         return list;
     }
 }
