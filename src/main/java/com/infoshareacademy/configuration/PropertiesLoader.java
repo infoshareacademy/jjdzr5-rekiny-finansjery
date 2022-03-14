@@ -1,5 +1,8 @@
 package com.infoshareacademy.configuration;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,24 +12,25 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class PropertiesLoader {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesLoader.class);
+
     private static PropertiesLoader INSTANCE;
 
     private static Properties properties;
 
-    public synchronized static PropertiesLoader getInstance(){
-        if(INSTANCE != null){
-            return  INSTANCE;
+    public synchronized static PropertiesLoader getInstance() {
+        if (INSTANCE != null) {
+            return INSTANCE;
         }
         return new PropertiesLoader();
     }
 
-    private PropertiesLoader(){
+    private PropertiesLoader() {
         Path path = Paths.get("db.properties");
-        try{
+        try {
             loadFromFile(path);
-        }
-        catch (IOException e){
-            properties = checkIfConfigFileExistsIfNotCreateDefaultOne();
+        } catch (IOException e) {
+            properties = createDefaultConfiguration();
         }
     }
 
@@ -35,38 +39,40 @@ public class PropertiesLoader {
         properties.load(Files.newBufferedReader(path));
     }
 
-    public Properties checkIfConfigFileExistsIfNotCreateDefaultOne() {
+    public Properties createDefaultConfiguration() {
+
+        Properties defaultProperties = new Properties();
 
         Path path = Paths.get("db.properties");
-        Map<String,String> defaultProperties = new HashMap<>();
-        defaultProperties.put("order", "ascending");
-        defaultProperties.put("date-format", "dd.MM.yyyy");
+        Map<String, String> defaultPropertiesMap = new HashMap<>();
+        defaultPropertiesMap.put("order", "ascending");
+        defaultPropertiesMap.put("date-format", "dd.MM.yyyy");
         AtomicReference<String> rawProperties = new AtomicReference<>("");
-        defaultProperties.forEach((key, value)-> rawProperties.set(rawProperties.get()+key+"="+value+"\n"));
+        defaultPropertiesMap.forEach((key, value) -> rawProperties.set(rawProperties.get() + key + "=" + value + "\n"));
         try {
             if (!Files.exists(path)) {
                 Files.createFile(path);
                 Files.writeString(path, rawProperties.get());
 
-                Properties properties = new Properties();
-                properties.load(new ByteArrayInputStream(rawProperties.get().getBytes()));
-                System.out.println("Problem with loading config file. I've created a default one.");
-                return properties;
+                defaultProperties.load(new ByteArrayInputStream(rawProperties.get().getBytes()));
+                LOGGER.warn("Problem with loading config file: {}. Default configuration is used.", path);
             }
+        } catch (IOException e) {
+            LOGGER.error("Couldn't load configuration file: ", e);
         }
-        catch (IOException e){
-        }
-        return null;
+
+        return defaultProperties;
     }
 
     public String getProperty(String property) {
         return properties.getProperty(property);
     }
 
-    public String returnOrder (){
+    public String returnOrder() {
         return properties.getProperty("order");
     }
-    public String returnDateFormat (){
+
+    public String returnDateFormat() {
         return properties.getProperty("date-format");
     }
 

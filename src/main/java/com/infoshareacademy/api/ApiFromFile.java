@@ -23,7 +23,7 @@ public class ApiFromFile extends ApiDataSource {
     public List<DailyExchangeRates> loadDb() {
         List<DailyExchangeRates> dailyExchangeRates = fromJson(loadDbFile(FILE_NAME));
         List<DailyExchangeRates> updateDailyExchangeRates = update(getLastDailyExchangeRates(dailyExchangeRates));
-        if (updateDailyExchangeRates.size() > 0 ) {
+        if (!updateDailyExchangeRates.isEmpty()) {
             dailyExchangeRates.addAll(updateDailyExchangeRates);
             saveDb(dailyExchangeRates);
         }
@@ -34,7 +34,7 @@ public class ApiFromFile extends ApiDataSource {
         return saveDbFile(toJson(dailyExchangeRates), FILE_NAME);
     }
 
-    private boolean saveDbFile (String dataBase, String pathToFile) {
+    private boolean saveDbFile(String dataBase, String pathToFile) {
         Path path = Paths.get(pathToFile);
         try {
             Files.writeString(path, dataBase);
@@ -49,7 +49,7 @@ public class ApiFromFile extends ApiDataSource {
         Path path = Paths.get(pathToFile);
         String dataBase = null;
         try {
-            if(Files.exists(path)) {
+            if (Files.exists(path)) {
                 dataBase = Files.readString(path);
             } else {
                 dataBase = new ApiFromNbp().getLast67DaysTables();
@@ -66,7 +66,7 @@ public class ApiFromFile extends ApiDataSource {
         LocalDate today = LocalDate.now();
         if (today.isAfter(lastDailyExchangeRates.getEffectiveDate())) {
             result.addAll(new ApiFromNbp().getRangeOfDate(lastDailyExchangeRates.getEffectiveDate().plusDays(1), today));
-            LOGGER.debug(result.size() + " new daailyExchangeRates");
+            LOGGER.debug("{} new dailyExchangeRates", result.size());
         }
         return result;
     }

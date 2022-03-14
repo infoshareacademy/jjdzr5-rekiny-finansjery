@@ -1,12 +1,9 @@
 package com.infoshareacademy.presentationlayer;
 
-import com.infoshareacademy.configuration.PropertiesLoader;
 import com.infoshareacademy.presentationlayer.filtration.FiltrationUI;
+import com.infoshareacademy.presentationlayer.search.SearchUI;
 import com.infoshareacademy.services.NBPApiManager;
 
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MenuContents {
@@ -19,29 +16,32 @@ public class MenuContents {
 
         menu.addMenuOption(new Menu.MenuOption().
                 setDescription("View All Elements").
-                setMethod(() -> {
-                    CollectionView.displayExchangeRatesArchiveTable(nbpApiManager.getCollectionsOfExchangeRates());
-                }));
+                setMethod(() -> CollectionView.displayExchangeRatesArchiveTable(nbpApiManager.getCollectionsOfExchangeRates())));
 
         menu.addMenuOption(new Menu.MenuOption().
                 setDescription("Filtration").
-                setMethod(()->{
+                setMethod(() -> {
                     FiltrationUI filtrationUI = new FiltrationUI();
                     filtrationUI.filtrationMenu();
                 }));
 
         menu.addMenuOption(new Menu.MenuOption().
+                setDescription("Search").
+                setMethod(() -> {
+                    SearchUI searchUI = new SearchUI();
+                    searchUI.runMenu();
+                }));
+
+        menu.addMenuOption(new Menu.MenuOption().
                 setDescription("Manage data").
-                setMethod(()->{
+                setMethod(() -> {
                     EditorUI editorUI = new EditorUI();
                     editorUI.displayEditorMainMenu();
                 }));
 
         menu.addMenuOption(new Menu.MenuOption().
                 setDescription("Exit").
-                setMethod(() -> {
-                    stayInLoop.set(false);
-                }));
+                setMethod(() -> stayInLoop.set(false)));
 
         menu.displayMenu();
         while (stayInLoop.get()) {

@@ -20,7 +20,7 @@ public class DailyExchangeRatesFiltrationService {
     }
 
     public List<DailyExchangeRates> getDailyExchangeRates(){
-        return new ArrayList<DailyExchangeRates>(dailyExchangeRates);
+        return new ArrayList<>(dailyExchangeRates);
     }
 
     public Optional<DailyExchangeRates> getLatestEffectiveDate(){

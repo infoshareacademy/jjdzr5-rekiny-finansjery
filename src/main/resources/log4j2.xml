@@ -25,7 +25,7 @@
 
     <Loggers>
         <Logger name="com.infoshareacademy.presentationlayer" level="debug"/>
-        <Logger name="com.infoshareacademy.api" level="warn">
+        <Logger name="com.infoshareacademy.api" level="info">
             <AppenderRef ref="RollingFile"/>
         </Logger>
         <Root level="error">
