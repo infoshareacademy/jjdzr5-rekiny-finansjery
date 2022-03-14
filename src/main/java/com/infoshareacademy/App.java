@@ -6,8 +6,6 @@ import com.infoshareacademy.presentationlayer.MenuContents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Properties;
-
 public class App {
     final Logger LOGGER = LoggerFactory.getLogger(App.class);
 

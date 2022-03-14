@@ -1,6 +1,5 @@
 package com.infoshareacademy.configuration;
 
-import com.infoshareacademy.App;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +8,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class PropertiesLoader {
 
