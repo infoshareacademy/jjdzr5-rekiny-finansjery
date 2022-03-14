@@ -16,7 +16,7 @@ public class UsageExamplesCode {
          test.method();
      }
 
-    public static void showExamples(NBPApiManager nbpApiManager){
+    public static void showExamples(NBPApiManager nbpApiManager) {
 
         /*Menu menu = new Menu();
         menu.showMenu();

@@ -7,9 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class App {
-    final Logger LOGGER = LoggerFactory.getLogger(App.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 
-    public static void main( String[] args ){
+    public static void main(String[] args) {
+
+        LOGGER.info("Start of the application.");
+
         System.out.println("______     _    _              ______ _                       _                 \n" +
                 "| ___ \\   | |  (_)             |  ___(_)                     (_)                \n" +
                 "| |_/ /___| | ___ _ __  _   _  | |_   _ _ __   __ _ _ __  ___ _  ___ _ __ _   _ \n" +

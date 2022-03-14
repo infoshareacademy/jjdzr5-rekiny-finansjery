@@ -17,16 +17,16 @@ public class PropertiesLoader {
 
     private static Properties properties;
 
-    public synchronized static PropertiesLoader getInstance(){
-        if(INSTANCE != null){
-            return  INSTANCE;
+    public synchronized static PropertiesLoader getInstance() {
+        if (INSTANCE != null) {
+            return INSTANCE;
         }
         return new PropertiesLoader();
     }
 
-    private PropertiesLoader(){
+    private PropertiesLoader() {
         Path path = Paths.get("db.properties");
-        try{
+        try {
             loadFromFile(path);
         } catch (IOException e) {
             properties = createDefaultConfiguration();
@@ -39,6 +39,7 @@ public class PropertiesLoader {
     }
 
     public Properties createDefaultConfiguration() {
+
         Properties defaultProperties = new Properties();
         defaultProperties.put("order", "ascending");
         defaultProperties.put("date-format", "dd.MM.yyyy");
@@ -58,10 +59,11 @@ public class PropertiesLoader {
         return properties.getProperty(property);
     }
 
-    public String returnOrder (){
+    public String returnOrder() {
         return properties.getProperty("order");
     }
-    public String returnDateFormat (){
+
+    public String returnDateFormat() {
         return properties.getProperty("date-format");
     }
 
