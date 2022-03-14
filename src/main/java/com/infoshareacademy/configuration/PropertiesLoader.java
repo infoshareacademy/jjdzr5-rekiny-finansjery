@@ -8,7 +8,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class PropertiesLoader {
 
@@ -42,25 +41,17 @@ public class PropertiesLoader {
     public Properties createDefaultConfiguration() {
 
         Properties defaultProperties = new Properties();
+        defaultProperties.put("order", "ascending");
+        defaultProperties.put("date-format", "dd.MM.yyyy");
 
         Path path = Paths.get("db.properties");
-        Map<String, String> defaultPropertiesMap = new HashMap<>();
-        defaultPropertiesMap.put("order", "ascending");
-        defaultPropertiesMap.put("date-format", "dd.MM.yyyy");
-        AtomicReference<String> rawProperties = new AtomicReference<>("");
-        defaultPropertiesMap.forEach((key, value) -> rawProperties.set(rawProperties.get() + key + "=" + value + "\n"));
-        try {
-            if (!Files.exists(path)) {
-                Files.createFile(path);
-                Files.writeString(path, rawProperties.get());
-
-                defaultProperties.load(new ByteArrayInputStream(rawProperties.get().getBytes()));
-                LOGGER.warn("Problem with loading config file: {}. Default configuration is used.", path);
-            }
-        } catch (IOException e) {
-            LOGGER.error("Couldn't load configuration file: ", e);
+        try(FileOutputStream outputStream = new FileOutputStream(path.toString())) {
+            defaultProperties.store(outputStream, "default config");
+            LOGGER.info("Problem with loading config file. I've created a default one.");
         }
-
+        catch (IOException e){
+            LOGGER.error("Problem with loading config file. Couldn't create default config file.");
+        }
         return defaultProperties;
     }
 
