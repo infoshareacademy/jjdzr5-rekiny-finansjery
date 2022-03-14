@@ -5,19 +5,15 @@ import com.infoshareacademy.domain.DailyExchangeRates;
 import com.infoshareacademy.domain.ExchangeRate;
 import de.vandermeer.asciitable.AsciiTable;
 
-import java.io.IOException;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.List;
 
 public class CollectionView {
 
 //todo: display table parameter using foreach
 
-    public static void displayExchangeRatesArchiveTable(List<DailyExchangeRates> list){
-        List<DailyExchangeRates> tables = list;
-        for (DailyExchangeRates table : tables) {
+    public static void displayExchangeRatesArchiveTable(List<DailyExchangeRates> list) {
+        for (DailyExchangeRates table : list) {
             displayDailyExchangeRates(table);
         }
     }
@@ -37,7 +33,7 @@ public class CollectionView {
                         .returnDateFormat()))
                         , "");
         asciiTable.addRule();
-        if (table.getRates().size() > 0){
+        if (!table.getRates().isEmpty()) {
             asciiTable.addRow("Code", "Currency Name", "Bid Price", "Asking Price");
             asciiTable.addRule();
             for (ExchangeRate rate : table.getRates()) {
@@ -48,7 +44,7 @@ public class CollectionView {
         System.out.println(asciiTable.render());
     }
 
-    public static void displayExchangeRate(ExchangeRate rate){
+    public static void displayExchangeRate(ExchangeRate rate) {
         AsciiTable asciiTable = new AsciiTable();
         asciiTable.addRule();
         asciiTable.addRow("Code", "Currency Name", "Bid Price", "Asking Price");

@@ -61,7 +61,6 @@ public class ApiFromNbp extends ApiDataSource {
                 body = response.body();
             }
         } catch(Exception e) {
-//            e.printStackTrace();
             LOGGER.error(e.getMessage());
         }
         return body;

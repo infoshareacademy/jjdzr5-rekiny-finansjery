@@ -1,30 +1,28 @@
 package com.infoshareacademy.presentationlayer;
 
 import com.infoshareacademy.configuration.PropertiesLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class ValuesScanner {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ValuesScanner.class);
-
     public static final Scanner scanner = new Scanner(System.in);
+
     public static LocalDate scanLocalDate(String text) {
         LocalDate since;
         while (true) {
             System.out.print(text + ": ");
             try {
                 since = LocalDate.parse(scanner.nextLine(),
-                            DateTimeFormatter
-                            .ofPattern(PropertiesLoader.getInstance().returnDateFormat())
-                        );
+                        DateTimeFormatter
+                                .ofPattern(PropertiesLoader.getInstance().returnDateFormat())
+                );
                 break;
             } catch (DateTimeException e) {
                 System.out.println("Incorrect date value.");
@@ -106,10 +104,6 @@ public class ValuesScanner {
             System.out.print(text + ": ");
             try {
                 str = scanner.nextLine();
-                if (str.length() < 3) {
-                    System.out.println("Searched phrase is too short.");
-                    continue;
-                }
                 return str;
             } catch (Exception e) {
                 System.out.println("Incorrect value.");
@@ -117,16 +111,28 @@ public class ValuesScanner {
         }
     }
 
-    public static Month scanMonth(String text) {
+    public static String scanStringWithLength(String text) {
+        String str;
+        while (true) {
+            str = scanString(text);
+            if (str.length() >= 3) {
+                return str;
+            } else {
+                System.out.println("Searched phrase is too short.");
+            }
+        }
+    }
+
+    public static Optional<Month> scanMonth(String text) {
         String str = "";
         while (true) {
             System.out.print(text + ": ");
             try {
                 str = scanner.nextLine();
-                return Month.of(Integer.parseInt(str));
+                return Optional.of(Month.of(Integer.parseInt(str)));
             } catch (NumberFormatException formatException) {
                 try {
-                    return str.equals("-") ? null : Month.valueOf(str.toUpperCase());
+                    return str.equals("-") ? Optional.empty() : Optional.of(Month.valueOf(str.toUpperCase()));
                 } catch (IllegalArgumentException argumentException) {
                     System.out.println("Incorrect month.");
                 }
@@ -135,4 +141,5 @@ public class ValuesScanner {
             }
         }
     }
+
 }

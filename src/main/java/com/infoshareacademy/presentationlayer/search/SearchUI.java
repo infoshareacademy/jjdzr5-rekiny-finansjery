@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 public class SearchUI {
 
@@ -47,7 +48,7 @@ public class SearchUI {
         menu.addMenuOption(new Menu.MenuOption()
                 .setDescription("Search for tables by giving a table number")
                 .setMethod(() -> {
-                    String tableNo = ValuesScanner.scanString("Enter a table number (example \"004/C/NBP/2022\")");
+                    String tableNo = ValuesScanner.scanStringWithLength("Enter a table number (example \"004/C/NBP/2022\")");
                     dailyExchangeRates = exchangeRatesSearchService.searchTableNo(tableNo);
                     displayResult();
                 })
@@ -55,10 +56,10 @@ public class SearchUI {
         menu.addMenuOption(new Menu.MenuOption()
                 .setDescription("Search for tables by giving a full effective date")
                 .setMethod(() -> {
-                    LocalDate effectiveDate = ValuesScanner.scanLocalDate("Enter a date (example \""+
-                            LocalDate.of(2022, 03, 01).
+                    LocalDate effectiveDate = ValuesScanner.scanLocalDate("Enter a date (example \"" +
+                            LocalDate.of(2022, 3, 1).
                                     format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
-                            +"\")" );
+                            + "\")");
                     exchangeRatesSearchService
                             .searchEffectiveDate(effectiveDate)
                             .ifPresent(CollectionView::displayDailyExchangeRates);
@@ -67,30 +68,18 @@ public class SearchUI {
         menu.addMenuOption(new Menu.MenuOption()
                 .setDescription("Search for tables by giving a year and a month of effective date")
                 .setMethod(() -> {
-                    int year = ValuesScanner.scanIntegerInRange("Enter a year from " + MIN_YEAR, MIN_YEAR, MAX_YEAR);
-                    Month month = ValuesScanner.scanMonth("Enter a month (examples: 2, february) or '-'");
-                    LocalDate dateFrom;
-                    LocalDate dateTo;
-
-                    if (month == null) {
-                        dateFrom = LocalDate.of(year, Month.JANUARY, 1);
-                        dateTo = LocalDate.of(year, Month.DECEMBER, 31);
-                    } else {
-                        boolean leapYear = LocalDate.of(year, 1, 1).isLeapYear();
-                        dateFrom = LocalDate.of(year, month, 1);
-                        dateTo = LocalDate.of(year, month, month.length(leapYear));
-                    }
-                    dailyExchangeRates = exchangeRatesSearchService.searchEffectiveDateByTimeRange(dateFrom, dateTo);
+                    DateRange dateRange = getDateRange();
+                    dailyExchangeRates = exchangeRatesSearchService.searchEffectiveDateByTimeRange(dateRange.dateFrom, dateRange.dateTo);
                     displayResult();
                 })
         );
         menu.addMenuOption(new Menu.MenuOption()
                 .setDescription("Search for tables by giving a full trading date")
                 .setMethod(() -> {
-                    LocalDate effectiveDate = ValuesScanner.scanLocalDate("Enter a date (example \""+
-                            LocalDate.of(2022, 03, 01).
+                    LocalDate effectiveDate = ValuesScanner.scanLocalDate("Enter a date (example \"" +
+                            LocalDate.of(2022, 3, 1).
                                     format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
-                            +"\")" );
+                            + "\")");
                     exchangeRatesSearchService
                             .searchTradingDate(effectiveDate)
                             .ifPresent(CollectionView::displayDailyExchangeRates);
@@ -99,27 +88,15 @@ public class SearchUI {
         menu.addMenuOption(new Menu.MenuOption()
                 .setDescription("Search for tables by giving a year and a month of trading date")
                 .setMethod(() -> {
-                    int year = ValuesScanner.scanIntegerInRange("Enter a year from " + MIN_YEAR, MIN_YEAR, MAX_YEAR);
-                    Month month = ValuesScanner.scanMonth("Enter a month (examples: 2, february) or '-'");
-                    LocalDate dateFrom;
-                    LocalDate dateTo;
-
-                    if (month == null) {
-                        dateFrom = LocalDate.of(year, Month.JANUARY, 1);
-                        dateTo = LocalDate.of(year, Month.DECEMBER, 31);
-                    } else {
-                        boolean leapYear = LocalDate.of(year, 1, 1).isLeapYear();
-                        dateFrom = LocalDate.of(year, month, 1);
-                        dateTo = LocalDate.of(year, month, month.length(leapYear));
-                    }
-                    dailyExchangeRates = exchangeRatesSearchService.searchTradingDateByTimeRange(dateFrom, dateTo);
+                    DateRange dateRange = getDateRange();
+                    dailyExchangeRates = exchangeRatesSearchService.searchTradingDateByTimeRange(dateRange.dateFrom, dateRange.dateTo);
                     displayResult();
                 })
         );
         menu.addMenuOption(new Menu.MenuOption()
                 .setDescription("Search for rates by giving a currency name")
                 .setMethod(() -> {
-                    String currency = ValuesScanner.scanString("Enter the currency name");
+                    String currency = ValuesScanner.scanStringWithLength("Enter the currency name");
                     dailyExchangeRates = exchangeRatesSearchService.forEachDay(exchangeRates -> exchangeRates.setRates(new ExchangeRatesSearchService(exchangeRates
                             .getRates())
                             .searchCurrency(currency)));
@@ -129,7 +106,7 @@ public class SearchUI {
         menu.addMenuOption(new Menu.MenuOption()
                 .setDescription("Search for rates by giving a currency code")
                 .setMethod(() -> {
-                    String code = ValuesScanner.scanString("Enter the currency code (example \"USD\")");
+                    String code = ValuesScanner.scanStringWithLength("Enter the currency code (example \"USD\")");
                     dailyExchangeRates = exchangeRatesSearchService.forEachDay(exchangeRates -> new ExchangeRatesSearchService(exchangeRates
                             .getRates())
                             .searchCode(code)
@@ -148,6 +125,35 @@ public class SearchUI {
             System.out.println("No results.");
         } else {
             CollectionView.displayExchangeRatesArchiveTable(dailyExchangeRates);
+        }
+    }
+
+    private DateRange getDateRange() {
+
+        int year = ValuesScanner.scanIntegerInRange("Enter a year from " + MIN_YEAR, MIN_YEAR, MAX_YEAR);
+        Optional<Month> month = ValuesScanner.scanMonth("Enter a month (examples: 2, february) or '-'");
+        LocalDate dateFrom;
+        LocalDate dateTo;
+
+        if (month.isPresent()) {
+            boolean leapYear = LocalDate.of(year, 1, 1).isLeapYear();
+            dateFrom = LocalDate.of(year, month.get(), 1);
+            dateTo = LocalDate.of(year, month.get(), month.get().length(leapYear));
+        } else {
+            dateFrom = LocalDate.of(year, Month.JANUARY, 1);
+            dateTo = LocalDate.of(year, Month.DECEMBER, 31);
+        }
+
+        return new DateRange(dateFrom, dateTo);
+    }
+
+    private static class DateRange {
+        LocalDate dateFrom;
+        LocalDate dateTo;
+
+        public DateRange(LocalDate dateFrom, LocalDate dateTo) {
+            this.dateFrom = dateFrom;
+            this.dateTo = dateTo;
         }
     }
 
