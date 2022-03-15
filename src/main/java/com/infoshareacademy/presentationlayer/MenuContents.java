@@ -15,7 +15,7 @@ public class MenuContents {
         Menu menu = new Menu();
 
         menu.addMenuOption(new Menu.MenuOption().
-                setDescription("View All Elements").
+                setDescription("View all elements").
                 setMethod(() -> CollectionView.displayExchangeRatesArchiveTable(nbpApiManager.getCollectionsOfExchangeRates())));
 
         menu.addMenuOption(new Menu.MenuOption().

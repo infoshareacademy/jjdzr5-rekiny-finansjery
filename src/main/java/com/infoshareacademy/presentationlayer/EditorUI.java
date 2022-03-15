@@ -14,7 +14,6 @@ public class EditorUI {
 
     public EditorUI(){
         this.nbpApiManager = NBPApiManager.getInstance();
-
     }
 
     public void displayEditorMainMenu(){
@@ -41,14 +40,22 @@ public class EditorUI {
                                     format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
                             +"\")"));
                     if(nbpApiManager.addDailyTable(newDailyTable)) {
+                        System.out.println("Added new daily table.");
                         nbpApiManager.saveCollection();
+                    }
+                    else{
+                        System.out.println("Couldn't add new daily table.");
                     }
                 }));
         menu.addMenuOption(new Menu.MenuOption().
                 setDescription("Remove daily table").
                 setMethod(()->{
                     if(nbpApiManager.removeDailyTable(ValuesScanner.scanString("Enter table No."))) {
+                        System.out.println("Removed daily table.");
                         nbpApiManager.saveCollection();
+                    }
+                    else{
+                        System.out.println("Couldn't remove daily table.");
                     }
                 }));
         menu.displayMenuWithReturnAndExecute("Back", ()->{});
@@ -77,14 +84,22 @@ public class EditorUI {
                     exchangeRate.setAsk(ValuesScanner.scanDouble("Enter ask price"));
                     exchangeRate.setBid(ValuesScanner.scanDouble("Enter bid price"));
                     if(nbpApiManager.addExchangeRate(dailyExchangeRates.getNo(), exchangeRate)) {
+                        System.out.println("Added new exchange rate.");
                         nbpApiManager.saveCollection();
+                    }
+                    else{
+                        System.out.println("Couldn't add new exchange rate.");
                     }
                 }));
         menu.addMenuOption(new Menu.MenuOption().
                 setDescription("Remove exchange rate").
                 setMethod(()->{
                     if(nbpApiManager.removeExchangeRate(dailyExchangeRates.getNo(), ValuesScanner.scanString("Enter currency code"))){
+                        System.out.println("Removed exchange rate.");
                         nbpApiManager.saveCollection();
+                    }
+                    else{
+                        System.out.println("Couldn't remove exchange rate.");
                     }
                 }));
         menu.displayMenuWithReturnAndExecute("Back", ()->CollectionView.displayDailyExchangeRates(dailyExchangeRates));
