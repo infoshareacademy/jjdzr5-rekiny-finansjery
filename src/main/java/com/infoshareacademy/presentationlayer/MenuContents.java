@@ -39,13 +39,6 @@ public class MenuContents {
                     editorUI.displayEditorMainMenu();
                 }));
 
-        menu.addMenuOption(new Menu.MenuOption().
-                setDescription("Exit").
-                setMethod(() -> stayInLoop.set(false)));
-
-        menu.displayMenu();
-        while (stayInLoop.get()) {
-            menu.executeSelectedOption(ValuesScanner.scanIntegerInRange("Select the desired option", 0, menu.getMenuSize()));
-        }
+        menu.displayMenuWithReturnAndExecute("Exit program",()->{});
     }
 }

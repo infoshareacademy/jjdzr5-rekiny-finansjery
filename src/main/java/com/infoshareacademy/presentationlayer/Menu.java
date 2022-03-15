@@ -28,7 +28,7 @@ public class Menu { //todo get rid ot table being displayed after the menu is ex
         AtomicBoolean stayInLoop = new AtomicBoolean(true);
         List<MenuOption> tempOptions = new ArrayList<>(options);
         tempOptions.add(0, new Menu.MenuOption().
-                setDescription("Back").
+                setDescription(returnText).
                 setMethod(()->{
                     stayInLoop.set(false);
                 }));

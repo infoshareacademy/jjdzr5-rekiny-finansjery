@@ -1,9 +1,12 @@
 package com.infoshareacademy.presentationlayer;
 
+import com.infoshareacademy.configuration.PropertiesLoader;
 import com.infoshareacademy.domain.DailyExchangeRates;
 import com.infoshareacademy.domain.ExchangeRate;
 import com.infoshareacademy.services.NBPApiManager;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class EditorUI {
@@ -29,8 +32,14 @@ public class EditorUI {
                     DailyExchangeRates newDailyTable = new DailyExchangeRates();
                     newDailyTable.setTable("C");
                     newDailyTable.setNo(ValuesScanner.scanString("Enter table No."));
-                    newDailyTable.setTradingDate(ValuesScanner.scanLocalDate("Enter trading date"));
-                    newDailyTable.setEffectiveDate(ValuesScanner.scanLocalDate("Enter effective date"));
+                    newDailyTable.setTradingDate(ValuesScanner.scanLocalDate("Enter trading date(example \""+
+                            LocalDate.of(2022, 03, 01).
+                                    format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
+                            +"\")"));
+                    newDailyTable.setEffectiveDate(ValuesScanner.scanLocalDate("Enter effective date (example \""+
+                            LocalDate.of(2022, 03, 01).
+                                    format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
+                            +"\")"));
                     if(nbpApiManager.addDailyTable(newDailyTable)) {
                         nbpApiManager.saveCollection();
                     }
@@ -121,13 +130,19 @@ public class EditorUI {
         menu.addMenuOption(new Menu.MenuOption().
                 setDescription("Set new trading date").
                 setMethod(()->{
-                    dailyExchangeRates.setTradingDate(ValuesScanner.scanLocalDate("Enter new trading date"));
+                    dailyExchangeRates.setTradingDate(ValuesScanner.scanLocalDate("Enter new trading date (example \""+
+                            LocalDate.of(2022, 03, 01).
+                                    format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
+                            +"\")"));
                     nbpApiManager.saveCollection();
                 }));
         menu.addMenuOption(new Menu.MenuOption().
                 setDescription("Set new effective date").
                 setMethod(()->{
-                    dailyExchangeRates.setEffectiveDate(ValuesScanner.scanLocalDate("Enter new effective date"));
+                    dailyExchangeRates.setEffectiveDate(ValuesScanner.scanLocalDate("Enter new effective date (example \""+
+                            LocalDate.of(2022, 03, 01).
+                                    format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
+                            +"\")"));
                     nbpApiManager.saveCollection();
                 }));
         menu.displayMenuWithReturnAndExecute("Return", ()->CollectionView.displayDailyExchangeRates(dailyExchangeRates));

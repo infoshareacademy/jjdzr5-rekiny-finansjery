@@ -10,17 +10,17 @@ import java.util.Optional;
 public class NBPApiManager {
     private List<DailyExchangeRates> collectionsOfExchangeRates;
 
-
     private static NBPApiManager INSTANCE;
 
     public synchronized static NBPApiManager getInstance(){
         if(INSTANCE != null){
             return  INSTANCE;
         }
-        return new NBPApiManager();
+        INSTANCE = new NBPApiManager();
+        return INSTANCE;
     }
 
-    public NBPApiManager(){
+    private NBPApiManager(){
         collectionsOfExchangeRates = new ApiFromFile().loadDb();
     }
 
@@ -61,13 +61,22 @@ public class NBPApiManager {
     }
 
     public boolean addDailyTable(DailyExchangeRates table){
+        if(findDailyTable(table.getNo()).isPresent()){
+            return false;
+        }
         return collectionsOfExchangeRates.add(table);
     }
 
     public boolean addExchangeRate(String no, ExchangeRate exchangeRate){
-        Optional<DailyExchangeRates> dailyExchangeRates = findDailyTable(no);
-        if(dailyExchangeRates.isPresent()){
-            return dailyExchangeRates.get().getRates().add(exchangeRate);
+        Optional<DailyExchangeRates> dailyTable = findDailyTable(no);
+        if(dailyTable.isPresent()){
+            Optional<ExchangeRate> existingExchangeRate = dailyTable.get()
+                    .getRates().stream().
+                    filter(table -> table.getCode().equals(exchangeRate.getCode())).findFirst();
+            if(existingExchangeRate.isPresent()){
+                return false;
+            }
+            return dailyTable.get().getRates().add(exchangeRate);
         }
         return false;
     }

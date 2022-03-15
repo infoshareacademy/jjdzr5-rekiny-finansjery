@@ -49,6 +49,11 @@ public class FiltrationUI {
     private List<FiltrationOption> getListOfOptions(NBPApiManager nbpApiManager){
         List<FiltrationOption> list = new ArrayList<>();
         list.add(new FiltrationOption().
+                setDescription("back to main menu").
+                setFilter((table) -> {
+                    exchangeRatesService = null;
+                }));
+        list.add(new FiltrationOption().
                 setDescription("display result of filtration").
                 setFilter((table) -> {
                     CollectionView.displayExchangeRatesArchiveTable(table.getDailyExchangeRates());
@@ -61,7 +66,10 @@ public class FiltrationUI {
         list.add(new FiltrationOption().
                 setDescription("filter daily tables with trading date since selected date").
                 setFilter((table) -> {
-                    LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \"2022-02-08\")");
+                    LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \""+
+                            LocalDate.of(2022, 03, 01).
+                                    format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
+                            +"\")");
                     exchangeRatesService = table.filterByTradingDateFrom(date);
                 }));
         list.add(new FiltrationOption().
@@ -134,11 +142,6 @@ public class FiltrationUI {
                     exchangeRatesService = table.forEachDay(dailyExchangeRates -> new ExchangeRatesFiltrationService(dailyExchangeRates.
                             getRates()).
                             filterByBuyPriceTo(value));
-                }));
-        list.add(new FiltrationOption().
-                setDescription("back to main menu").
-                setFilter((table) -> {
-                    exchangeRatesService = null;
                 }));
         return list;
     }
