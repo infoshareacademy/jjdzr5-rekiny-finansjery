@@ -8,7 +8,7 @@ public class ExchangeRate {
 
     public ExchangeRate(String currency, String code, double bid, double ask) {
         this.currency = currency;
-        this.code = code;
+        this.code = code.toUpperCase();
         this.bid = bid;
         this.ask = ask;
     }
@@ -28,7 +28,7 @@ public class ExchangeRate {
     }
 
     public void setCode(String code) {
-        this.code = code;
+        this.code = code.toUpperCase();
     }
 
     public double getBid() {

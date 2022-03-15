@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FiltrationUI {
@@ -106,7 +107,7 @@ public class FiltrationUI {
         list.add(new FiltrationOption().
                 setDescription("Filter currencies with selected short names").
                 setFilter((table) -> {
-                    String[] currencies = ValuesScanner.scanMultipleStrings("Enter selected currencies (example \"USD,SEK\")");
+                    List<String> currencies = new ArrayList<>(Arrays.asList(ValuesScanner.scanMultipleStrings("Enter selected currencies (example \"USD,SEK\")")));
                     exchangeRatesService = table.forEachDay(dailyExchangeRates -> new ExchangeRatesFiltrationService(dailyExchangeRates.
                             getRates()).
                             filterByShortName(currencies));
