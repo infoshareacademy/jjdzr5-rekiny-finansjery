@@ -15,7 +15,7 @@ public class MenuContents {
         Menu menu = new Menu();
 
         menu.addMenuOption(new Menu.MenuOption().
-                setDescription("View All Elements").
+                setDescription("View all elements").
                 setMethod(() -> CollectionView.displayExchangeRatesArchiveTable(nbpApiManager.getCollectionsOfExchangeRates())));
 
         menu.addMenuOption(new Menu.MenuOption().
@@ -39,13 +39,6 @@ public class MenuContents {
                     editorUI.displayEditorMainMenu();
                 }));
 
-        menu.addMenuOption(new Menu.MenuOption().
-                setDescription("Exit").
-                setMethod(() -> stayInLoop.set(false)));
-
-        menu.displayMenu();
-        while (stayInLoop.get()) {
-            menu.executeSelectedOption(ValuesScanner.scanIntegerInRange("Select the desired option", 0, menu.getMenuSize()));
-        }
+        menu.displayMenuWithReturnAndExecute("Exit program",()->{});
     }
 }

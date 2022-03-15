@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ApiFromNbp extends ApiDataSource {
 
@@ -31,7 +32,7 @@ public class ApiFromNbp extends ApiDataSource {
         return getJsonFromNbp(LAST_67_DAYS_TABLES);
     }
     protected List<DailyExchangeRates> getRangeOfDate(LocalDate startDate, LocalDate endDate){
-        List<DailyExchangeRates> result = new ArrayList<>();
+        List<DailyExchangeRates> result = new CopyOnWriteArrayList<>();
         LocalDate tempEndDate = (ChronoUnit.DAYS.between(startDate, endDate) > LIMIT_DAYS? startDate.plusDays(LIMIT_DAYS):endDate);
         do {
             try {

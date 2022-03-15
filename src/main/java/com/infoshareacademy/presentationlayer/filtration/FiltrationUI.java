@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FiltrationUI {
@@ -39,7 +40,7 @@ public class FiltrationUI {
 
     private void displayOptionsTable(List<FiltrationOption> list){
         SimpleCustomTable menuTable = new SimpleCustomTable(2);
-        menuTable.setTopics("id", "menu options");
+        menuTable.setTopics("ID", "Menu Options");
         for(int i = 0; i < list.size(); i++){
             menuTable.addRow(String.valueOf(i), list.get(i).getDescription());
         }
@@ -49,23 +50,31 @@ public class FiltrationUI {
     private List<FiltrationOption> getListOfOptions(NBPApiManager nbpApiManager){
         List<FiltrationOption> list = new ArrayList<>();
         list.add(new FiltrationOption().
-                setDescription("display result of filtration").
+                setDescription("Back to main menu").
+                setFilter((table) -> {
+                    exchangeRatesService = null;
+                }));
+        list.add(new FiltrationOption().
+                setDescription("Display result of filtration").
                 setFilter((table) -> {
                     CollectionView.displayExchangeRatesArchiveTable(table.getDailyExchangeRates());
                 }));
         list.add(new FiltrationOption().
-                setDescription("reset collection").
+                setDescription("Reset collection").
                 setFilter((table) -> {
                     exchangeRatesService = nbpApiManager.getDailyExchangeRatesService();
                 }));
         list.add(new FiltrationOption().
-                setDescription("filter daily tables with trading date since selected date").
+                setDescription("Filter daily tables with trading date since selected date").
                 setFilter((table) -> {
-                    LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \"2022-02-08\")");
+                    LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \""+
+                            LocalDate.of(2022, 03, 01).
+                                    format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
+                            +"\")");
                     exchangeRatesService = table.filterByTradingDateFrom(date);
                 }));
         list.add(new FiltrationOption().
-                setDescription("filter daily tables with trading date until selected date").
+                setDescription("Filter daily tables with trading date until selected date").
                 setFilter((table) -> {
                     LocalDate date = ValuesScanner.
                             scanLocalDate("Enter the threshold date (example \""+
@@ -76,7 +85,7 @@ public class FiltrationUI {
                             filterByTradingDateTo(date);
                 }));
         list.add(new FiltrationOption().
-                setDescription("filter daily tables with effective date since selected date").
+                setDescription("Filter daily tables with effective date since selected date").
                 setFilter((table) -> {
                     LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \""+
                             LocalDate.of(2022, 03, 01).
@@ -86,7 +95,7 @@ public class FiltrationUI {
                             filterByEffectiveDateFrom(date);
                 }));
         list.add(new FiltrationOption().
-                setDescription("filter daily tables with effective date until selected date").
+                setDescription("Filter daily tables with effective date until selected date").
                 setFilter((table) -> {
                     LocalDate date = ValuesScanner.scanLocalDate("Enter the threshold date (example \""+
                             LocalDate.of(2022, 03, 01).
@@ -96,15 +105,15 @@ public class FiltrationUI {
                             filterByEffectiveDateTo(date);
                 }));
         list.add(new FiltrationOption().
-                setDescription("filter currencies with selected short names").
+                setDescription("Filter currencies with selected short names").
                 setFilter((table) -> {
-                    String[] currencies = ValuesScanner.scanMultipleStrings("Enter selected currencies (example \"USD,SEK\")");
+                    List<String> currencies = new ArrayList<>(Arrays.asList(ValuesScanner.scanMultipleStrings("Enter selected currencies (example \"USD,SEK\")")));
                     exchangeRatesService = table.forEachDay(dailyExchangeRates -> new ExchangeRatesFiltrationService(dailyExchangeRates.
                             getRates()).
                             filterByShortName(currencies));
                 }));
         list.add(new FiltrationOption().
-                setDescription("filter currencies with ask prices above selected value").
+                setDescription("Filter currencies with ask prices above selected value").
                 setFilter((table) -> {
                     double value = ValuesScanner.scanDouble("Enter the threshold value");
                     exchangeRatesService = table.forEachDay(dailyExchangeRates -> new ExchangeRatesFiltrationService(dailyExchangeRates.
@@ -112,7 +121,7 @@ public class FiltrationUI {
                             filterBySellPriceFrom(value));
                 }));
         list.add(new FiltrationOption().
-                setDescription("filter currencies with ask prices below selected value").
+                setDescription("Filter currencies with ask prices below selected value").
                 setFilter((table) -> {
                     double value = ValuesScanner.scanDouble("Enter the threshold value");
                     exchangeRatesService = table.forEachDay(dailyExchangeRates -> new ExchangeRatesFiltrationService(dailyExchangeRates.
@@ -120,7 +129,7 @@ public class FiltrationUI {
                             filterBySellPriceTo(value));
                 }));
         list.add(new FiltrationOption().
-                setDescription("filter currencies with bid prices above selected value").
+                setDescription("Filter currencies with bid prices above selected value").
                 setFilter((table) -> {
                     double value = ValuesScanner.scanDouble("Enter the threshold value");
                     exchangeRatesService = table.forEachDay(dailyExchangeRates -> new ExchangeRatesFiltrationService(dailyExchangeRates.
@@ -128,17 +137,12 @@ public class FiltrationUI {
                             filterByBuyPriceFrom(value));
                 }));
         list.add(new FiltrationOption().
-                setDescription("filter currencies with bid prices belowe selected value").
+                setDescription("Filter currencies with bid prices belowe selected value").
                 setFilter((table) -> {
                     double value = ValuesScanner.scanDouble("Enter the threshold value");
                     exchangeRatesService = table.forEachDay(dailyExchangeRates -> new ExchangeRatesFiltrationService(dailyExchangeRates.
                             getRates()).
                             filterByBuyPriceTo(value));
-                }));
-        list.add(new FiltrationOption().
-                setDescription("back to main menu").
-                setFilter((table) -> {
-                    exchangeRatesService = null;
                 }));
         return list;
     }

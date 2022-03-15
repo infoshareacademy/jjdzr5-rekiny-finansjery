@@ -9,10 +9,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ApiFromFile extends ApiDataSource {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiFromFile.class);
@@ -62,7 +62,7 @@ public class ApiFromFile extends ApiDataSource {
     }
 
     private List<DailyExchangeRates> update(DailyExchangeRates lastDailyExchangeRates) {
-        List<DailyExchangeRates> result = new ArrayList<>();
+        List<DailyExchangeRates> result = new CopyOnWriteArrayList<>();
         LocalDate today = LocalDate.now();
         if (today.isAfter(lastDailyExchangeRates.getEffectiveDate())) {
             result.addAll(new ApiFromNbp().getRangeOfDate(lastDailyExchangeRates.getEffectiveDate().plusDays(1), today));

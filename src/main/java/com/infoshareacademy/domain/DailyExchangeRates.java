@@ -17,7 +17,7 @@ public class DailyExchangeRates {
 
     public DailyExchangeRates(String table, String no, LocalDate tradingDate, LocalDate effectiveDate, CopyOnWriteArrayList<ExchangeRate> rates) {
         this.table = table;
-        this.no = no;
+        this.no = no.toUpperCase();
         this.tradingDate = tradingDate;
         this.effectiveDate = effectiveDate;
         this.rates = rates;
@@ -36,7 +36,7 @@ public class DailyExchangeRates {
     }
 
     public void setNo(String no) {
-        this.no = no;
+        this.no = no.toUpperCase();
     }
 
     public LocalDate getTradingDate() {

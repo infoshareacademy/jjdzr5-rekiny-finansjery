@@ -44,7 +44,10 @@ public class SearchUI {
     }
 
     private void getListOfOptions() {
-
+        menu.addMenuOption(new Menu.MenuOption()
+                .setDescription("Back to main menu")
+                .setMethod(() -> this.isRunning = false)
+        );
         menu.addMenuOption(new Menu.MenuOption()
                 .setDescription("Search for tables by giving a table number")
                 .setMethod(() -> {
@@ -113,10 +116,6 @@ public class SearchUI {
                             .ifPresent(exchangeRate -> exchangeRates.setRates(List.of(exchangeRate))));
                     displayResult();
                 })
-        );
-        menu.addMenuOption(new Menu.MenuOption()
-                .setDescription("Back to main menu")
-                .setMethod(() -> this.isRunning = false)
         );
     }
 

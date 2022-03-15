@@ -1,9 +1,12 @@
 package com.infoshareacademy.presentationlayer;
 
+import com.infoshareacademy.configuration.PropertiesLoader;
 import com.infoshareacademy.domain.DailyExchangeRates;
 import com.infoshareacademy.domain.ExchangeRate;
 import com.infoshareacademy.services.NBPApiManager;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class EditorUI {
@@ -11,7 +14,6 @@ public class EditorUI {
 
     public EditorUI(){
         this.nbpApiManager = NBPApiManager.getInstance();
-
     }
 
     public void displayEditorMainMenu(){
@@ -29,17 +31,31 @@ public class EditorUI {
                     DailyExchangeRates newDailyTable = new DailyExchangeRates();
                     newDailyTable.setTable("C");
                     newDailyTable.setNo(ValuesScanner.scanString("Enter table No."));
-                    newDailyTable.setTradingDate(ValuesScanner.scanLocalDate("Enter trading date"));
-                    newDailyTable.setEffectiveDate(ValuesScanner.scanLocalDate("Enter effective date"));
+                    newDailyTable.setTradingDate(ValuesScanner.scanLocalDate("Enter trading date(example \""+
+                            LocalDate.of(2022, 03, 01).
+                                    format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
+                            +"\")"));
+                    newDailyTable.setEffectiveDate(ValuesScanner.scanLocalDate("Enter effective date (example \""+
+                            LocalDate.of(2022, 03, 01).
+                                    format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
+                            +"\")"));
                     if(nbpApiManager.addDailyTable(newDailyTable)) {
+                        System.out.println("Added new daily table.");
                         nbpApiManager.saveCollection();
+                    }
+                    else{
+                        System.out.println("Couldn't add new daily table.");
                     }
                 }));
         menu.addMenuOption(new Menu.MenuOption().
                 setDescription("Remove daily table").
                 setMethod(()->{
                     if(nbpApiManager.removeDailyTable(ValuesScanner.scanString("Enter table No."))) {
+                        System.out.println("Removed daily table.");
                         nbpApiManager.saveCollection();
+                    }
+                    else{
+                        System.out.println("Couldn't remove daily table.");
                     }
                 }));
         menu.displayMenuWithReturnAndExecute("Back", ()->{});
@@ -68,14 +84,22 @@ public class EditorUI {
                     exchangeRate.setAsk(ValuesScanner.scanDouble("Enter ask price"));
                     exchangeRate.setBid(ValuesScanner.scanDouble("Enter bid price"));
                     if(nbpApiManager.addExchangeRate(dailyExchangeRates.getNo(), exchangeRate)) {
+                        System.out.println("Added new exchange rate.");
                         nbpApiManager.saveCollection();
+                    }
+                    else{
+                        System.out.println("Couldn't add new exchange rate.");
                     }
                 }));
         menu.addMenuOption(new Menu.MenuOption().
                 setDescription("Remove exchange rate").
                 setMethod(()->{
                     if(nbpApiManager.removeExchangeRate(dailyExchangeRates.getNo(), ValuesScanner.scanString("Enter currency code"))){
+                        System.out.println("Removed exchange rate.");
                         nbpApiManager.saveCollection();
+                    }
+                    else{
+                        System.out.println("Couldn't remove exchange rate.");
                     }
                 }));
         menu.displayMenuWithReturnAndExecute("Back", ()->CollectionView.displayDailyExchangeRates(dailyExchangeRates));
@@ -121,13 +145,19 @@ public class EditorUI {
         menu.addMenuOption(new Menu.MenuOption().
                 setDescription("Set new trading date").
                 setMethod(()->{
-                    dailyExchangeRates.setTradingDate(ValuesScanner.scanLocalDate("Enter new trading date"));
+                    dailyExchangeRates.setTradingDate(ValuesScanner.scanLocalDate("Enter new trading date (example \""+
+                            LocalDate.of(2022, 03, 01).
+                                    format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
+                            +"\")"));
                     nbpApiManager.saveCollection();
                 }));
         menu.addMenuOption(new Menu.MenuOption().
                 setDescription("Set new effective date").
                 setMethod(()->{
-                    dailyExchangeRates.setEffectiveDate(ValuesScanner.scanLocalDate("Enter new effective date"));
+                    dailyExchangeRates.setEffectiveDate(ValuesScanner.scanLocalDate("Enter new effective date (example \""+
+                            LocalDate.of(2022, 03, 01).
+                                    format(DateTimeFormatter.ofPattern(PropertiesLoader.getInstance().returnDateFormat()))
+                            +"\")"));
                     nbpApiManager.saveCollection();
                 }));
         menu.displayMenuWithReturnAndExecute("Return", ()->CollectionView.displayDailyExchangeRates(dailyExchangeRates));

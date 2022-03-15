@@ -4,6 +4,7 @@ import com.infoshareacademy.domain.ExchangeRate;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
@@ -44,11 +45,15 @@ public class ExchangeRatesFiltrationService extends CopyOnWriteArrayList<Exchang
         return this;
     }
 
-    public ExchangeRatesFiltrationService filterByShortName(String... selectedCurrencies){
-        List<String> selectedCurrenciesList = Arrays.asList(selectedCurrencies);
+    public ExchangeRatesFiltrationService filterByShortName(List<String> selectedCurrencies){
+        ListIterator<String> iterator = selectedCurrencies.listIterator();
+        while (iterator.hasNext()){
+            String s = iterator.next();
+            iterator.set(s.toUpperCase());
+        }
         exchangeRates = exchangeRates.stream()
                 .filter((currency ->
-                        selectedCurrenciesList.contains(currency.getCode())
+                        selectedCurrencies.contains(currency.getCode())
                 ))
                 .collect(Collectors.toList());
         return this;
