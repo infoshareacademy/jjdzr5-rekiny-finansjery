@@ -18,9 +18,10 @@ public class Menu { //todo get rid ot table being displayed after the menu is ex
     public void displayMenu(List<MenuOption> optionList){
         SimpleCustomTable menuTable = new SimpleCustomTable(2);
         menuTable.setTopics("ID", "Menu Options");
-        for(int i = 0; i < optionList.size(); i++){
+        for(int i = 1; i < optionList.size(); i++){
             menuTable.addRow(String.valueOf(i), optionList.get(i).getDescription());
         }
+        menuTable.addRow(String.valueOf(0), optionList.get(0).getDescription());
         menuTable.displayTable();
     }
 
