@@ -82,11 +82,11 @@ public class ApiFromFile extends ApiDataSource {
 
         if (today.isAfter(lastUpdate)) {
             result.addAll(new ApiFromNbp().getRangeOfDate(lastUpdate.plusDays(1), today));
-            LocalDate newLastUpdate = Collections.max(result, Comparator
-                    .comparing(DailyExchangeRates::getEffectiveDate))
-                    .getEffectiveDate();
-            PropertiesLoader.getInstance().setProperty("last-update",newLastUpdate.toString());
-            LOGGER.info("added {} new table", result.size());
+            if (result.size() > 0 ) {
+                lastUpdate = getLastDailyExchangeRates(result).getEffectiveDate();
+                LOGGER.info("added {} new table", result.size());
+            }
+            PropertiesLoader.getInstance().setProperty("last-update",lastUpdate.toString());
         }
         return result;
     }
