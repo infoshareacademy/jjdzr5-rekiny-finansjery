@@ -41,9 +41,10 @@ public class FiltrationUI {
     private void displayOptionsTable(List<FiltrationOption> list){
         SimpleCustomTable menuTable = new SimpleCustomTable(2);
         menuTable.setTopics("ID", "Menu Options");
-        for(int i = 0; i < list.size(); i++){
+        for(int i = 1; i < list.size(); i++){
             menuTable.addRow(String.valueOf(i), list.get(i).getDescription());
         }
+        menuTable.addRow(String.valueOf(0), list.get(0).getDescription());
         menuTable.displayTable();
     }
 

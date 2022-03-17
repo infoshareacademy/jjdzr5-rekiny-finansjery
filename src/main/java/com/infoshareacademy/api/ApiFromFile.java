@@ -1,5 +1,6 @@
 package com.infoshareacademy.api;
 
+import com.infoshareacademy.configuration.PropertiesLoader;
 import com.infoshareacademy.domain.DailyExchangeRates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,10 +10,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 public class ApiFromFile extends ApiDataSource {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiFromFile.class);
@@ -22,12 +22,26 @@ public class ApiFromFile extends ApiDataSource {
     @Override
     public List<DailyExchangeRates> loadDb() {
         List<DailyExchangeRates> dailyExchangeRates = fromJson(loadDbFile(FILE_NAME));
-        List<DailyExchangeRates> updateDailyExchangeRates = update(getLastDailyExchangeRates(dailyExchangeRates));
+        List<DailyExchangeRates> updateDailyExchangeRates = update();
         if (!updateDailyExchangeRates.isEmpty()) {
+            for (DailyExchangeRates table: dailyExchangeRates) {
+                updateDailyExchangeRates.removeIf(t -> t.getNo().equals(table.getNo()));
+            }
             dailyExchangeRates.addAll(updateDailyExchangeRates);
             saveDb(dailyExchangeRates);
         }
-        return dailyExchangeRates;
+
+        switch (PropertiesLoader.getInstance().getProperty("order")) {
+            case "descending":
+                return dailyExchangeRates.stream()
+                        .sorted((e1,e2) -> e2.getEffectiveDate().compareTo(e1.getEffectiveDate()))
+                        .collect(Collectors.toList());
+            case "ascending":
+            default:
+                return dailyExchangeRates.stream()
+                        .sorted(Comparator.comparing(DailyExchangeRates::getEffectiveDate))
+                        .collect(Collectors.toList());
+        }
     }
 
     public boolean saveDb(List<DailyExchangeRates> dailyExchangeRates) {
@@ -39,7 +53,7 @@ public class ApiFromFile extends ApiDataSource {
         try {
             Files.writeString(path, dataBase);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.info(".Couldn't save data base file");
             return false;
         }
         return true;
@@ -56,17 +70,23 @@ public class ApiFromFile extends ApiDataSource {
                 saveDbFile(dataBase, pathToFile);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.info("Problem with loading data base file.");
         }
         return dataBase;
     }
 
-    private List<DailyExchangeRates> update(DailyExchangeRates lastDailyExchangeRates) {
+    private List<DailyExchangeRates> update() {
         List<DailyExchangeRates> result = new CopyOnWriteArrayList<>();
         LocalDate today = LocalDate.now();
-        if (today.isAfter(lastDailyExchangeRates.getEffectiveDate())) {
-            result.addAll(new ApiFromNbp().getRangeOfDate(lastDailyExchangeRates.getEffectiveDate().plusDays(1), today));
-            LOGGER.debug("{} new dailyExchangeRates", result.size());
+        LocalDate lastUpdate = LocalDate.parse(PropertiesLoader.getInstance().getProperty("last-update"));
+
+        if (today.isAfter(lastUpdate)) {
+            result.addAll(new ApiFromNbp().getRangeOfDate(lastUpdate.plusDays(1), today));
+            LocalDate newLastUpdate = Collections.max(result, Comparator
+                    .comparing(DailyExchangeRates::getEffectiveDate))
+                    .getEffectiveDate();
+            PropertiesLoader.getInstance().setProperty("last-update",newLastUpdate.toString());
+            LOGGER.info("added {} new table", result.size());
         }
         return result;
     }

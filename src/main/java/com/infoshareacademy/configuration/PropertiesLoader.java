@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.*;
 import java.io.*;
 
@@ -17,6 +18,8 @@ public class PropertiesLoader {
 
     private static Properties properties;
 
+    private static final Path path = Paths.get("db.properties");
+
     public synchronized static PropertiesLoader getInstance() {
         if (INSTANCE != null) {
             return INSTANCE;
@@ -25,7 +28,6 @@ public class PropertiesLoader {
     }
 
     private PropertiesLoader() {
-        Path path = Paths.get("db.properties");
         try {
             loadFromFile(path);
         } catch (IOException e) {
@@ -43,20 +45,27 @@ public class PropertiesLoader {
         Properties defaultProperties = new Properties();
         defaultProperties.put("order", "ascending");
         defaultProperties.put("date-format", "dd.MM.yyyy");
+        defaultProperties.put("last-update", LocalDate.now().toString());
+        saveToFile(defaultProperties);
+        LOGGER.info("Problem with loading config file. I've created a default one.");
+        return defaultProperties;
+    }
 
-        Path path = Paths.get("db.properties");
+    private void saveToFile(Properties properties) {
         try(FileOutputStream outputStream = new FileOutputStream(path.toString())) {
-            defaultProperties.store(outputStream, "default config");
-            LOGGER.info("Problem with loading config file. I've created a default one.");
+            properties.store(outputStream, "default config");
         }
         catch (IOException e){
-            LOGGER.error("Problem with loading config file. Couldn't create default config file.");
+            LOGGER.error("Couldn't create config file.");
         }
-        return defaultProperties;
     }
 
     public String getProperty(String property) {
         return properties.getProperty(property);
+    }
+    public void setProperty(String property, String value){
+        properties.put(property,value);
+        saveToFile(properties);
     }
 
     public String returnOrder() {

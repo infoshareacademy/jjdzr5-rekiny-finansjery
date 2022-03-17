@@ -11,7 +11,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -31,6 +30,7 @@ public class ApiFromNbp extends ApiDataSource {
     protected String getLast67DaysTables(){
         return getJsonFromNbp(LAST_67_DAYS_TABLES);
     }
+
     protected List<DailyExchangeRates> getRangeOfDate(LocalDate startDate, LocalDate endDate){
         List<DailyExchangeRates> result = new CopyOnWriteArrayList<>();
         LocalDate tempEndDate = (ChronoUnit.DAYS.between(startDate, endDate) > LIMIT_DAYS? startDate.plusDays(LIMIT_DAYS):endDate);
@@ -38,7 +38,7 @@ public class ApiFromNbp extends ApiDataSource {
             try {
                 result.addAll(fromJson(getJsonFromNbp(String.format(RANGE_OF_DATE, startDate, tempEndDate))));
             } catch (NullPointerException e) {
-                LOGGER.error(e.getMessage());
+                LOGGER.error("No data to download.");
             }
             startDate = tempEndDate;
             tempEndDate = (ChronoUnit.DAYS.between(startDate, endDate) > LIMIT_DAYS? startDate.plusDays(LIMIT_DAYS):endDate);
@@ -62,7 +62,7 @@ public class ApiFromNbp extends ApiDataSource {
                 body = response.body();
             }
         } catch(Exception e) {
-            LOGGER.error(e.getMessage());
+            LOGGER.info("Problem with download data from API.");
         }
         return body;
     }
