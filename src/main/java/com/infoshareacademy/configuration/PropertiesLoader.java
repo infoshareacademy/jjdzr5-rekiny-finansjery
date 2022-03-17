@@ -32,6 +32,7 @@ public class PropertiesLoader {
             loadFromFile(path);
         } catch (IOException e) {
             properties = createDefaultConfiguration();
+            saveToFile(properties);
         }
     }
 
@@ -46,7 +47,6 @@ public class PropertiesLoader {
         defaultProperties.put("order", "ascending");
         defaultProperties.put("date-format", "dd.MM.yyyy");
         defaultProperties.put("last-update", LocalDate.now().toString());
-        saveToFile(defaultProperties);
         LOGGER.info("Problem with loading config file. I've created a default one.");
         return defaultProperties;
     }
@@ -61,7 +61,11 @@ public class PropertiesLoader {
     }
 
     public String getProperty(String property) {
-        return properties.getProperty(property);
+        String value = properties.getProperty(property);
+        if (value == null || value.equals("")) {
+            value = addDefaultProperty(property);
+        }
+        return value;
     }
     public void setProperty(String property, String value){
         properties.put(property,value);
@@ -69,11 +73,19 @@ public class PropertiesLoader {
     }
 
     public String returnOrder() {
-        return properties.getProperty("order");
+        return getProperty("order");
     }
 
     public String returnDateFormat() {
-        return properties.getProperty("date-format");
+        return getProperty("date-format");
+    }
+
+    private String addDefaultProperty(String property){
+        Properties temp = createDefaultConfiguration();
+        String value = temp.getProperty(property);
+        properties.put(property,value);
+        saveToFile(properties);
+        return value;
     }
 
 }
