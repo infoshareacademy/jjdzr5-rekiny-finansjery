@@ -12,7 +12,6 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 
 public class ApiFromFile extends ApiDataSource {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApiFromFile.class);
@@ -30,18 +29,7 @@ public class ApiFromFile extends ApiDataSource {
             dailyExchangeRates.addAll(updateDailyExchangeRates);
             saveDb(dailyExchangeRates);
         }
-
-        switch (PropertiesLoader.getInstance().getProperty("order")) {
-            case "descending":
-                return dailyExchangeRates.stream()
-                        .sorted((e1,e2) -> e2.getEffectiveDate().compareTo(e1.getEffectiveDate()))
-                        .collect(Collectors.toList());
-            case "ascending":
-            default:
-                return dailyExchangeRates.stream()
-                        .sorted(Comparator.comparing(DailyExchangeRates::getEffectiveDate))
-                        .collect(Collectors.toList());
-        }
+        return dailyExchangeRates;
     }
 
     public boolean saveDb(List<DailyExchangeRates> dailyExchangeRates) {
