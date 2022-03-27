@@ -63,7 +63,9 @@ public class DailyExchangeRatesFiltrationService {
             exchangeRates.setRates(exchangeRatesFiltrationService.getExchangeRates());
             list.set(i, exchangeRates);
         }
-        dailyExchangeRates = list;
+        dailyExchangeRates = list.stream()
+                .filter(table -> !table.getRates().isEmpty())
+                .collect(Collectors.toList());
         return this;
     }
 }
