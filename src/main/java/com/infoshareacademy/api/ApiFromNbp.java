@@ -38,7 +38,7 @@ public class ApiFromNbp extends ApiDataSource {
             try {
                 result.addAll(fromJson(getJsonFromNbp(String.format(RANGE_OF_DATE, startDate, tempEndDate))));
             } catch (NullPointerException e) {
-                LOGGER.error("No data to download.");
+                LOGGER.info("No data to download.");
             }
             startDate = tempEndDate;
             tempEndDate = (ChronoUnit.DAYS.between(startDate, endDate) > LIMIT_DAYS? startDate.plusDays(LIMIT_DAYS):endDate);
