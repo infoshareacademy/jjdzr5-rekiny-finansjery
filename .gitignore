@@ -37,3 +37,6 @@ hs_err_pid*
 
 db_table.json
 db.properties
+
+/src/logs
+
