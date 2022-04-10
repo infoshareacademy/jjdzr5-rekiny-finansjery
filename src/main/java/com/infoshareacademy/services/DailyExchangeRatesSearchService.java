@@ -31,13 +31,8 @@ public class DailyExchangeRatesSearchService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<DailyExchangeRates> searchEffectiveDate(LocalDate effectiveDate) {
-
-        Predicate<DailyExchangeRates> searchEffectiveDate = dailyExchangeRates -> dailyExchangeRates.getEffectiveDate().equals(effectiveDate);
-
-        return dailyExchangeRates.stream()
-                .filter(searchEffectiveDate)
-                .findAny();
+    public DailyExchangeRatesFiltrationService searchTableNoForFiltration(String tableNo) {
+        return new DailyExchangeRatesFiltrationService(searchTableNo(tableNo));
     }
 
     public List<DailyExchangeRates> searchEffectiveDateByTimeRange(LocalDate dateFrom, LocalDate dateTo) {
@@ -50,13 +45,8 @@ public class DailyExchangeRatesSearchService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<DailyExchangeRates> searchTradingDate(LocalDate tradingDate) {
-
-        Predicate<DailyExchangeRates> searchTradingDate = dailyExchangeRates -> dailyExchangeRates.getTradingDate().equals(tradingDate);
-
-        return dailyExchangeRates.stream()
-                .filter(searchTradingDate)
-                .findAny();
+    public DailyExchangeRatesFiltrationService searchEffectiveDateByTimeRangeForFiltration(LocalDate dateFrom, LocalDate dateTo) {
+        return new DailyExchangeRatesFiltrationService(searchEffectiveDateByTimeRange(dateFrom, dateTo));
     }
 
     public List<DailyExchangeRates> searchTradingDateByTimeRange(LocalDate dateFrom, LocalDate dateTo) {
@@ -69,6 +59,10 @@ public class DailyExchangeRatesSearchService {
                 .collect(Collectors.toList());
     }
 
+    public DailyExchangeRatesFiltrationService searchTradingDateByTimeRangeForFiltration(LocalDate dateFrom, LocalDate dateTo) {
+        return new DailyExchangeRatesFiltrationService(searchTradingDateByTimeRange(dateFrom, dateTo));
+    }
+
     public List<DailyExchangeRates> forEachDay(Consumer<DailyExchangeRates> consumer) {
 
         CopyOnWriteArrayList<DailyExchangeRates> list = new CopyOnWriteArrayList<>(dailyExchangeRates);
@@ -79,6 +73,29 @@ public class DailyExchangeRatesSearchService {
         }
 
         return list;
+    }
+
+    public DailyExchangeRatesFiltrationService forEachDayForFiltration(Consumer<DailyExchangeRates> consumer) {
+        return new DailyExchangeRatesFiltrationService(forEachDay(consumer));
+    }
+
+
+    public Optional<DailyExchangeRates> searchEffectiveDate(LocalDate effectiveDate) {
+
+        Predicate<DailyExchangeRates> searchEffectiveDate = dailyExchangeRates -> dailyExchangeRates.getEffectiveDate().equals(effectiveDate);
+
+        return dailyExchangeRates.stream()
+                .filter(searchEffectiveDate)
+                .findAny();
+    }
+
+    public Optional<DailyExchangeRates> searchTradingDate(LocalDate tradingDate) {
+
+        Predicate<DailyExchangeRates> searchTradingDate = dailyExchangeRates -> dailyExchangeRates.getTradingDate().equals(tradingDate);
+
+        return dailyExchangeRates.stream()
+                .filter(searchTradingDate)
+                .findAny();
     }
 
 }

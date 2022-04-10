@@ -29,6 +29,10 @@ public class ExchangeRatesSearchService {
                 .collect(Collectors.toList());
     }
 
+    public ExchangeRatesFiltrationService searchCurrencyForFiltration(String currency) {
+        return new ExchangeRatesFiltrationService(searchCurrency(currency));
+    }
+
     public Optional<ExchangeRate> searchCode(String code) {
 
         Predicate<ExchangeRate> searchCode = exchangeRate -> exchangeRate.getCode().contains(code.toUpperCase());
@@ -37,5 +41,4 @@ public class ExchangeRatesSearchService {
                 .filter(searchCode)
                 .findAny();
     }
-
 }
