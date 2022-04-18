@@ -45,16 +45,6 @@ public class MenuContents {
                     editorUI.displayEditorMainMenu();
                 }));
 
-        menu.addMenuOption(new Menu.MenuOption().
-                setDescription("Test search and filtration").
-                setMethod(() -> {
-                    DailyExchangeRatesSearchService exchangeRatesSearchService = NBPApiManager.getInstance().getDailyExchangeSearchRatesService();
-                    List<DailyExchangeRates> list = exchangeRatesSearchService
-                            .searchTableNoForFiltration("21").forEachDay(table -> new ExchangeRatesFiltrationService(table.getRates())
-                            .filterByShortName(Arrays.asList("USD")))
-                            .getDailyExchangeRates();
-                    CollectionView.displayExchangeRatesArchiveTable(list);
-                }));
 
         menu.displayMenuWithReturnAndExecute("Exit program",()->{});
     }

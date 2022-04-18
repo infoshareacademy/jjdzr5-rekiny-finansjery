@@ -1,14 +1,18 @@
 package com.infoshareacademy.services;
 
 import com.infoshareacademy.domain.DailyExchangeRates;
+import com.infoshareacademy.domain.ExchangeRate;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class DailyExchangeRatesSearchService {
 
@@ -79,6 +83,22 @@ public class DailyExchangeRatesSearchService {
         return new DailyExchangeRatesFiltrationService(forEachDay(consumer));
     }
 
+    public List<DailyExchangeRates> searchWidely(String phrases){
+        String[] parts = phrases.split(" ");
+
+        Set<DailyExchangeRates> result = new HashSet<>();
+        for(String phrase : parts){
+            Stream<DailyExchangeRates> stream = dailyExchangeRates.stream();
+            stream.filter(dailyExchangeRates -> {
+                return dailyExchangeRates.getNo().contains(phrase.toUpperCase()) ||
+                        dailyExchangeRates.getEffectiveDate().toString().contains(phrase) ||
+                        dailyExchangeRates.getTradingDate().toString().contains(phrase);
+            });
+            result.addAll(stream.collect(Collectors.toList()));
+        }
+        return result.stream().collect(Collectors.toList());
+
+    }
 
     public Optional<DailyExchangeRates> searchEffectiveDate(LocalDate effectiveDate) {
 

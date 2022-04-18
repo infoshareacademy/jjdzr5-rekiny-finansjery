@@ -1,12 +1,16 @@
 package com.infoshareacademy.services;
 
+import com.infoshareacademy.domain.DailyExchangeRates;
 import com.infoshareacademy.domain.ExchangeRate;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ExchangeRatesSearchService {
 
@@ -40,5 +44,20 @@ public class ExchangeRatesSearchService {
         return exchangeRates.stream()
                 .filter(searchCode)
                 .findAny();
+    }
+
+    public List<ExchangeRate> searchWidely(String phrases){
+        String[] parts = phrases.split(" ");
+
+        Set<ExchangeRate> result = new HashSet<>();
+        for(String phrase : parts){
+            Stream<ExchangeRate> stream = exchangeRates.stream();
+            stream.filter(exchangeRate -> {
+                return exchangeRate.getCode().contains(phrase.toUpperCase()) ||
+                        exchangeRate.getCurrency().toLowerCase().contains(phrase.toLowerCase());
+            });
+            result.addAll(stream.collect(Collectors.toList()));
+        }
+        return result.stream().collect(Collectors.toList());
     }
 }
