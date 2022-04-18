@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -50,14 +51,15 @@ public class ExchangeRatesSearchService {
         String[] parts = phrases.split(" ");
 
         Set<ExchangeRate> result = new HashSet<>();
-        for(String phrase : parts){
-            Stream<ExchangeRate> stream = exchangeRates.stream();
-            stream.filter(exchangeRate -> {
-                return exchangeRate.getCode().contains(phrase.toUpperCase()) ||
-                        exchangeRate.getCurrency().toLowerCase().contains(phrase.toLowerCase());
-            });
-            result.addAll(stream.collect(Collectors.toList()));
-        }
+        Supplier<Stream<ExchangeRate>> streamSupplier = () -> exchangeRates.stream();
+
+        result.addAll(streamSupplier.get().filter(exchangeRate -> {
+            for(String phrase : parts) {
+                if(exchangeRate.getCode().contains(phrase.toUpperCase()) ||
+                        exchangeRate.getCurrency().toLowerCase().contains(phrase.toLowerCase())) return true;
+            }
+            return false;
+        }).collect(Collectors.toList()));
         return result.stream().collect(Collectors.toList());
     }
 }

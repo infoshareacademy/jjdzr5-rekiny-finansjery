@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -88,14 +89,15 @@ public class DailyExchangeRatesSearchService {
 
         Set<DailyExchangeRates> result = new HashSet<>();
         for(String phrase : parts){
-            Stream<DailyExchangeRates> stream = dailyExchangeRates.stream();
-            stream.filter(dailyExchangeRates -> {
+            Supplier<Stream<DailyExchangeRates>> streamSupplier = () -> dailyExchangeRates.stream();
+
+            result.addAll(streamSupplier.get().filter(dailyExchangeRates -> {
                 return dailyExchangeRates.getNo().contains(phrase.toUpperCase()) ||
                         dailyExchangeRates.getEffectiveDate().toString().contains(phrase) ||
                         dailyExchangeRates.getTradingDate().toString().contains(phrase);
-            });
-            result.addAll(stream.collect(Collectors.toList()));
+            }).collect(Collectors.toList()));
         }
+
         return result.stream().collect(Collectors.toList());
 
     }
