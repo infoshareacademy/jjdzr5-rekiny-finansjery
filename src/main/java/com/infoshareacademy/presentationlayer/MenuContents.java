@@ -1,9 +1,15 @@
 package com.infoshareacademy.presentationlayer;
 
+import com.infoshareacademy.domain.DailyExchangeRates;
 import com.infoshareacademy.presentationlayer.filtration.FiltrationUI;
 import com.infoshareacademy.presentationlayer.search.SearchUI;
+import com.infoshareacademy.services.DailyExchangeRatesFiltrationService;
+import com.infoshareacademy.services.DailyExchangeRatesSearchService;
+import com.infoshareacademy.services.ExchangeRatesFiltrationService;
 import com.infoshareacademy.services.NBPApiManager;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MenuContents {
@@ -38,6 +44,7 @@ public class MenuContents {
                     EditorUI editorUI = new EditorUI();
                     editorUI.displayEditorMainMenu();
                 }));
+
 
         menu.displayMenuWithReturnAndExecute("Exit program",()->{});
     }
