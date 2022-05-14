@@ -34,6 +34,12 @@ public class SearchUI {
         this.isRunning = true;
     }
 
+    SearchUI(DailyExchangeRatesSearchService exchangeRatesSearchService, Menu menu, boolean isRunning) {
+        this.exchangeRatesSearchService = exchangeRatesSearchService;
+        this.menu = menu;
+        this.isRunning = isRunning;
+    }
+
     public void runMenu() {
         while (isRunning) {
             menu.displayMenu();
